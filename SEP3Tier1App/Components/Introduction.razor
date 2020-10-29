@@ -1,0 +1,35 @@
+@using WebApplication.Data
+@using WebApplication.Network
+@inject ProfileData _Profile;
+@inject INetworkComp _NetworkComp;
+@inject IModalService Modal
+@inject NavigationManager n
+
+
+
+<input @bind-value="profileText"> </input>
+<button @onclick="Save">Save</button>
+@code {
+    
+    private string profileText;
+    
+    protected override Task OnInitializedAsync()
+    {
+        
+        return base.OnInitializedAsync();
+    }
+
+    private void Save()
+    {
+        _Profile.intro = profileText;
+        
+        //Ned i tier2 -- TODO: SKAL ÆNDRE USERNAME
+        _NetworkComp.EditIntroduction(new ProfileData()
+        {
+            intro = profileText,
+            username = "maria"
+        });
+       n.NavigateTo("/Profile");
+    }
+
+}

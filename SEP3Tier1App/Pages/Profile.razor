@@ -1,0 +1,86 @@
+﻿@page "/Profile"
+@using WebApplication.Data
+@using WebApplication.Network
+@using SEP3Tier1App.Components
+@using Blazored.Modal.Services
+@inject IModalService Modal
+@inject ProfileData ProfileData
+@inject INetworkComp Network;
+
+<head>
+    <style>
+        body {
+        background-color: #1b1e21;
+        }
+    </style>
+</head>
+<div style="width: 100%; height: 400px; background: rgb(2,0,36);
+                                                                         background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
+    <div id="example1" class="cover-div" style="height: 220px; position: relative">
+        <button class="btn btn-primary" style="position: absolute; bottom: 3px; right: 3px">Change cover</button>
+        <div id="example2"></div>
+        <button style="position: absolute; bottom: 3px; right: 40%; height: 30px; width: 40px; border-radius: 8px;">
+            <img src="images/camera.png" style="height: 100%; width: 100%;"/>
+        </button>
+    </div>
+
+
+    <div id="top">
+        <h2 class="Georgia">Maria Frandsen</h2>
+
+    </div>
+</div>
+
+<div style="width: 75%; margin: auto; background-color: white;">
+    <RadzenTabs>
+        <Tabs>
+            <RadzenTabsItem Text="About">
+                <div style="height: 300px">
+                    <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
+                        <div>
+                            <h5 class="Georgia" style="float: left">About Maria</h5>
+                            <button class="btn btn-primary Georgia" style="float: right">Edit</button>
+                        </div>
+                        <div style="float: left">
+                            <p class="Georgia">Age: </p>
+                            <p class="Georgia">Interests: </p>
+                            <p class="Georgia">Ideal date: </p>
+                            <p class="Georgia">Instagram: </p>
+                            <p class="Georgia">Spotify: </p>
+                        </div>
+
+                    </div>
+                    <div style=" overflow: scroll; float:right; width: 40%; height: 250px; border-style: solid; margin-right: 7%; margin-bottom: 50px;">
+                        <div>
+                            <h5 class="Georgia" style="float: left">Introduction </h5>
+                            <button @onclick="@(() => Modal.Show<Introduction>("Introduction"))" class="btn btn-primary Georgia" style="float: right">Edit</button>
+                        </div>
+                        <p class="Georgia" style="float: left">
+                            @ProfileData.intro
+                        </p>
+                    </div>
+                </div>
+
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Images">
+                <div style="height: 300px"></div>
+
+            </RadzenTabsItem>
+            <RadzenTabsItem Text="Reviews">
+                <div style="height: 300px"></div>
+            </RadzenTabsItem>
+        </Tabs>
+    </RadzenTabs>
+
+ </div>
+
+@code {
+    private string username = "maria";
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("her");
+        ProfileData = await Network.GetProfile(username);
+    }
+    
+
+}

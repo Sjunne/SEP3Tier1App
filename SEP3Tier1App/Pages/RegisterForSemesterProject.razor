@@ -1,0 +1,21 @@
+﻿@page "/RegisterForSemesterProject"
+<h1>Create a New Account</h1>
+<h2>And Find Your Next Mistake</h2>
+<link rel="stylesheet" href="style.css">
+<div id="Form" class="form">
+    <input type="text" class="textbox" placeholder="Enter UserName" id="UserName" required>
+    <input type="Email" class="textbox" placeholder="Enter Email" id="Email" required>
+    <input type="password" class="passwordbox" placeholder="Enter Password" id="Password" required>
+    <input type="password" class="passwordbox" style="float: right" placeholder="Enter Password Again" id="PasswordAgain" required>
+    <div id="checkboxAbove18div">
+        <input type="checkbox" id="checkboxAbove18" required>
+            <label for="checkboxAbove18">I am above 18</label>
+    </div>
+    <div>
+        <input type="submit" class="button" id="submitButton" value="Sign Up">
+    </div>
+    
+</div>
+@code {
+    
+}

@@ -35,7 +35,7 @@ namespace WebApplication.Network
             return profileData;
         }
 
-        public async Task GetFilePath(string username)
+        public async Task<string> GetFilePath(string username)
         {
             Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
             byte[] b = new byte[16*1024];
@@ -51,7 +51,10 @@ namespace WebApplication.Network
                 b2 = ms.ToArray();
             }
 
-            ByteArrayToFile("wwwroot/test2.jpg", b2);
+            var base64 = Convert.ToBase64String(b2);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            return imgSrc;
+            //ByteArrayToFile("wwwroot/test2.jpg", b2);
          
             Console.WriteLine(message);
         }

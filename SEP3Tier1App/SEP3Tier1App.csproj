@@ -13,9 +13,4 @@
       <Folder Include="pictures" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Include="wwwroot\sdf.jpg" />
-      <None Include="wwwroot\test.jpg" />
-    </ItemGroup>
-
 </Project>

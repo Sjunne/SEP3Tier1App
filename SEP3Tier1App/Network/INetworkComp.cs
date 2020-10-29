@@ -9,6 +9,6 @@ namespace WebApplication.Network
     {
         public Task EditIntroduction(ProfileData profileData);
         Task<ProfileData> GetProfile(string username);
-        Task GetFilePath(string username);
+        Task<string> GetFilePath(string username);
     }
 }

@@ -2,6 +2,64 @@
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    width: 100%;
+}
+
+#cover {
+    background-image: linear-gradient(darkblue, lightblue);
+}
+
+.Georgia {
+    font-family: 'Georgia', Georgia, serif !important;
+    margin-top: 10px;
+    margin-left: 10px; margin-right: 10px;
+}
+
+#top {
+    position: relative;
+    width:100%;
+    height: 50px;
+    vertical-align:middle;
+    border: black 2px;
+}
+
+#top h2{
+    text-align: center;
+    color: black;
+    margin-top: 30px;
+}
+
+#button_camera {
+    background: url(../images/camera.png) no-repeat;
+    background-size: auto;
+    margin: auto;
+}
+
+#example1 {
+    border: 2px solid black;
+    padding: 25px;
+    background: url(../images/2017-03-18--12.10.30.jpg) no-repeat;
+    background-size: cover;
+    margin: auto;
+}
+
+
+#example2{
+    border: black 2px;
+    padding: 25px;
+    background: url(../images/2017-03-18--12.10.30.jpg) no-repeat;
+    background-size: cover;
+    width: 20%;
+    height: 150px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+    right: 40%;
+
+}
+
+.cover-div{
+    width: 80%;
 }
 
 a, .btn-link {

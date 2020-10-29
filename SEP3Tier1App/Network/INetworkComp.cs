@@ -1,5 +1,7 @@
-﻿﻿using System.Threading.Tasks;
-using WebApplication.Data;
+﻿﻿using System.IO;
+ using System.Threading.Tasks;
+ using Microsoft.AspNetCore.Mvc;
+ using WebApplication.Data;
 
 namespace WebApplication.Network
 {
@@ -7,5 +9,6 @@ namespace WebApplication.Network
     {
         public Task EditIntroduction(ProfileData profileData);
         Task<ProfileData> GetProfile(string username);
+        Task GetFilePath(string username);
     }
 }

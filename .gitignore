@@ -31,3 +31,5 @@
 *.out
 *.app
 /.idea/
+/SEP3Tier1App/bin/
+/SEP3Tier1App/obj/

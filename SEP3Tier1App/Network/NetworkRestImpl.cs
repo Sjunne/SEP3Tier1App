@@ -1,9 +1,12 @@
 ﻿﻿using System;
-using System.Net.Http;
+ using System.Drawing;
+ using System.IO;
+ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using WebApplication.Data;
+ using Microsoft.AspNetCore.Mvc;
+ using WebApplication.Data;
 
 namespace WebApplication.Network
 {
@@ -31,5 +34,50 @@ namespace WebApplication.Network
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             return profileData;
         }
+
+        public async Task<string> GetFilePath(string username)
+        {
+            Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
+            byte[] b = new byte[16*1024];
+            byte[] b2;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = message.Read(b, 0, b.Length)) > 0)
+                {
+                    ms.Write(b, 0, read);
+                }
+
+                b2 = ms.ToArray();
+            }
+
+            var base64 = Convert.ToBase64String(b2);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            return imgSrc;
+            //ByteArrayToFile("wwwroot/test2.jpg", b2);
+         
+            Console.WriteLine(message);
+        }
+        
+        
+        public bool ByteArrayToFile(string fileName, byte[] byteArray)
+        {
+            try
+            {
+                using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    fs.Write(byteArray, 0, byteArray.Length);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception caught in process: {0}", ex);
+                return false;
+            }
+        }
     }
+
+    
+    
 }

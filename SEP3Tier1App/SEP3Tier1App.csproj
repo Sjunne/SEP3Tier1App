@@ -9,4 +9,8 @@
       <PackageReference Include="Radzen.Blazor" Version="2.15.19" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="pictures" />
+    </ItemGroup>
+
 </Project>

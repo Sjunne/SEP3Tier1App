@@ -1,3 +1,4 @@
+using System.Dynamic;
 using System.Text.Json.Serialization;
 
 namespace WebApplication.Data
@@ -7,6 +8,15 @@ namespace WebApplication.Data
         public string intro { get; set; }
         public string username { get; set; }
 
-        [JsonIgnore] public bool isEditing { get; set; }
+        public string age { get; set; }
+        public string instragram { get; set; }
+        public string idealdate { get; set; }
+        public string interests { get; set; }
+
+        public string spotify { get; set; }
+
+        [JsonIgnore] public bool isEditingAbout { get; set; }
+        [JsonIgnore] public bool isEditingIntro { get; set; }
+
     }
 }

@@ -43,6 +43,11 @@
                     <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
                         <div>
                             <h5 class="Georgia" style="float: left">About Maria</h5>
+                            
+                            @if (ProfileData.isEditing)
+                            {
+                                
+                            }
                             <button class="btn btn-primary Georgia" style="float: right">Edit</button>
                         </div>
                         <div style="float: left">
@@ -54,6 +59,8 @@
                         </div>
 
                     </div>
+                    
+                    
                     <div style=" overflow: scroll; float:right; width: 40%; height: 250px; border-style: solid; margin-right: 7%; margin-bottom: 50px;">
                         <div>
                             <h5 class="Georgia" style="float: left">Introduction </h5>
@@ -75,8 +82,7 @@
             </RadzenTabsItem>
         </Tabs>
     </RadzenTabs>
-
- </div>
+</div>
 
 @code {
    private string filepath;
@@ -86,6 +92,8 @@
     protected override async Task OnInitializedAsync()
     {
         ProfileData = await Network.GetProfile(username);
+        ProfileData.isEditing = false;
+        
         filepath = await Network.GetFilePath(username);
     }
     

@@ -21,7 +21,6 @@ namespace WebApplication.Network
 
         public async Task EditIntroduction(ProfileData profileData)
         {
-            Console.WriteLine("Test");
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
@@ -35,6 +34,17 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task<string> GetFilePath(string username)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Image");
+            string image = JsonSerializer.Deserialize<string>(message);
+
+            return image;
+
+
+        }
+        
+        /*
         public async Task<string> GetFilePath(string username)
         {
             Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
@@ -58,6 +68,7 @@ namespace WebApplication.Network
          
             Console.WriteLine(message);
         }
+        */
         
         
         public bool ByteArrayToFile(string fileName, byte[] byteArray)

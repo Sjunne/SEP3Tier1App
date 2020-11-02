@@ -78,7 +78,6 @@
     private string username = "maria";
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("her");
         ProfileData = await Network.GetProfile(username);
     }
     

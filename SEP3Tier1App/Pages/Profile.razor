@@ -5,6 +5,7 @@
 @using Blazored.Modal.Services
 @using System.Net.Mime
 @using System.IO
+@using BlazorInputFile
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
@@ -17,7 +18,7 @@
     </style>
 </head>
 <div style="width: 100%; height: 400px; background: rgb(2,0,36);
-                                                                         background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
     <div id="example1" class="cover-div" style="height: 220px; position: relative">
         <img src="@filepath" alt=""/>
         <button class="btn btn-primary" style="position: absolute; bottom: 3px; right: 3px">Change cover</button>
@@ -99,7 +100,20 @@
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Images">
-                <div style="height: 300px"></div>
+                <div style="height: 300px">
+                    <InputFile OnChange="HandleSelection"/>
+                    <br/>
+                    @foreach (var image in Images)
+                    {
+                        <div class="gallery">
+                            <a target="_blank" href="@image">
+                                <img src="@image" alt="1" width="600px" height="400px"/>
+                            </a>
+                            <div class="desc">Description</div>
+                            
+                        </div>
+                    }
+                </div>
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Reviews">
@@ -110,16 +124,24 @@
 </div>
 
 @code {
-   private string filepath;
+    //comment siden
+    //fjern inline style
+
+
+    private string filepath;
+    private string dataUri;
+    private IList<string> Images = new List<string>();
 
     private string username = "maria";
     protected override async Task OnInitializedAsync()
     {
         //ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
+        //Images = await Network.GetPictures(username);
         
-        
-        //filepath = await Network.GetFilePath(username);
+        filepath = await Network.GetFilePath(username);
+        Console.WriteLine(filepath);
+        //Console.WriteLine(Images[0]);
     }
 
     private void Here()
@@ -134,6 +156,19 @@
     private void EditIntro()
     {
         ProfileData.isEditingIntro = !ProfileData.isEditingIntro;
+    }
+    
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
+            var ms = new MemoryStream();
+            await image.Data.CopyToAsync(ms);
+            
+            dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
+        }
     }
 
 }

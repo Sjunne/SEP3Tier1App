@@ -1,4 +1,5 @@
 ﻿﻿using System;
+ using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
  using System.Net.Http;
@@ -37,13 +38,21 @@ namespace WebApplication.Network
         public async Task<string> GetFilePath(string username)
         {
             string message = await client.GetStringAsync($"https://localhost:5003/Image");
-            string image = JsonSerializer.Deserialize<string>(message);
+            //string image = JsonSerializer.Deserialize<string>(message);
 
-            return image;
+            return message;
 
 
         }
-        
+
+        public async Task<IList<string>> GetPictures(string username)
+        {
+            string message = await client.GetStringAsync("https://localhost:5003/Image/All");
+            string[] images = message.Split("å");
+            Console.WriteLine(images.Length);
+            return images;
+        }
+
         /*
         public async Task<string> GetFilePath(string username)
         {

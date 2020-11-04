@@ -5,6 +5,7 @@
 @using Blazored.Modal.Services
 @using System.Net.Mime
 @using System.IO
+@using BlazorInputFile
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
@@ -41,40 +42,78 @@
             <RadzenTabsItem Text="About">
                 <div style="height: 300px">
                     <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
-                        <div>
+
                             <h5 class="Georgia" style="float: left">About Maria</h5>
                             
-                            @if (ProfileData.isEditing)
+                            @if (!ProfileData.isEditingAbout)
                             {
-                                
+                                <button class="btn btn-primary Georgia" type="submit" @onclick="Edit" style="float: right">Edit</button>
+                                <div style="float: left">
+                                    <p class="Georgia">Age: @ProfileData.age</p>
+                                    <p class="Georgia">Interests: @ProfileData.interests</p>
+                                    <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
+                                    <p class="Georgia">Instagram: @ProfileData.instragram</p>
+                                    <p class="Georgia">Spotify: @ProfileData.spotify</p>
+                                </div>
+
                             }
-                            <button class="btn btn-primary Georgia" style="float: right">Edit</button>
-                        </div>
-                        <div style="float: left">
-                            <p class="Georgia">Age: </p>
-                            <p class="Georgia">Interests: </p>
-                            <p class="Georgia">Ideal date: </p>
-                            <p class="Georgia">Instagram: </p>
-                            <p class="Georgia">Spotify: </p>
-                        </div>
+                            else
+                            {
+                                <button class="btn btn-primary Georgia" type="submit" @onclick="Edit" style="float: right">Save</button>
+                                <p/>
+                                <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
+                                <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
+                                <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
+                                <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
+                                <input type="text" class="form-control" placeholder="Spotify" @bind="@ProfileData.instragram"/>
+                            }
+                       
 
                     </div>
                     
                     
                     <div style=" overflow: scroll; float:right; width: 40%; height: 250px; border-style: solid; margin-right: 7%; margin-bottom: 50px;">
-                        <div>
                             <h5 class="Georgia" style="float: left">Introduction </h5>
-                            <button @onclick="@(() => Modal.Show<Introduction>("Introduction"))" class="btn btn-primary Georgia" style="float: right">Edit</button>
-                        </div>
-                        <p class="Georgia" style="float: left">
-                            @ProfileData.intro
-                        </p>
+                            
+                            @if (!ProfileData.isEditingIntro)
+                            {
+                                <button class="btn btn-primary Georgia" type="submit" @onclick="EditIntro" style="float: right">Edit</button>
+                                <p class="Georgia" style="float: left">
+                                    @ProfileData.intro
+                                </p>
+                            }
+                            else
+                            {
+                                <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntro" style="float: right">Save</button>
+                                <br/>
+                                <EditForm Model="@ProfileData" OnValidSubmit="Here">
+                                    <DataAnnotationsValidator />
+                                    <ValidationSummary />
+                                    <br/>
+                                    <InputTextArea style="margin-left: 5px; width: 250px; height: 150px" @bind-Value="ProfileData.intro"/>
+
+                                </EditForm>
+                            }
+                       
                     </div>
                 </div>
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Images">
-                <div style="height: 300px"></div>
+                <div style="height: 300px">
+                    <InputFile OnChange="HandleSelection"/>
+                    <br/>
+                    @for(int i = 0; i < Images.Count-1;i++)
+                    {
+                        <div class="gallery">
+                            <a target="_blank" href="@Images[i]">
+                                <img src="@Images[i]" alt="1" width="600px" height="400px"/>
+                            </a>
+                            <div class="desc">Description</div>
+                            
+                        </div>
+                    }
+                </div>
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Reviews">
@@ -85,17 +124,50 @@
 </div>
 
 @code {
-   private string filepath;
-    
-    
+    //comment siden
+    //fjern inline style
+
+
+    private string filepath;
+    private string dataUri;
+    private IList<string> Images = new List<string>();
+
     private string username = "maria";
     protected override async Task OnInitializedAsync()
     {
-        ProfileData = await Network.GetProfile(username);
-        ProfileData.isEditing = false;
-        
+        //ProfileData = await Network.GetProfile(username);
+        ProfileData.isEditingAbout = false;
         filepath = await Network.GetFilePath(username);
+
+        Images = await Network.GetPictures(username);
+        Console.WriteLine(Images[0]);
+    }
+
+    private void Here()
+    {
+    }
+
+    private void Edit()
+    {
+        ProfileData.isEditingAbout = !ProfileData.isEditingAbout;
+    }
+
+    private void EditIntro()
+    {
+        ProfileData.isEditingIntro = !ProfileData.isEditingIntro;
     }
     
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
+            var ms = new MemoryStream();
+            await image.Data.CopyToAsync(ms);
+            
+            dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
+        }
+    }
 
 }

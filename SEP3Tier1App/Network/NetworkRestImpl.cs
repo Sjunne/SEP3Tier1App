@@ -48,7 +48,8 @@ namespace WebApplication.Network
         public async Task<IList<string>> GetPictures(string username)
         {
             string message = await client.GetStringAsync("https://localhost:5003/Image/All");
-            IList<string> images = JsonSerializer.Deserialize<List<string>>(message);
+            string[] images = message.Split("å");
+            Console.WriteLine(images.Length);
             return images;
         }
 

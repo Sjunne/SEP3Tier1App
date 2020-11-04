@@ -103,11 +103,11 @@
                 <div style="height: 300px">
                     <InputFile OnChange="HandleSelection"/>
                     <br/>
-                    @foreach (var image in Images)
+                    @for(int i = 0; i < Images.Count-1;i++)
                     {
                         <div class="gallery">
-                            <a target="_blank" href="@image">
-                                <img src="@image" alt="1" width="600px" height="400px"/>
+                            <a target="_blank" href="@Images[i]">
+                                <img src="@Images[i]" alt="1" width="600px" height="400px"/>
                             </a>
                             <div class="desc">Description</div>
                             
@@ -137,11 +137,10 @@
     {
         //ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
-        //Images = await Network.GetPictures(username);
-        
         filepath = await Network.GetFilePath(username);
-        Console.WriteLine(filepath);
-        //Console.WriteLine(Images[0]);
+
+        Images = await Network.GetPictures(username);
+        Console.WriteLine(Images[0]);
     }
 
     private void Here()

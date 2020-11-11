@@ -25,7 +25,6 @@ namespace WebApplication.Network
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
-            //if(info.IsSuccessStatusCode)
                 
         }
 
@@ -48,9 +47,8 @@ namespace WebApplication.Network
 
         public async Task<IList<string>> GetPictures(string username)
         {
-            string message = await client.GetStringAsync("https://localhost:5003/Image/All");
+            string message = await client.GetStringAsync($"https://localhost:5003/Image/All?username={username}");
             string[] images = message.Split("å");
-            Console.WriteLine(images.Length);
             return images;
         }
 

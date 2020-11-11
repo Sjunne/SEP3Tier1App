@@ -160,8 +160,10 @@
             IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
             var ms = new MemoryStream();
             await image.Data.CopyToAsync(ms);
-
+            
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
+            Console.WriteLine(dataUri);
+            await Network.UploadPicture(username, dataUri);
             
         }
     }

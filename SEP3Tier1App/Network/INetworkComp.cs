@@ -12,5 +12,6 @@ namespace WebApplication.Network
         Task<ProfileData> GetProfile(string username);
         Task<string> GetFilePath(string username);
         Task<IList<string>> GetPictures(string username);
+        Task UploadPicture(string username, string dataUri);
     }
 }

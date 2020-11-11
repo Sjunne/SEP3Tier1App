@@ -25,7 +25,6 @@ namespace WebApplication.Network
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
-            Console.WriteLine(info);
         }
 
         public async Task<ProfileData> GetProfile(string username)

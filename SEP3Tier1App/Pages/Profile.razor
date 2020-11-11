@@ -21,11 +21,7 @@
                                                                          background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
     <div id="example1" class="cover-div" style="height: 220px; position: relative; padding: 0;">
         <img src="@filepath" style="height: 100%; width:100%; display: block; border: 0;margin: 0;padding: 0;" alt=""/>
-        <button class="btn btn-primary" style="position: absolute; bottom: 3px; right: 3px">Change cover</button>
         <div id="example2"></div>
-        <button style="position: absolute; bottom: 3px; right: 40%; height: 30px; width: 40px; border-radius: 8px;">
-            <img src="" style="height: 100%; width: 100%;" alt="test"/>
-        </button>
     </div>
 
     
@@ -140,7 +136,6 @@
         filepath = await Network.GetFilePath(username);
 
         Images = await Network.GetPictures(username);
-        Console.WriteLine(Images[0]);
     }
 
     private void Here()
@@ -165,8 +160,9 @@
             IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
             var ms = new MemoryStream();
             await image.Data.CopyToAsync(ms);
-            
+
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
+            
         }
     }
 

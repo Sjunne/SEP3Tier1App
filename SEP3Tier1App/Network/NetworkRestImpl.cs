@@ -53,6 +53,24 @@ namespace WebApplication.Network
             return images;
         }
 
+        public async Task UploadPicture(string username, string dataUri)
+        {
+            Request request = new Request()
+            {
+                Username = username,
+                o = dataUri,
+                requestOperation = RequestOperationEnum.UPLOADPICTURE
+            };
+
+            HttpContent content = new StringContent(
+                JsonSerializer.Serialize(request),
+                Encoding.UTF8,
+                "application/json");
+            
+            HttpResponseMessage httpResponseMessage = await client.PostAsync("https://localhost:5003/Image/Upload", content);
+            Console.WriteLine(httpResponseMessage);
+        }
+
         /*
         public async Task<string> GetFilePath(string username)
         {

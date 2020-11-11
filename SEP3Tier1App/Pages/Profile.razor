@@ -162,7 +162,6 @@
             await image.Data.CopyToAsync(ms);
             
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
-            Console.WriteLine(dataUri);
             await Network.UploadPicture(username, dataUri);
             
         }

@@ -178,10 +178,13 @@
 
     private async Task EditAbout()
     {
-        Edit();
-        ProfileData.username = username;
     //brug for at bruge den samme metode altid med et request objekt,
     //så det kun er enum som er forskellige når man opdater profiledata
+        Edit();
+        ProfileData.username = username;
+   
+        await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+
     }
 
 }

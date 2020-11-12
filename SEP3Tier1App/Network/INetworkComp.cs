@@ -13,5 +13,6 @@ namespace WebApplication.Network
         Task<string> GetFilePath(string username);
         Task<IList<string>> GetPictures(string username);
         Task UploadPicture(string username, string dataUri);
+        Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum);
     }
 }

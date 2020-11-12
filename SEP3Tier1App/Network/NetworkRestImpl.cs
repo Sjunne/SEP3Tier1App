@@ -72,6 +72,19 @@ namespace WebApplication.Network
             Console.WriteLine(httpResponseMessage);
         }
 
+        public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
+        {
+            Request request = new Request()
+            {
+                Username = profileData.username,
+                o = profileData,
+                requestOperation = requestOperationEnum
+            };
+            string message = JsonSerializer.Serialize(request);
+            HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
+        }
+
         /*
         public async Task<string> GetFilePath(string username)
         {

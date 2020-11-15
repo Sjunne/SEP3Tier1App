@@ -132,6 +132,7 @@
     private string username = "Maria";
     protected override async Task OnInitializedAsync()
     {
+        ProfileData.username = username;
         ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
         filepath = await Network.GetFilePath(username);
@@ -182,7 +183,6 @@
     //så det kun er enum som er forskellige når man opdater profiledata
         Edit();
         ProfileData.username = username;
-   
         await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
 
     }

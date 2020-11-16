@@ -1,4 +1,5 @@
-﻿﻿using System;
+﻿using System;
+ using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
  using System.Net.Http;
@@ -21,11 +22,11 @@ namespace WebApplication.Network
 
         public async Task EditIntroduction(ProfileData profileData)
         {
-            Console.WriteLine("Test");
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
-            Console.WriteLine(info);
+            //if(info.IsSuccessStatusCode)
+                
         }
 
         public async Task<ProfileData> GetProfile(string username)
@@ -37,38 +38,83 @@ namespace WebApplication.Network
 
         public async Task<string> GetFilePath(string username)
         {
-            //Henter en STREAM fra vores getter (file)
-            Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
-            //Laver et stort bye array
-            byte[] b = new byte[16*1024];
-            //Laver et uden declartion, for at sætte "b" ind i. (Så vi slipper for tomme pladser, hvis billedet er mindre end 16 bits
-            byte[] b2;
+            string message = await client.GetStringAsync($"https://localhost:5003/Image");
+            //string image = JsonSerializer.Deserialize<string>(message);
+
+            return message;
+
+
+        }
+
+        public async Task<IList<string>> GetPictures(string username)
+        {
+            string message = await client.GetStringAsync("https://localhost:5003/Image/All");
+            string[] images = message.Split("å");
+            Console.WriteLine(images.Length);
+            return images;
+        }
+
+        public async Task UploadPicture(string username, string dataUri)
+        {
+            Request request = new Request()
+            {
+                Username = username,
+                o = dataUri,
+                requestOperation = RequestOperationEnum.UPLOADPICTURE
+            };
+
+            HttpContent content = new StringContent(
+                JsonSerializer.Serialize(request),
+                Encoding.UTF8,
+                "application/json");
             
+            HttpResponseMessage httpResponseMessage = await client.PostAsync("https://localhost:5003/Image", content);
+            Console.WriteLine(httpResponseMessage);
+        }
+
+        public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
+        {
+            Request request = new Request()
+            {
+                Username = profileData.username,
+                o = profileData,
+                requestOperation = requestOperationEnum
+            };
+            string message = JsonSerializer.Serialize(request);
+            HttpContent content = new StringContent(
+                message,
+                Encoding.UTF8,
+                "application/json");
+                
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
+            Console.WriteLine(info + " here");
+        }
+
+        /*
+        public async Task<string> GetFilePath(string username)
+        {
+            Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
+            byte[] b = new byte[16*1024];
+            byte[] b2;
             using (MemoryStream ms = new MemoryStream())
             {
-                //holder styr på hvor meget vi har læst
                 int read;
-                //Begynder at læse vores "STREAM"(message)
                 while ((read = message.Read(b, 0, b.Length)) > 0)
                 {
-                    //gemmer bytes i memory stream, ved at bruge b???
                     ms.Write(b, 0, read);
                 }
-                //ligger ind i b2 for at få et præcist "størrelse" array
+
                 b2 = ms.ToArray();
             }
 
             var base64 = Convert.ToBase64String(b2);
             var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
             return imgSrc;
-            
-            
-            //Denne virker V hvis skal gemme på tier 1 for caching.. Skal huske at sige .jpg og wwwroot folder er den eneste man kan gemme billeder i
-            //**
             //ByteArrayToFile("wwwroot/test2.jpg", b2);
          
             Console.WriteLine(message);
         }
+        */
         
         
         public bool ByteArrayToFile(string fileName, byte[] byteArray)

@@ -6,11 +6,8 @@
 
     <ItemGroup>
       <PackageReference Include="Blazored.Modal" Version="4.1.0" />
+      <PackageReference Include="BlazorInputFile" Version="0.2.0" />
       <PackageReference Include="Radzen.Blazor" Version="2.15.19" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="pictures" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,54 @@
+﻿@page "/Matches"
+@using WebApplication.Data
+@using WebApplication.Network
+@inject IModalService Modal
+@inject ProfileData ProfileData
+@inject INetworkComp Network;
+<h3>Matches</h3>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<body>
+
+@if (Profiles == null)
+{
+  <p><em>No matches found</em></p>
+}
+else
+{
+  @foreach (var item in Profiles)
+  {
+    <div class="w3-container">
+
+      <div class="w3-card-4 w3-dark-grey" style="width:50%">
+
+        <div class="w3-container w3-center">
+          <h3>Match Request</h3>
+          <img src="@Network.GetFilePath(item.username)" alt="Avatar" style="width:80%">
+          <h5>@item.username</h5>
+
+          <div class="w3-section">
+            <button class="w3-button w3-green">Accept</button>
+            <button class="w3-button w3-red">Decline</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  }
+}
+</body>
+@code {
+  private IList<ProfileData> Profiles;
+  private IList<int> matchesId;
+  private string username = "Maria";
+  
+ 
+  protected override async Task OnInitializedAsync()
+  {
+    matchesId = await Network.GetMatches(1);
+    for (int i = 0; i < matchesId.Count; i++)
+    {
+      Profiles.Add(await Network.GetProfile(matchesId[i]));
+    }
+  }
+}

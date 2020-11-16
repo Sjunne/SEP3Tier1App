@@ -90,6 +90,21 @@ namespace WebApplication.Network
             Console.WriteLine(info + " here");
         }
 
+        public async Task<IList<int>> GetMatches(int userId)
+        {
+            string profile = await client.GetStringAsync($"https://localhost:5003/Match?user1={userId}");
+            Console.WriteLine(profile.ToString());
+            IList<int> profiles = JsonSerializer.Deserialize<IList<int>>(profile);
+            return profiles;
+        }
+
+        public async Task<ProfileData> GetProfile(int userId)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Profile?userid={userId}");
+            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            return profileData;
+        }
+
         /*
         public async Task<string> GetFilePath(string username)
         {

@@ -1,0 +1,68 @@
+﻿@page "/CreateProfile"
+@using WebApplication.Data
+@using WebApplication.Network
+@inject ProfileData ProfileData
+@inject INetworkComp NetWork
+
+<h1>CreateProfile</h1>
+
+<input type="text" class="form-control" placeholder="FirstName" @bind="@ProfileData.firstName"/>
+<input type="text" class="form-control" placeholder="LastName" @bind="@ProfileData.lastName"/>
+<input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
+<input type="text" class="form-control" placeholder="Education" @bind="@ProfileData.education"/>
+<input type="text" class="form-control" placeholder="City" @bind="@ProfileData.city"/>
+<input type="text" class="form-control" placeholder="Hobbies" @bind="@ProfileData.hobbies"/>
+<input type="text" class="form-control" placeholder="HairColor" @bind="@ProfileData.self.hairColor"/>
+<input type="text" class="form-control" placeholder="EyeColor" @bind="@ProfileData.self.eyeColor"/>
+<input type="text" class="form-control" placeholder="SkinColor" @bind="@ProfileData.self.skinColor"/>
+<input type="text" class="form-control" placeholder="Nationality" @bind="@ProfileData.self.nationality"/>
+<input type="text" class="form-control" placeholder="BodyShape" @bind="@ProfileData.self.bodyShape"/>
+<input type="text" class="form-control" placeholder="Job" @bind="@ProfileData.self.job"/>
+<input type="text" class="form-control" placeholder="Gender" @bind="@ProfileData.self.gender"/>
+<div>
+    <label>Do you have kids?</label>
+    <input type="checkbox" @bind="@ProfileData.self.kids"/>
+</div>
+<div>
+    <label>Seeks Relationship</label>
+    <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
+</div>
+
+<h1>Preferences</h1>
+<input type="text" class="form-control" placeholder="MaxAge" @bind="@ProfileData.preferences.maximumAge"/>
+<input type="text" class="form-control" placeholder="MinAge" @bind="@ProfileData.preferences.minimumAge"/>
+<input type="text" class="form-control" placeholder="Education" @bind="@ProfileData.preferences.education"/>
+<input type="text" class="form-control" placeholder="City" @bind="@ProfileData.preferences.city"/>
+<input type="text" class="form-control" placeholder="Hobbies" @bind="@ProfileData.preferences.hobbies"/>
+<input type="text" class="form-control" placeholder="HairColor" @bind="@ProfileData.preferences.hairColor"/>
+<input type="text" class="form-control" placeholder="EyeColor" @bind="@ProfileData.preferences.eyeColor"/>
+<input type="text" class="form-control" placeholder="SkinColor" @bind="@ProfileData.preferences.skinColor"/>
+<input type="text" class="form-control" placeholder="Nationality" @bind="@ProfileData.preferences.nationality"/>
+<input type="text" class="form-control" placeholder="BodyShape" @bind="@ProfileData.preferences.bodyShape"/>
+<input type="text" class="form-control" placeholder="Job" @bind="@ProfileData.preferences.job"/>
+<input type="text" class="form-control" placeholder="Gender" @bind="@ProfileData.preferences.gender"/>
+<div>
+    <label>Do you want them to have kids?</label>
+    <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
+</div>
+<div>
+    <label>Seeks Relationship</label>
+    <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
+</div>
+
+
+<button @onclick="@(() => ConfirmData())">
+    <i class="oi oi-submit" style="color:red"/>
+    Submit</button>
+
+
+
+@code {
+
+    public void ConfirmData()
+    {
+        ProfileData.username = "Kasper";
+        NetWork.CreateProfile(ProfileData);
+    }
+    
+}

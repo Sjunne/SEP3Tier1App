@@ -28,6 +28,16 @@ namespace WebApplication.Network
             //if(info.IsSuccessStatusCode)
                 
         }
+        
+        public async Task CreateProfile(ProfileData profileData)
+        {
+            profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/CreateProfile", content);
+        }
 
         public async Task<ProfileData> GetProfile(string username)
         {
@@ -89,6 +99,7 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
             Console.WriteLine(info + " here");
         }
+        
 
         /*
         public async Task<string> GetFilePath(string username)

@@ -37,23 +37,34 @@ namespace WebApplication.Network
 
         public async Task<string> GetFilePath(string username)
         {
+            //Henter en STREAM fra vores getter (file)
             Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
+            //Laver et stort bye array
             byte[] b = new byte[16*1024];
+            //Laver et uden declartion, for at sætte "b" ind i. (Så vi slipper for tomme pladser, hvis billedet er mindre end 16 bits
             byte[] b2;
+            
             using (MemoryStream ms = new MemoryStream())
             {
+                //holder styr på hvor meget vi har læst
                 int read;
+                //Begynder at læse vores "STREAM"(message)
                 while ((read = message.Read(b, 0, b.Length)) > 0)
                 {
+                    //gemmer bytes i memory stream, ved at bruge b???
                     ms.Write(b, 0, read);
                 }
-
+                //ligger ind i b2 for at få et præcist "størrelse" array
                 b2 = ms.ToArray();
             }
 
             var base64 = Convert.ToBase64String(b2);
             var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
             return imgSrc;
+            
+            
+            //Denne virker V hvis skal gemme på tier 1 for caching.. Skal huske at sige .jpg og wwwroot folder er den eneste man kan gemme billeder i
+            //**
             //ByteArrayToFile("wwwroot/test2.jpg", b2);
          
             Console.WriteLine(message);

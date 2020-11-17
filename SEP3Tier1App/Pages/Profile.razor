@@ -55,7 +55,7 @@
                             }
                             else
                             {
-                                <button class="btn btn-primary Georgia" type="submit" @onclick="Edit" style="float: right">Save</button>
+                                <button class="btn btn-primary Georgia" type="submit" @onclick="EditAbout" style="float: right">Save</button>
                                 <p/>
                                 <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
                                 <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
@@ -80,7 +80,7 @@
                             }
                             else
                             {
-                                <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntro" style="float: right">Save</button>
+                                <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntroduction" style="float: right">Save</button>
                                 <br/>
                                 <EditForm Model="@ProfileData" OnValidSubmit="Here">
                                     <DataAnnotationsValidator />
@@ -103,7 +103,7 @@
                     {
                         <div class="gallery">
                             <a target="_blank" href="@Images[i]">
-                                <img src="@Images[i]" alt="1" width="600px" height="400px"/>
+                                <img src="@Images[i]" alt="@i" width="600px" height="400px"/>
                             </a>
                             <div class="desc">Description</div>
                             
@@ -130,11 +130,13 @@
     private string filepath;
     private string dataUri;
     private IList<string> Images = new List<string>();
+    
 
     private string username = "Maria";
     protected override async Task OnInitializedAsync()
     {
-        //ProfileData = await Network.GetProfile(username);
+        ProfileData.username = username;
+        ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
         filepath = await Network.GetFilePath(username);
 
@@ -154,6 +156,14 @@
     {
         ProfileData.isEditingIntro = !ProfileData.isEditingIntro;
     }
+
+    public async Task EditIntroduction()
+    {
+        EditIntro();
+    //Ned i tier2 -- TODO: SKAL ÆNDRE USERNAME
+        ProfileData.username = username;
+        await Network.EditIntroduction(ProfileData);
+    }
     
     async Task HandleSelection(IFileListEntry[] files)
     {
@@ -169,6 +179,16 @@
             await Network.UploadPicture(username, dataUri);
             
         }
+    }
+
+    private async Task EditAbout()
+    {
+    //brug for at bruge den samme metode altid med et request objekt,
+    //så det kun er enum som er forskellige når man opdater profiledata
+        Edit();
+        ProfileData.username = username;
+        await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+
     }
 
 }

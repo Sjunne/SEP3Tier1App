@@ -32,11 +32,19 @@ namespace WebApplication.Network
         public async Task CreateProfile(ProfileData profileData)
         {
             profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreateProfile", content);
+        }
+
+        public async Task CreatePreference(ProfileData profileData)
+        {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
             string message = JsonSerializer.Serialize(profileData);
             Console.WriteLine(message);
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
-            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/CreateProfile", content);
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
         public async Task<ProfileData> GetProfile(string username)

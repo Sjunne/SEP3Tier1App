@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Text.Json.Serialization;
 
@@ -19,16 +20,26 @@ namespace WebApplication.Data
         public string intro { get; set; }
         public string username { get; set; }
         
+        [Required]
+        [StringLength(20)]
         public string firstName { get; set; }
         
+        [Required]
+        [StringLength(20)]
         public string lastName { get; set; }
         
+        [Required]
+        [StringLength(30)]
         public string city { get; set; }
         
+        [Required]
+        [StringLength(40)]
         public string education { get; set; }
         
+        [StringLength(40)]
         public string hobbies { get; set; }
 
+        [Range(18, 150, ErrorMessage = "Must be at least 18")]
         public int age { get; set; }
         public string instragram { get; set; }
         public string idealdate { get; set; }

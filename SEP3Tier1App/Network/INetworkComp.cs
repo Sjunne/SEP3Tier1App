@@ -16,5 +16,7 @@ namespace WebApplication.Network
         Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum);
 
         Task CreateProfile(ProfileData profileData);
+
+        Task CreatePreference(ProfileData profileData);
     }
 }

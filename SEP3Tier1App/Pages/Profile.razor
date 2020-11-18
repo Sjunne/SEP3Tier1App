@@ -20,11 +20,12 @@
 <div style="width: 100%; height: 400px; background: rgb(2,0,36);
                                                                          background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
     <div id="example1" class="cover-div" style="height: 220px; position: relative; padding: 0;">
-        <img src="@filepath" style="height: 100%; width:100%; display: block; border: 0;margin: 0;padding: 0;" alt=""/>
-        <div id="example2"></div>
+        <img src="@CoverPicture" style="height: 100%; width:100%; display: block; border: 0;margin: 0;padding: 0;" alt=""/>
+        <div id="example2">
+            <img src="@ProfilePicture" style="width: 100%;border-radius: 50%;height: 150px;" alt=""/>
+        </div>
     </div>
 
-    
 
     <div id="top">
         <h2 class="Georgia">Maria Frandsen</h2>
@@ -39,58 +40,57 @@
                 <div style="height: 300px">
                     <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
 
-                            <h5 class="Georgia" style="float: left">About Maria</h5>
-                            
-                            @if (!ProfileData.isEditingAbout)
-                            {
-                                <button class="btn btn-primary Georgia" type="submit" @onclick="Edit" style="float: right">Edit</button>
-                                <div style="float: left">
-                                    <p class="Georgia">Age: @ProfileData.age</p>
-                                    <p class="Georgia">Interests: @ProfileData.interests</p>
-                                    <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
-                                    <p class="Georgia">Instagram: @ProfileData.instragram</p>
-                                    <p class="Georgia">Spotify: @ProfileData.spotify</p>
-                                </div>
+                        <h5 class="Georgia" style="float: left">About Maria</h5>
 
-                            }
-                            else
-                            {
-                                <button class="btn btn-primary Georgia" type="submit" @onclick="EditAbout" style="float: right">Save</button>
-                                <p/>
-                                <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
-                                <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
-                                <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
-                                <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
-                                <input type="text" class="form-control" placeholder="Spotify" @bind="@ProfileData.instragram"/>
-                            }
-                       
+                        @if (!ProfileData.isEditingAbout)
+                        {
+                            <button class="btn btn-primary Georgia" type="submit" @onclick="Edit" style="float: right">Edit</button>
+                            <div style="float: left">
+                                <p class="Georgia">Age: @ProfileData.age</p>
+                                <p class="Georgia">Interests: @ProfileData.interests</p>
+                                <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
+                                <p class="Georgia">Instagram: @ProfileData.instragram</p>
+                                <p class="Georgia">Spotify: @ProfileData.spotify</p>
+                            </div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary Georgia" type="submit" @onclick="EditAbout" style="float: right">Save</button>
+                            <p/>
+                            <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
+                            <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
+                            <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
+                            <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
+                            <input type="text" class="form-control" placeholder="Spotify" @bind="@ProfileData.instragram"/>
+                        }
+
 
                     </div>
-                    
-                    
-                    <div style=" overflow: scroll; float:right; width: 40%; height: 250px; border-style: solid; margin-right: 7%; margin-bottom: 50px;">
-                            <h5 class="Georgia" style="float: left">Introduction </h5>
-                            
-                            @if (!ProfileData.isEditingIntro)
-                            {
-                                <button class="btn btn-primary Georgia" type="submit" @onclick="EditIntro" style="float: right">Edit</button>
-                                <p class="Georgia" style="float: left">
-                                    @ProfileData.intro
-                                </p>
-                            }
-                            else
-                            {
-                                <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntroduction" style="float: right">Save</button>
-                                <br/>
-                                <EditForm Model="@ProfileData" OnValidSubmit="Here">
-                                    <DataAnnotationsValidator />
-                                    <ValidationSummary />
-                                    <br/>
-                                    <InputTextArea style="margin-left: 5px; width: 250px; height: 150px" @bind-Value="ProfileData.intro"/>
 
-                                </EditForm>
-                            }
-                       
+
+                    <div style=" overflow: scroll; float:right; width: 40%; height: 250px; border-style: solid; margin-right: 7%; margin-bottom: 50px;">
+                        <h5 class="Georgia" style="float: left">Introduction </h5>
+
+                        @if (!ProfileData.isEditingIntro)
+                        {
+                            <button class="btn btn-primary Georgia" type="submit" @onclick="EditIntro" style="float: right">Edit</button>
+                            <p class="Georgia" style="float: left">
+                                @ProfileData.intro
+                            </p>
+                        }
+                        else
+                        {
+                            <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntroduction" style="float: right">Save</button>
+                            <br/>
+                            <EditForm Model="@ProfileData" OnValidSubmit="Here">
+                                <DataAnnotationsValidator/>
+                                <ValidationSummary/>
+                                <br/>
+                                <InputTextArea style="margin-left: 5px; width: 250px; height: 150px" @bind-Value="ProfileData.intro"/>
+
+                            </EditForm>
+                        }
+
                     </div>
                 </div>
 
@@ -99,14 +99,17 @@
                 <div style="height: 300px">
                     <InputFile OnChange="HandleSelection"/>
                     <br/>
-                    @for(int i = 0; i < Images.Count-1;i++)
+                    @for (int i = 0; i < Images.Count - 1; i++)
                     {
+                        int holder = i;
                         <div class="gallery">
                             <a target="_blank" href="@Images[i]">
                                 <img src="@Images[i]" alt="@i" width="600px" height="400px"/>
                             </a>
-                            <div class="desc">Description</div>
-                            
+                            <div>
+                                <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
+                                <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
+                            </div>
                         </div>
                     }
                 </div>
@@ -124,20 +127,22 @@
     //fjern inline style
 
 
-    private string filepath;
+    private string CoverPicture;
+    private string ProfilePicture;
     private string dataUri;
     private IList<string> Images = new List<string>();
-    
+
 
     private string username = "Maria";
+
     protected override async Task OnInitializedAsync()
     {
         ProfileData.username = username;
         ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
-        filepath = await Network.GetFilePath(username);
-
         Images = await Network.GetPictures(username);
+        CoverPicture = await Network.GetFilePath(username);
+        ProfilePicture = await Network.GetProfilePicture(username);
     }
 
     private void Here()
@@ -161,7 +166,7 @@
         ProfileData.username = username;
         await Network.EditIntroduction(ProfileData);
     }
-    
+
     async Task HandleSelection(IFileListEntry[] files)
     {
         var file = files.FirstOrDefault();
@@ -170,10 +175,9 @@
             IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
             var ms = new MemoryStream();
             await image.Data.CopyToAsync(ms);
-            
+
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
             await Network.UploadPicture(username, dataUri);
-            
         }
     }
 
@@ -184,7 +188,19 @@
         Edit();
         ProfileData.username = username;
         await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+    }
 
+
+    private async void ChooseCover(int i)
+    {
+        await Network.ChangeCoverPicture(username + (i + 1));
+        CoverPicture = Images[i];
+    }
+
+    private async void ChooseProfilePic(int i)
+    {
+        await Network.ChangeProfilePic(username + (i + 1));
+        ProfilePicture = Images[i];
     }
 
 }

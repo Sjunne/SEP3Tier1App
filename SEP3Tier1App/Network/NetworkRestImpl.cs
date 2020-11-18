@@ -38,7 +38,7 @@ namespace WebApplication.Network
 
         public async Task<string> GetFilePath(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image");
+            string message = await client.GetStringAsync($"https://localhost:5003/Image?username=" + username);
             //string image = JsonSerializer.Deserialize<string>(message);
 
             return message;
@@ -48,9 +48,9 @@ namespace WebApplication.Network
 
         public async Task<IList<string>> GetPictures(string username)
         {
-            string message = await client.GetStringAsync("https://localhost:5003/Image/All");
+            string message = await client.GetStringAsync("https://localhost:5003/Image/All" + "?username=" + username);
             string[] images = message.Split("å");
-            Console.WriteLine(images.Length);
+            Console.WriteLine(images.Length + "her");
             return images;
         }
 
@@ -87,36 +87,35 @@ namespace WebApplication.Network
                 "application/json");
                 
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
-            Console.WriteLine(info + " here");
         }
 
-        /*
-        public async Task<string> GetFilePath(string username)
+        public async Task ChangeCoverPicture(string pictureName)
         {
-            Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
-            byte[] b = new byte[16*1024];
-            byte[] b2;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                int read;
-                while ((read = message.Read(b, 0, b.Length)) > 0)
-                {
-                    ms.Write(b, 0, read);
-                }
+            string message = JsonSerializer.Serialize(pictureName);
 
-                b2 = ms.ToArray();
-            }
-
-            var base64 = Convert.ToBase64String(b2);
-            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-            return imgSrc;
-            //ByteArrayToFile("wwwroot/test2.jpg", b2);
-         
-            Console.WriteLine(message);
+            HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
         }
-        */
-        
-        
+
+        public async Task<string> GetProfilePicture(string username)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
+            //string image = JsonSerializer.Deserialize<string>(message);
+
+            return message;
+        }
+
+        public async Task ChangeProfilePic(string picturename)
+        {
+            
+                string message = JsonSerializer.Serialize(picturename);
+
+                HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
+                HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);
+            
+        }
+
+
         public bool ByteArrayToFile(string fileName, byte[] byteArray)
         {
             try

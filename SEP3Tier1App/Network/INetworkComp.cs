@@ -14,5 +14,8 @@ namespace WebApplication.Network
         Task<IList<string>> GetPictures(string username);
         Task UploadPicture(string username, string dataUri);
         Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum);
+        Task ChangeCoverPicture(string pictureName);
+        Task<string> GetProfilePicture(string username);
+        Task ChangeProfilePic(string picturename);
     }
 }

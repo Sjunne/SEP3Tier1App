@@ -20,7 +20,7 @@
 <div style="width: 100%; height: 400px; background: rgb(2,0,36);
                                                                          background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);">
     <div id="example1" class="cover-div" style="height: 220px; position: relative; padding: 0;">
-        <img src="@filepath" style="height: 100%; width:100%; display: block; border: 0;margin: 0;padding: 0;" alt=""/>
+        <img src="@CoverPicture" style="height: 100%; width:100%; display: block; border: 0;margin: 0;padding: 0;" alt=""/>
         <div id="example2"></div>
     </div>
 
@@ -87,7 +87,6 @@
                                     <ValidationSummary />
                                     <br/>
                                     <InputTextArea style="margin-left: 5px; width: 250px; height: 150px" @bind-Value="ProfileData.intro"/>
-
                                 </EditForm>
                             }
                        
@@ -124,7 +123,7 @@
     //fjern inline style
 
 
-    private string filepath;
+    private string CoverPicture;
     private string dataUri;
     private IList<string> Images = new List<string>();
     
@@ -133,11 +132,15 @@
     protected override async Task OnInitializedAsync()
     {
         ProfileData.username = username;
-        ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
-        filepath = await Network.GetFilePath(username);
-
+        
+        //henter data fra databasen til at fylde profilen ud,
+        //kunne optimeres
+        Task<ProfileData> profile = Network.GetProfile(username);
+        CoverPicture = await Network.GetCoverPicture(username);
         Images = await Network.GetPictures(username);
+        ProfileData = await profile;
+        
     }
 
     private void Here()
@@ -157,8 +160,6 @@
     public async Task EditIntroduction()
     {
         EditIntro();
-    //Ned i tier2 -- TODO: SKAL ÆNDRE USERNAME
-        ProfileData.username = username;
         await Network.EditIntroduction(ProfileData);
     }
     

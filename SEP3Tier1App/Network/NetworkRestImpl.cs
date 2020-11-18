@@ -26,7 +26,6 @@ namespace WebApplication.Network
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
             //if(info.IsSuccessStatusCode)
-                
         }
 
         public async Task<ProfileData> GetProfile(string username)
@@ -36,14 +35,10 @@ namespace WebApplication.Network
             return profileData;
         }
 
-        public async Task<string> GetFilePath(string username)
+        public async Task<string> GetCoverPicture(string username)
         {
             string message = await client.GetStringAsync($"https://localhost:5003/Image");
-            //string image = JsonSerializer.Deserialize<string>(message);
-
             return message;
-
-
         }
 
         public async Task<IList<string>> GetPictures(string username)
@@ -68,7 +63,8 @@ namespace WebApplication.Network
                 Encoding.UTF8,
                 "application/json");
             
-            HttpResponseMessage httpResponseMessage = await client.PostAsync("https://localhost:5003/Image", content);
+            HttpResponseMessage httpResponseMessage = await client.
+                PostAsync("https://localhost:5003/Image", content);
             Console.WriteLine(httpResponseMessage);
         }
 

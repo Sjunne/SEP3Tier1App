@@ -18,6 +18,8 @@ div.gallery {
     border: 1px solid #ccc;
     float: left;
     width: 180px;
+    height: 110px;
+    position:relative;
 }
 
 div.gallery:hover {
@@ -71,15 +73,15 @@ div.desc {
 
 #example2{
     border: black 2px;
-    padding: 25px;
-    background: url(../images/2017-03-18--12.10.30.jpg) no-repeat;
-    background-size: cover;
+    background: #1b1e21;
     width: 20%;
     height: 150px;
     border-radius: 50%;
     position: absolute;
     bottom: 5px;
     right: 40%;
+    object-fit: fill;
+
 
 }
 

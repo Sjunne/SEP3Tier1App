@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
  using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
@@ -37,7 +37,7 @@ namespace WebApplication.Network
 
         public async Task<string> GetCoverPicture(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image");
+            string message = await client.GetStringAsync($"https://localhost:5003/Image?username=" + username);
             return message;
         }
 
@@ -82,9 +82,34 @@ namespace WebApplication.Network
                 "application/json");
                 
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
-            Console.WriteLine(info + " here");
         }
 
+        public async Task ChangeCoverPicture(string pictureName)
+        {
+            string message = JsonSerializer.Serialize(pictureName);
+
+            HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
+        }
+
+        public async Task<string> GetProfilePicture(string username)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
+            //string image = JsonSerializer.Deserialize<string>(message);
+
+            return message;
+        }
+
+        public async Task ChangeProfilePic(string picturename)
+        {
+            
+                string message = JsonSerializer.Serialize(picturename);
+
+                HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
+                HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);
+            
+        }
+        
         public async Task<IList<Review>> GetReviews(string username)
         {
             string message = await client.GetStringAsync($"https://localhost:5003/Profile/Reviews?username={username}");

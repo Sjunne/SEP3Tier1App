@@ -85,33 +85,13 @@ namespace WebApplication.Network
             Console.WriteLine(info + " here");
         }
 
-        /*
-        public async Task<string> GetFilePath(string username)
+        public async Task<IList<Review>> GetReviews(string username)
         {
-            Stream message = await client.GetStreamAsync($"https://localhost:5003/Image");
-            byte[] b = new byte[16*1024];
-            byte[] b2;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                int read;
-                while ((read = message.Read(b, 0, b.Length)) > 0)
-                {
-                    ms.Write(b, 0, read);
-                }
-
-                b2 = ms.ToArray();
-            }
-
-            var base64 = Convert.ToBase64String(b2);
-            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
-            return imgSrc;
-            //ByteArrayToFile("wwwroot/test2.jpg", b2);
-         
-            Console.WriteLine(message);
+            string message = await client.GetStringAsync($"https://localhost:5003/Profile/Reviews?username={username}");
+            List<Review> reviews = JsonSerializer.Deserialize<List<Review>>(message);
+            return reviews;        
         }
-        */
-        
-        
+
         public bool ByteArrayToFile(string fileName, byte[] byteArray)
         {
             try

@@ -102,9 +102,9 @@
                     @for (int i = 0; i < Images.Count - 1; i++)
                     {
                         int holder = i;
-                        <div class="gallery">
-                            <a target="_blank" href="@Images[i]">
-                                <img src="@Images[i]" alt="@i" width="600px" height="400px"/>
+                        <div class="gallery" style="overflow: hidden;">
+                            <a target="_blank" href="@Images[holder]" >
+                                <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
                             </a>
                             <div>
                                 <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>

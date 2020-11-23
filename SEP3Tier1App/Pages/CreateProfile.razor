@@ -1,0 +1,76 @@
+﻿@page "/CreateProfile"
+@using WebApplication.Data
+@using WebApplication.Network
+@inject ProfileData ProfileData
+@inject INetworkComp NetWork
+@inject NavigationManager NavigationManager
+
+<h1>CreateProfile</h1>
+
+<EditForm Model="@ProfileData" OnValidSubmit="Here">
+<DataAnnotationsValidator />
+<ValidationSummary />
+<label>First Name</label>
+<InputText class="form-control" placeholder="FirstName" @bind-Value="@ProfileData.firstName"/>
+<label>Last Name</label>
+<InputText class="form-control" placeholder="LastName" @bind-Value="@ProfileData.lastName"/>
+
+<label>Age</label>
+<InputNumber class="form-control" placeholder="Age" @bind-Value="@ProfileData.age"/>
+<label>Education</label>
+<InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
+<label>City</label>
+<InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
+<div>
+    <label>Hobbies</label>
+    <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
+    <button @onclick="@(() => { if (ProfileData.self.hobbies == null) {ProfileData.self.hobbies += hobby;} else { ProfileData.self.hobbies += ", " + hobby;} hobby = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.self.hobbies</label>
+</div>
+<label>Hair Color</label>
+<InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
+<label>Eye Color</label>
+<InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.self.eyeColor"/>
+<label>Skin Color</label>
+<InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.self.skinColor"/>
+<label>Nationality</label>
+<InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.self.nationality"/>
+<label>Body Shape</label>
+<InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.self.bodyShape"/>
+<label>Job</label>
+<InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.self.job"/>
+<label>Gender</label>
+<InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.self.gender"/>
+<div>
+    <label>Do you have kids?</label>
+    <input type="checkbox" @bind="@ProfileData.self.kids"/>
+</div>
+<div>
+    <label>Seeks Relationship</label>
+    <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
+</div>
+
+<button @onclick="() => ConfirmData()">
+    <i class="oi oi-submit" style="color:red"/>
+    Submit</button>
+</EditForm>
+
+
+@code {
+    private string hobby;
+
+    public void ConfirmData()
+    {
+        ProfileData.username = "Kasper";
+        NetWork.CreateProfile(ProfileData);
+        NavigationManager.NavigateTo("CreatePreference");
+    }
+
+    public void Here()
+    {
+        
+    }
+
+}

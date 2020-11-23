@@ -1,0 +1,163 @@
+﻿@page "/CreatePreference"
+@using WebApplication.Data
+@using WebApplication.Network
+@using System.Diagnostics.Eventing.Reader
+@inject ProfileData ProfileData
+@inject INetworkComp NetWork
+<h1>Create Preferences</h1>
+<EditForm Model="@ProfileData" OnValidSubmit="Here">
+<DataAnnotationsValidator />
+<ValidationSummary />
+<label>Maximum Age</label>
+<InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
+<label>Minimum Age</label>
+<InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
+<div>
+    <label>Education</label>
+    <InputText class="form-control" placeholder="Education" @bind-Value="@education"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.education == null) {ProfileData.preferences.education += education;}
+                      else {
+                          ProfileData.preferences.education+= ", " + education;}
+                                  education = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have chosen: @ProfileData.preferences.education</label>
+</div>
+<div>
+    <label>City</label>
+    <InputText class="form-control" placeholder="City" @bind-Value="@city"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.city == null) {ProfileData.preferences.city += city;}
+                      else {
+                          ProfileData.preferences.city += ", " + city;}
+                                  city = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have chosen: @ProfileData.preferences.city</label>
+</div>
+<div>
+    <label>Hobbies</label>
+    <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {ProfileData.preferences.hobbies += hobby;}
+                      else {
+                          ProfileData.preferences.hobbies += ", " + hobby;}
+                                  hobby = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have chosen: @ProfileData.preferences.hobbies</label>
+</div>
+<div>
+    <label>Hair Colors</label>
+    <InputText class="form-control" placeholder="HairColor" @bind-Value="@hairColor"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {ProfileData.preferences.hairColor += hairColor;}
+                      else {
+                          ProfileData.preferences.hairColor += ", " + hairColor;}
+                                  hairColor = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have chosen: @ProfileData.preferences.hairColor</label>
+</div>
+<div>
+    <label>Eye Colors</label>
+    <InputText class="form-control" placeholder="EyeColor" @bind-Value="@eyeColor"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {ProfileData.preferences.eyeColor += eyeColor;}
+                      else {
+                          ProfileData.preferences.eyeColor += ", " + eyeColor;}
+                                  eyeColor = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.eyeColor</label>
+</div>
+<div>
+    <label>Skin Colors</label>
+    <InputText class="form-control" placeholder="SkinColor" @bind-Value="@skinColor"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {ProfileData.preferences.skinColor += skinColor;}
+                                  else {
+                                      ProfileData.preferences.skinColor += ", " + skinColor;}
+                                  skinColor = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.skinColor</label>
+</div>
+<div>
+    <label>Nationalities</label>
+    <InputText class="form-control" placeholder="Nationality" @bind-Value="@nationality"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.nationality == null) {ProfileData.preferences.nationality += nationality;}
+                      else {
+                          ProfileData.preferences.nationality += ", " + nationality;}
+                                  nationality = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.nationality</label>
+</div>
+<div>
+    <label>Bodyshape</label>
+    <InputText class="form-control" placeholder="BodyShape" @bind-Value="@bodyshape"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {ProfileData.preferences.bodyShape += bodyshape;}
+                      else {
+                          ProfileData.preferences.bodyShape += ", " + bodyshape;}
+                                  bodyshape = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.bodyShape</label>
+</div>
+<div>
+    <label>Jobs</label>
+    <InputText class="form-control" placeholder="Job" @bind-Value="@job"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.job == null) {ProfileData.preferences.job += job;}
+                      else {
+                          ProfileData.preferences.job += ", " + job;}
+                                  job = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.job</label>
+</div>
+<div>
+    <label>Genders</label>
+    <InputText class="form-control" placeholder="Gender" @bind-Value="@gender"/>
+    <button @onclick="@(() => { if (ProfileData.preferences.gender == null) {ProfileData.preferences.gender += gender;}
+                      else {
+                          ProfileData.preferences.gender += ", " + gender;}
+                                  gender = ""; })">
+        <i class="oi oi-plus" style="color:red"/>
+        Add</button>
+    <label>So far you have: @ProfileData.preferences.gender</label>
+</div>
+
+<div>
+    <label>Do you want them to have kids?</label>
+    <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
+</div>
+<div>
+    <label>Seeks Relationship</label>
+    <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
+</div>
+
+
+<button @onclick="() => ConfirmData()">
+    <i class="oi oi-submit" style="color:red"/>
+    Submit</button>
+</EditForm>
+
+@code {
+    private string hobby;
+    private string hairColor;
+    private string eyeColor;
+    private string skinColor;
+    private string nationality;
+    private string job;
+    private string bodyshape; 
+    private string gender;
+    private string education;
+    private string city;
+
+    public void ConfirmData()
+    {
+        ProfileData.username = "Kasper";
+        NetWork.CreatePreference(ProfileData);
+    }
+
+    public void Here()
+    {
+        
+    }
+}

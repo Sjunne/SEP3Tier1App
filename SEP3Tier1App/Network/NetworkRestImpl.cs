@@ -29,7 +29,25 @@ namespace WebApplication.Network
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
-            //if(info.IsSuccessStatusCode)
+                
+        }
+        
+        public async Task CreateProfile(ProfileData profileData)
+        {
+            profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreateProfile", content);
+        }
+
+        public async Task CreatePreference(ProfileData profileData)
+        {
+            profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
         public async Task<ProfileData> GetProfile(string username)
@@ -53,7 +71,7 @@ namespace WebApplication.Network
 
         public async Task<IList<string>> GetPictures(string username)
         {
-            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/ALl?username={username}");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/All?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
                 throw new ErrorException(httpResponseMessage.StatusCode+ "");

@@ -8,6 +8,8 @@ namespace WebApplication.Network
         EDITINTRODUCTION,
         UPLOADPICTURE,
         EDITABOUT,
-        REVIEWS
+        REVIEWS,
+        CREATEPROFILE,
+        CREATEPREFERENCE
     }
 }

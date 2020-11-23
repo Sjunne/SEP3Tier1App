@@ -18,5 +18,9 @@ namespace WebApplication.Network
         Task ChangeCoverPicture(string pictureName);
         Task<string> GetProfilePicture(string username);
         Task ChangeProfilePic(string picturename);
+
+        Task CreateProfile(ProfileData profileData);
+
+        Task CreatePreference(ProfileData profileData);
     }
 }

@@ -29,6 +29,10 @@ namespace WebApplication.Network
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
+            if (info.StatusCode != HttpStatusCode.Created)
+            {
+                throw new ErrorException(info.StatusCode + "");
+            }
                 
         }
         
@@ -52,8 +56,13 @@ namespace WebApplication.Network
 
         public async Task<ProfileData> GetProfile(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Profile?username={username}");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
+            if(httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                throw new ErrorException("Database connection lost");
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            
             return profileData;
         }
 
@@ -132,6 +141,10 @@ namespace WebApplication.Network
 
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
+            if (info.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException(info.StatusCode + "");
+            }
         }
 
         public async Task<string> GetProfilePicture(string username)
@@ -156,7 +169,11 @@ namespace WebApplication.Network
 
                 HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
                 HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);
-            
+                if (info.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new ErrorException("Database connection lost");
+                }
+
         }
         
         public async Task<IList<Review>> GetReviews(string username)

@@ -204,7 +204,6 @@
     public async Task EditIntroduction()
     {
         EditIntro();
-    //Ned i tier2 -- TODO: SKAL ÆNDRE USERNAME
         ProfileData.username = username;
         ProfileData.intro = ProfileData.intro.Trim();
         await Network.EditIntroduction(ProfileData);
@@ -224,6 +223,7 @@
             try
             {
                 await Network.UploadPicture(username, dataUri);
+                Images = await Network.GetPictures(username);
             }
             catch (ErrorException e)
             {
@@ -251,14 +251,29 @@
     
     private async void ChooseCover(int i)
     {
-        await Network.ChangeCoverPicture(username + (i + 1));
-        CoverPicture = Images[i];
+        try
+        {
+            await Network.ChangeCoverPicture(username + (i + 1));
+            CoverPicture = Images[i];
+        }
+        catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
     }
 
     private async void ChooseProfilePic(int i)
     {
-        await Network.ChangeProfilePic(username + (i + 1));
-        ProfilePicture = Images[i];
+        try
+        {
+            await Network.ChangeProfilePic(username + (i + 1));
+            ProfilePicture = Images[i];
+        }
+        catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
+       
     }
 
 }

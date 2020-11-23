@@ -39,7 +39,6 @@ namespace WebApplication.Data
         [StringLength(40)]
         public string hobbies { get; set; }
 
-        public int age { get; set; }
         public string instagram { get; set; }
         [Range(18, 150, ErrorMessage = "Must be at least 18")]
         public int age { get; set; }

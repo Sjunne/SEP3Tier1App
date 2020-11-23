@@ -2,12 +2,16 @@
  using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
- using System.Net.Http;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
- using WebApplication.Data;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Radzen;
+using SEP3Tier1App.Util;
+using WebApplication.Data;
 
 namespace WebApplication.Network
 {
@@ -37,13 +41,25 @@ namespace WebApplication.Network
 
         public async Task<string> GetCoverPicture(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image?username=" + username);
-            return message;
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image?username=" + username);
+            if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                return "";
+            }
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
         public async Task<IList<string>> GetPictures(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image/ALl?username={username}");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/ALl?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException(httpResponseMessage.StatusCode+ "");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
             string[] images = message.Split("å");
             return images;
         }
@@ -64,7 +80,11 @@ namespace WebApplication.Network
             
             HttpResponseMessage httpResponseMessage = await client.
                 PostAsync("https://localhost:5003/Image", content);
-            Console.WriteLine(httpResponseMessage);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
+            {
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+
+            }
         }
 
         public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
@@ -72,7 +92,7 @@ namespace WebApplication.Network
             Request request = new Request()
             {
                 Username = profileData.username,
-                o = profileData,
+                o = JsonSerializer.Serialize(profileData),
                 requestOperation = requestOperationEnum
             };
             string message = JsonSerializer.Serialize(request);
@@ -82,6 +102,10 @@ namespace WebApplication.Network
                 "application/json");
                 
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
+            if (info.StatusCode != HttpStatusCode.Created)
+            {
+                throw new ErrorException(info.StatusCode + "");
+            }
         }
 
         public async Task ChangeCoverPicture(string pictureName)
@@ -94,10 +118,17 @@ namespace WebApplication.Network
 
         public async Task<string> GetProfilePicture(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
-            //string image = JsonSerializer.Deserialize<string>(message);
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
+            if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                return "";
+            }
+            else if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
 
-            return message;
+            return await httpResponseMessage.ReadAsync<string>();
         }
 
         public async Task ChangeProfilePic(string picturename)
@@ -112,7 +143,12 @@ namespace WebApplication.Network
         
         public async Task<IList<Review>> GetReviews(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Profile/Reviews?username={username}");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Reviews?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
             List<Review> reviews = JsonSerializer.Deserialize<List<Review>>(message);
             return reviews;        
         }

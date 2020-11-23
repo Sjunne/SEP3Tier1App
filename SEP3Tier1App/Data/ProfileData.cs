@@ -8,8 +8,8 @@ namespace WebApplication.Data
         public string intro { get; set; }
         public string username { get; set; }
 
-        public string age { get; set; }
-        public string instragram { get; set; }
+        public int age { get; set; }
+        public string instagram { get; set; }
         public string idealdate { get; set; }
         public string interests { get; set; }
 

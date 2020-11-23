@@ -6,9 +6,11 @@
 @using System.Net.Mime
 @using System.IO
 @using BlazorInputFile
+@using SEP3Tier1App.Util
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
+@inject NavigationManager NavigationManager
 
 <head>
     <style>
@@ -49,7 +51,7 @@
                                 <p class="Georgia">Age: @ProfileData.age</p>
                                 <p class="Georgia">Interests: @ProfileData.interests</p>
                                 <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
-                                <p class="Georgia">Instagram: @ProfileData.instragram</p>
+                                <p class="Georgia">Instagram: @ProfileData.instagram</p>
                                 <p class="Georgia">Spotify: @ProfileData.spotify</p>
                             </div>
                         }
@@ -61,7 +63,7 @@
                             <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
                             <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
                             <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
-                            <input type="text" class="form-control" placeholder="Spotify" @bind="@ProfileData.instragram"/>
+                            <input type="text" class="form-control" placeholder="Spotify" @bind="@ProfileData.instagram"/>
                         }
 
 
@@ -119,16 +121,23 @@
                 <div style="height: 300px; overflow: scroll;">
                     @foreach (Review review in Reviews)
                     {
-                        <div style="height: 100px; border-width: 1px; border-style: solid; margin-left: 10px; margin-right: 30px;">
-                            <p style="float: right;">@review.timestamp</p>
-                            
-                            <div style="height: 75px; width: 75px;">
-                                <img src="@review.image" alt="@review.username" style="object-fit: fill; border-radius: 50%; width: 100%; height: 100%;" />
-                            </div>
-                            <p>@review.username</p>
-                                <div>
+                        <div style="height: 100px; border-width: 1px; border-style: solid; margin-left: 10px; margin-right: 30px;" class="container">
+                            <div class="row" style="height: 100%">
+                                <div style="border-style: solid; height: 100%" class="col-md-2">
+                                    <img src="@review.image" alt="@review.username" style="object-fit: fill; border-radius: 50%; width: 100%; height: 70%;"/>
+                                    <p style="margin-left: 25%;">@review.username</p>
+                                </div>
+
+
+                                <div class="col-md-8" style="border-style: solid">
                                     <p>@review.review</p>
                                 </div>
+
+                                <div class="col-md-2" style="border-style: solid">
+                                     <p style="float: right;">@review.timestamp</p>
+                                </div>
+                            </div>
+
                         </div>
                     }
                 </div>
@@ -161,10 +170,18 @@
     //henter data fra databasen til at fylde profilen ud,
     //kunne optimeres
         Task<ProfileData> profile = Network.GetProfile(username);
-        CoverPicture = await Network.GetCoverPicture(username);
-        Images = await Network.GetPictures(username);
-        ProfilePicture = await Network.GetProfilePicture(username);
-        Reviews = await Network.GetReviews(username);
+
+        try
+        {
+            CoverPicture = await Network.GetCoverPicture(username);
+            Images = await Network.GetPictures(username);
+            ProfilePicture = await Network.GetProfilePicture(username);
+            Reviews = await Network.GetReviews(username);
+        }
+        catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
 
 
         ProfileData = await profile;
@@ -189,6 +206,7 @@
         EditIntro();
     //Ned i tier2 -- TODO: SKAL ÆNDRE USERNAME
         ProfileData.username = username;
+        ProfileData.intro = ProfileData.intro.Trim();
         await Network.EditIntroduction(ProfileData);
     }
 
@@ -202,7 +220,15 @@
             await image.Data.CopyToAsync(ms);
 
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
-            await Network.UploadPicture(username, dataUri);
+
+            try
+            {
+                await Network.UploadPicture(username, dataUri);
+            }
+            catch (ErrorException e)
+            {
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+            }
         }
     }
 
@@ -212,10 +238,17 @@
     //så det kun er enum som er forskellige når man opdater profiledata
         Edit();
         ProfileData.username = username;
-        await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+
+        try
+        {
+            await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+        }
+        catch (ErrorException e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
     }
-
-
+    
     private async void ChooseCover(int i)
     {
         await Network.ChangeCoverPicture(username + (i + 1));

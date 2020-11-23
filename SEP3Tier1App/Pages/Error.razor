@@ -1,0 +1,8 @@
+﻿@page "/Error/{ErrorMessage}"
+<h3>Error</h3>
+<p>@ErrorMessage. Contact IT Department: 7575 7604</p>
+
+@code {
+    [Parameter] 
+    public string ErrorMessage { get; set; }
+}

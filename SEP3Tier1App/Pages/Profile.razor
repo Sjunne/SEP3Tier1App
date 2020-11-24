@@ -111,6 +111,7 @@
                             <div>
                                 <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
                                 <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
+                                <button @onclick="@(e => DeletePhoto(holder))">Delete</button>
                             </div>
                         </div>
                     }
@@ -182,12 +183,11 @@
             
             ProfileData = await profile;
         }
-        catch (Exception e)
+        catch (ErrorException e)
         {
+            Console.WriteLine(e.Message);
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
-
-
         
     }
 
@@ -290,6 +290,11 @@
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
        
+    }
+
+    private async void DeletePhoto(int holder)
+    {
+        throw new NotImplementedException();
     }
 
 }

@@ -158,8 +158,8 @@ namespace WebApplication.Network
             {
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
-
-            return await httpResponseMessage.ReadAsync<string>();
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            return readAsStringAsync;
         }
 
         public async Task ChangeProfilePic(string picturename)

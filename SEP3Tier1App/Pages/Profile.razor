@@ -111,7 +111,7 @@
                             <div>
                                 <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
                                 <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
-                                <button @onclick="@(e => DeletePhoto(holder))">Delete</button>
+                                <button @onclick="@(e => DeletePhoto(holder))" style="bottom: 0; right: 32%; position: absolute; background-color: red">Delete</button>
                             </div>
                         </div>
                     }
@@ -280,7 +280,9 @@
 
     private async void DeletePhoto(int holder)
     {
-        throw new NotImplementedException();
+        await Network.DeletePhoto(username + (holder + 1));
+        Images = await Network.GetPictures(username);
+        StateHasChanged();
     }
 
 }

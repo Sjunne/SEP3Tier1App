@@ -22,5 +22,6 @@ namespace WebApplication.Network
         Task CreateProfile(ProfileData profileData);
 
         Task CreatePreference(ProfileData profileData);
+        Task DeletePhoto(string username);
     }
 }

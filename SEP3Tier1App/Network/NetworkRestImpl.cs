@@ -54,6 +54,17 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
+        public async Task DeletePhoto(string pictureName)
+        {
+            HttpResponseMessage info = await client.DeleteAsync($"https://localhost:5003/Image/DeletePhoto/{pictureName}");
+            if (info.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(info);
+
+                throw new ErrorException(info.StatusCode + "");
+            }
+        }
+
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");

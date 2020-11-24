@@ -16,7 +16,7 @@
 <div>
 <label>Education</label>
     <InputText class="form-control" placeholder="Education" @bind-Value="@education"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{ ProfileData.preferences.education += education;}} else { ProfileData.preferences.education += ", " + education;} education = ""; })">
+    <button @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{ ProfileData.preferences.education += education;}} else {if (education.Any(char.IsDigit)){} else{ProfileData.preferences.education += ", " + education;}} education = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
     <label>So far you have chosen: @ProfileData.preferences.education</label>
@@ -24,9 +24,9 @@
 <div>
     <label>City</label>
     <InputText class="form-control" placeholder="City" @bind-Value="@city"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.city == null) {ProfileData.preferences.city += city;}
-                      else {
-                          ProfileData.preferences.city += ", " + city;}
+    <button @onclick="@(() => { if (ProfileData.preferences.city == null) {if (city.Any(char.IsDigit)){} else{ProfileData.preferences.city += city;}}
+                      else { if (city.Any(char.IsDigit)){} else{
+                          ProfileData.preferences.city += ", " + city;}}
                                   city = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -35,9 +35,9 @@
 <div>
     <label>Hobbies</label>
     <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {ProfileData.preferences.hobbies += hobby;}
-                      else {
-                          ProfileData.preferences.hobbies += ", " + hobby;}
+    <button @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{ProfileData.preferences.hobbies += hobby;}}
+                      else { if (hobby.Any(char.IsDigit)){} else{
+                          ProfileData.preferences.hobbies += ", " + hobby;}}
                                   hobby = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -46,9 +46,9 @@
 <div>
     <label>Hair Colors</label>
     <InputText class="form-control" placeholder="HairColor" @bind-Value="@hairColor"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {ProfileData.preferences.hairColor += hairColor;}
-                      else {
-                          ProfileData.preferences.hairColor += ", " + hairColor;}
+    <button @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {if (hairColor.Any(char.IsDigit)){} else{ProfileData.preferences.hairColor += hairColor;}}
+                      else { if (hairColor.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.hairColor += ", " + hairColor;}}
                                   hairColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -57,9 +57,9 @@
 <div>
     <label>Eye Colors</label>
     <InputText class="form-control" placeholder="EyeColor" @bind-Value="@eyeColor"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {ProfileData.preferences.eyeColor += eyeColor;}
-                      else {
-                          ProfileData.preferences.eyeColor += ", " + eyeColor;}
+    <button @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {if (eyeColor.Any(char.IsDigit)){} else{ ProfileData.preferences.eyeColor += eyeColor;}}
+                      else { if (eyeColor.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.eyeColor += ", " + eyeColor;}}
                                   eyeColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -68,9 +68,9 @@
 <div>
     <label>Skin Colors</label>
     <InputText class="form-control" placeholder="SkinColor" @bind-Value="@skinColor"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {ProfileData.preferences.skinColor += skinColor;}
-                                  else {
-                                      ProfileData.preferences.skinColor += ", " + skinColor;}
+    <button @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {if (skinColor.Any(char.IsDigit)){} else {ProfileData.preferences.skinColor += skinColor;}}
+                                  else { if (skinColor.Any(char.IsDigit)){} else{
+                                      ProfileData.preferences.skinColor += ", " + skinColor;}}
                                   skinColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -79,9 +79,9 @@
 <div>
     <label>Nationalities</label>
     <InputText class="form-control" placeholder="Nationality" @bind-Value="@nationality"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.nationality == null) {ProfileData.preferences.nationality += nationality;}
-                      else {
-                          ProfileData.preferences.nationality += ", " + nationality;}
+    <button @onclick="@(() => { if (ProfileData.preferences.nationality == null) {if (nationality.Any(char.IsDigit)){} else {ProfileData.preferences.nationality += nationality;}}
+                      else { if (nationality.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.nationality += ", " + nationality;}}
                                   nationality = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -90,9 +90,9 @@
 <div>
     <label>Bodyshape</label>
     <InputText class="form-control" placeholder="BodyShape" @bind-Value="@bodyshape"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {ProfileData.preferences.bodyShape += bodyshape;}
-                      else {
-                          ProfileData.preferences.bodyShape += ", " + bodyshape;}
+    <button @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {if (bodyshape.Any(char.IsDigit)){} else { ProfileData.preferences.bodyShape += bodyshape;}}
+                      else { if (bodyshape.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.bodyShape += ", " + bodyshape;}}
                                   bodyshape = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -101,9 +101,9 @@
 <div>
     <label>Jobs</label>
     <InputText class="form-control" placeholder="Job" @bind-Value="@job"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.job == null) {ProfileData.preferences.job += job;}
-                      else {
-                          ProfileData.preferences.job += ", " + job;}
+    <button @onclick="@(() => { if (ProfileData.preferences.job == null) {if (job.Any(char.IsDigit)){} else {ProfileData.preferences.job += job;}}
+                      else { if (job.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.job += ", " + job;}}
                                   job = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -111,14 +111,7 @@
 </div>
 <div>
     <label>Genders</label>
-    <InputText class="form-control" placeholder="Gender" @bind-Value="@gender"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.gender == null) {ProfileData.preferences.gender += gender;}
-                      else {
-                          ProfileData.preferences.gender += ", " + gender;}
-                                  gender = ""; })">
-        <i class="oi oi-plus" style="color:red"/>
-        Add</button>
-    <label>So far you have: @ProfileData.preferences.gender</label>
+    <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.preferences.gender"/>
 </div>
 
 <div>

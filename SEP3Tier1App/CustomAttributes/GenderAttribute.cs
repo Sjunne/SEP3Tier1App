@@ -6,7 +6,7 @@ namespace SEP3Tier1App.CustomAttributes
     {
         public GenderAttribute()
         {
-            ErrorMessage = " field Must be a valid gender Either Male or Female, Enter N if Nonbinary";
+            ErrorMessage = " field Must be a valid gender Either Male or Female, Enter N if Nonbinary or both";
         }
         
         protected override ValidationResult IsValid(object value,

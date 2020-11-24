@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SEP3Tier1App.CustomAttributes
 {
@@ -12,9 +14,15 @@ namespace SEP3Tier1App.CustomAttributes
         protected override ValidationResult IsValid(object value,
             ValidationContext validationContext)
         {
-            var str = (string)value;
+            if (value == null)
+            {
+                return ValidationResult.Success;
+            }
+            var str = value.ToString();
+            
             if (str.Any(char.IsDigit))
             {
+                
                 return new ValidationResult(ErrorMessage+validationContext.MemberName,new []{validationContext.MemberName});
             }
             return ValidationResult.Success;

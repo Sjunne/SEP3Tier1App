@@ -1,11 +1,12 @@
-﻿@page "/CreatePreference"
+﻿@page "/Createpreference"
 @using WebApplication.Data
 @using WebApplication.Network
 @using System.Diagnostics.Eventing.Reader
+@using SEP3Tier1App.CustomAttributes
 @inject ProfileData ProfileData
 @inject INetworkComp NetWork
-<h1>Create Preferences</h1>
-<EditForm Model="@ProfileData" OnValidSubmit="Here">
+<h1>Create preferences.</h1>
+<EditForm EditContext=@editContext OnValidSubmit="ConfirmData">
 <DataAnnotationsValidator />
 <ValidationSummary />
 <label>Maximum Age</label>
@@ -13,12 +14,9 @@
 <label>Minimum Age</label>
 <InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
 <div>
-    <label>Education</label>
+<label>Education</label>
     <InputText class="form-control" placeholder="Education" @bind-Value="@education"/>
-    <button @onclick="@(() => { if (ProfileData.preferences.education == null) {ProfileData.preferences.education += education;}
-                      else {
-                          ProfileData.preferences.education+= ", " + education;}
-                                  education = ""; })">
+    <button @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{ ProfileData.preferences.education += education;}} else { ProfileData.preferences.education += ", " + education;} education = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
     <label>So far you have chosen: @ProfileData.preferences.education</label>
@@ -133,7 +131,7 @@
 </div>
 
 
-<button @onclick="() => ConfirmData()">
+<button>
     <i class="oi oi-submit" style="color:red"/>
     Submit</button>
 </EditForm>
@@ -149,15 +147,23 @@
     private string gender;
     private string education;
     private string city;
+    private EditContext editContext;
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(ProfileData.preferences);
+    }
 
     public void ConfirmData()
     {
-        ProfileData.username = "Kasper";
-        NetWork.CreatePreference(ProfileData);
-    }
+        Boolean isValid = editContext.Validate();
 
-    public void Here()
-    {
-        
+        if (isValid)
+        {
+            ProfileData.username = "Kasper";
+            NetWork.CreatePreference(ProfileData);
+        }
+       
     }
+    
 }

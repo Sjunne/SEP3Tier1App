@@ -7,11 +7,13 @@ namespace WebApplication.Data
 {
     public class ProfileData : IProfile
     {
-        public Details self;
-        public Details preferences;
+        [ValidateComplexType]
+        public Details self { get; set; }
+        public Details preferences { get; set; }
 
         public ProfileData()
         {
+            
             self = new Details();
             preferences = new Details();
             

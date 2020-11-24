@@ -17,10 +17,10 @@ namespace WebApplication.Data
         [NoNumbers]
         public string nationality { get; set; }
         
-        [Range(18, 150, ErrorMessage = "must be at least 18.")]
+        [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
         public int minimumAge { get; set; }
         
-        [Range(18, 150, ErrorMessage = "must be at least 18.")]
+        [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
         public int maximumAge { get; set; }
         
         [StringLength(40)]
@@ -44,12 +44,15 @@ namespace WebApplication.Data
         public bool lookingFor { get; set; }
         
         [StringLength(40)]
+        [NoNumbers]
         public string eyeColor { get; set; }
         
         [StringLength(40)]
+        [Gender]
         public string gender { get; set; }
         
         [StringLength(40)]
+        [NoNumbers]
         public string city { get; set; }
         
     }

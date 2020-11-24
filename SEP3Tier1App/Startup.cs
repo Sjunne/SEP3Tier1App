@@ -35,10 +35,12 @@ namespace SEP3Tier1App
             services.AddBlazoredModal();
             
 
-            // Singleton
+            // Scoped
             services.AddScoped<ProfileData>();
+            services.AddScoped<Details>();
             
             //Network
+            // Singleton
             services.AddSingleton<INetworkComp, NetworkRestImpl>();
         }
 

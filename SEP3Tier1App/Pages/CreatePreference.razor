@@ -14,7 +14,8 @@
 <label>Minimum Age</label>
 <InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
 <div>
-<label>Education</label>
+    <label>Education</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Education" @bind-Value="@education"/>
     <button @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{ ProfileData.preferences.education += education;}} else {if (education.Any(char.IsDigit)){} else{ProfileData.preferences.education += ", " + education;}} education = ""; })">
         <i class="oi oi-plus" style="color:red"/>
@@ -22,7 +23,8 @@
     <label>So far you have chosen: @ProfileData.preferences.education</label>
 </div>
 <div>
-    <label>City</label>
+    <label>City</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="City" @bind-Value="@city"/>
     <button @onclick="@(() => { if (ProfileData.preferences.city == null) {if (city.Any(char.IsDigit)){} else{ProfileData.preferences.city += city;}}
                       else { if (city.Any(char.IsDigit)){} else{
@@ -33,7 +35,8 @@
     <label>So far you have chosen: @ProfileData.preferences.city</label>
 </div>
 <div>
-    <label>Hobbies</label>
+    <label>Hobbies</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
     <button @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{ProfileData.preferences.hobbies += hobby;}}
                       else { if (hobby.Any(char.IsDigit)){} else{
@@ -44,7 +47,8 @@
     <label>So far you have chosen: @ProfileData.preferences.hobbies</label>
 </div>
 <div>
-    <label>Hair Colors</label>
+    <label>Hair Colors</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="HairColor" @bind-Value="@hairColor"/>
     <button @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {if (hairColor.Any(char.IsDigit)){} else{ProfileData.preferences.hairColor += hairColor;}}
                       else { if (hairColor.Any(char.IsDigit)){} else {
@@ -55,7 +59,8 @@
     <label>So far you have chosen: @ProfileData.preferences.hairColor</label>
 </div>
 <div>
-    <label>Eye Colors</label>
+    <label>Eye Colors</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="EyeColor" @bind-Value="@eyeColor"/>
     <button @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {if (eyeColor.Any(char.IsDigit)){} else{ ProfileData.preferences.eyeColor += eyeColor;}}
                       else { if (eyeColor.Any(char.IsDigit)){} else {
@@ -66,7 +71,8 @@
     <label>So far you have: @ProfileData.preferences.eyeColor</label>
 </div>
 <div>
-    <label>Skin Colors</label>
+    <label>Skin Colors</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="SkinColor" @bind-Value="@skinColor"/>
     <button @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {if (skinColor.Any(char.IsDigit)){} else {ProfileData.preferences.skinColor += skinColor;}}
                                   else { if (skinColor.Any(char.IsDigit)){} else{
@@ -77,7 +83,8 @@
     <label>So far you have: @ProfileData.preferences.skinColor</label>
 </div>
 <div>
-    <label>Nationalities</label>
+    <label>Nationalities</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Nationality" @bind-Value="@nationality"/>
     <button @onclick="@(() => { if (ProfileData.preferences.nationality == null) {if (nationality.Any(char.IsDigit)){} else {ProfileData.preferences.nationality += nationality;}}
                       else { if (nationality.Any(char.IsDigit)){} else {
@@ -88,7 +95,8 @@
     <label>So far you have: @ProfileData.preferences.nationality</label>
 </div>
 <div>
-    <label>Bodyshape</label>
+    <label>Bodyshape</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="BodyShape" @bind-Value="@bodyshape"/>
     <button @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {if (bodyshape.Any(char.IsDigit)){} else { ProfileData.preferences.bodyShape += bodyshape;}}
                       else { if (bodyshape.Any(char.IsDigit)){} else {
@@ -99,7 +107,8 @@
     <label>So far you have: @ProfileData.preferences.bodyShape</label>
 </div>
 <div>
-    <label>Jobs</label>
+    <label>Jobs</label><br>
+    <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Job" @bind-Value="@job"/>
     <button @onclick="@(() => { if (ProfileData.preferences.job == null) {if (job.Any(char.IsDigit)){} else {ProfileData.preferences.job += job;}}
                       else { if (job.Any(char.IsDigit)){} else {

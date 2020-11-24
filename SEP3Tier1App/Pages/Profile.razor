@@ -5,6 +5,7 @@
 @using Blazored.Modal.Services
 @using System.Net.Mime
 @using System.IO
+@using System.Text
 @using BlazorInputFile
 @using SEP3Tier1App.Util
 @inject IModalService Modal
@@ -59,7 +60,7 @@
                         {
                             <button class="btn btn-primary Georgia" type="submit" @onclick="EditAbout" style="float: right">Save</button>
                             <p/>
-                            <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
+                            <input type="number" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
                             <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
                             <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
                             <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
@@ -92,18 +93,25 @@
 
                             </EditForm>
                         }
+                       
 
                     </div>
+                     <p>@ErrorIntro</p>
                 </div>
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Images">
                 <div style="height: 300px">
                     <InputFile OnChange="HandleSelection"/>
+                    <p>@Error</p>
                     <br/>
                     @for (int i = 0; i < Images.Count - 1; i++)
                     {
                         int holder = i;
+                        @if (Images.Count == 0)
+                        {
+                            <p>Upload Pictures to your Profile </p>
+                        }
                         <div class="gallery" style="overflow: hidden;">
                             <a target="_blank" href="@Images[holder]" >
                                 <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
@@ -115,7 +123,6 @@
                             </div>
                         </div>
                     }
-                    <p>@Error</p>
                 </div>
 
             </RadzenTabsItem>
@@ -153,9 +160,10 @@
     //fjern inline style
 
 
+    private string placeholder;
     private string CoverPicture;
     private string ProfilePicture;
-    private string dataUri, Error;
+    private string dataUri, Error, ErrorIntro;
     private IList<string> Images = new List<string>();
     private IList<Review> Reviews = new List<Review>();
 
@@ -207,9 +215,15 @@
 
     public async Task EditIntroduction()
     {
+        
         EditIntro();
         ProfileData.username = username;
         ProfileData.intro = ProfileData.intro.Trim();
+        if (ProfileData.intro.Length > 300)
+        {
+            ErrorIntro = "Changes has not been stored! \n Please shorten your introduction to maximum 300 characters.";
+        }
+        else
         await Network.EditIntroduction(ProfileData);
     }
 
@@ -218,26 +232,38 @@
         var file = files.FirstOrDefault();
         if (file != null)
         {
-            if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")))
+            IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
+            var ms = new MemoryStream();
+            await image.Data.CopyToAsync(ms);
+
+            dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
+            int length = Encoding.ASCII.GetBytes(dataUri).Length;
+            Console.WriteLine(length + " here");
+            
+            if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")) && 55000 < length)
             {
-                Error = "Please upload only jpeg files.";
+                Error = "Only JPG is supported for now. /n Choose a smaller picture.";
+                StateHasChanged();
             }
-            if (file.Size > 1048576)
+            else if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")))
             {
-                Error += "Please upload a smaller file";
+                Error = "Only JPG is supported for now. ";
+                StateHasChanged();
+            }
+            else if (55000 <= length)
+            {
+                Error += "Choose a smaller picture.";
+                StateHasChanged();
             }
             else
             {
-                IFileListEntry image = await file.ToImageFileAsync(file.Type, 512, 512);
-                var ms = new MemoryStream();
-                await image.Data.CopyToAsync(ms);
-
-                dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
-
+                Error = "";
+                
                 try
                 {
                     await Network.UploadPicture(username, dataUri);
                     Images = await Network.GetPictures(username);
+                    StateHasChanged();
                 }
                 catch (ErrorException e)
                 {
@@ -257,7 +283,12 @@
 
         try
         {
-            await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+            if(ProfileData.age < 18 || ProfileData.age>120)
+                ErrorIntro = "Changes has not been stored! Please select a valid age.";
+            else
+            {
+                await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+            }
         }
         catch (ErrorException e)
         {
@@ -271,6 +302,8 @@
         {
             await Network.ChangeCoverPicture(username + (i + 1));
             CoverPicture = Images[i];
+            StateHasChanged();
+
         }
         catch (Exception e)
         {
@@ -284,6 +317,8 @@
         {
             await Network.ChangeProfilePic(username + (i + 1));
             ProfilePicture = Images[i];
+            StateHasChanged();
+
         }
         catch (Exception e)
         {

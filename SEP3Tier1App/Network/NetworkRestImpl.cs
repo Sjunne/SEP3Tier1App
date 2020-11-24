@@ -69,8 +69,11 @@ namespace WebApplication.Network
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
-            if(httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
+            }
 
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
@@ -85,8 +88,12 @@ namespace WebApplication.Network
             {
                 return "";
             }
+
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
             return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
@@ -95,6 +102,7 @@ namespace WebApplication.Network
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/All?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode+ "");
             }
 
@@ -121,8 +129,8 @@ namespace WebApplication.Network
                 PostAsync("https://localhost:5003/Image", content);
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
-
             }
         }
 
@@ -143,6 +151,7 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
             if (info.StatusCode != HttpStatusCode.Created)
             {
+                Console.WriteLine(info);
                 throw new ErrorException(info.StatusCode + "");
             }
         }
@@ -155,6 +164,7 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
             if (info.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine(info);
                 throw new ErrorException(info.StatusCode + "");
             }
         }
@@ -168,10 +178,11 @@ namespace WebApplication.Network
             }
             else if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
-
-            return await httpResponseMessage.ReadAsync<string>();
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            return readAsStringAsync;
         }
 
         public async Task ChangeProfilePic(string picturename)
@@ -183,6 +194,7 @@ namespace WebApplication.Network
                 HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);
                 if (info.StatusCode != HttpStatusCode.OK)
                 {
+                    Console.WriteLine(info);
                     throw new ErrorException("Database connection lost");
                 }
 
@@ -193,6 +205,7 @@ namespace WebApplication.Network
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Reviews?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
             string message = await httpResponseMessage.Content.ReadAsStringAsync();

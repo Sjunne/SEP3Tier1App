@@ -111,6 +111,7 @@
                             <div>
                                 <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
                                 <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
+                                <button @onclick="@(e => DeletePhoto(holder))">Delete</button>
                             </div>
                         </div>
                     }
@@ -164,27 +165,28 @@
     {
         Reviews.Add(new Review());
         ProfileData.username = username;
-        ProfileData = await Network.GetProfile(username);
         ProfileData.isEditingAbout = false;
 
     //henter data fra databasen til at fylde profilen ud,
     //kunne optimeres
-        Task<ProfileData> profile = Network.GetProfile(username);
 
         try
         {
             CoverPicture = await Network.GetCoverPicture(username);
             Images = await Network.GetPictures(username);
             ProfilePicture = await Network.GetProfilePicture(username);
+            Task<ProfileData> profile = Network.GetProfile(username);
+
+            ProfileData = await profile;
             Reviews = await Network.GetReviews(username);
         }
-        catch (Exception e)
+        catch (ErrorException e)
         {
+            Console.WriteLine(e.Message);
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
 
 
-        ProfileData = await profile;
     }
 
     private void Here()
@@ -274,6 +276,11 @@
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
        
+    }
+
+    private async void DeletePhoto(int holder)
+    {
+        throw new NotImplementedException();
     }
 
 }

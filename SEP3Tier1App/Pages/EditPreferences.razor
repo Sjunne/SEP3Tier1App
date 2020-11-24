@@ -1,12 +1,13 @@
-﻿@page "/Createpreference"
+﻿@page "/Editpreference"
 @using WebApplication.Data
 @using WebApplication.Network
 @using System.Diagnostics.Eventing.Reader
+@using System.Text.Json
 @using SEP3Tier1App.CustomAttributes
 @inject ProfileData ProfileData
-@inject INetworkComp NetWork
+@inject INetworkComp Network
 <h1>Create preferences.</h1>
-<EditForm EditContext=@editContext OnValidSubmit="ConfirmData">
+<EditForm Model="ProfileData.preferences" OnValidSubmit="@ConfirmData">
 <DataAnnotationsValidator />
 <ValidationSummary />
 <label>Maximum Age</label>
@@ -133,7 +134,7 @@
 </div>
 
 
-<button type="submit">
+<button>
     <i class="oi oi-submit" style="color:red"/>
     Submit</button>
 </EditForm>
@@ -151,9 +152,13 @@
     private string city;
     private EditContext editContext;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        ProfileData = await Network.GetPreference("Kasper");
+        ProfileData.preferences=JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
         editContext = new EditContext(ProfileData.preferences);
+        Console.WriteLine(ProfileData.username);
+        
     }
 
     public void ConfirmData()
@@ -163,7 +168,7 @@
         if (isValid)
         {
             ProfileData.username = "Kasper";
-            NetWork.CreatePreference(ProfileData);
+            Network.CreatePreference(ProfileData);
         }
        
     }

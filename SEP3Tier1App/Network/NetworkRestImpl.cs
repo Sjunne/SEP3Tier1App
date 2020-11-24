@@ -54,6 +54,18 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
+        public async Task<ProfileData> GetPreference(string username)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Preference?username={username}");
+            if(httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                throw new ErrorException("Database connection lost");
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            
+            return profileData;
+        }
+
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");

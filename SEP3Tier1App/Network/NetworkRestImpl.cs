@@ -171,7 +171,6 @@ namespace WebApplication.Network
         public async Task<string> GetProfilePicture(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
-           Console.WriteLine(httpResponseMessage);
             if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
             {
                 return "";
@@ -181,7 +180,6 @@ namespace WebApplication.Network
                 Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
-
             string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
             return readAsStringAsync;
         }
@@ -196,7 +194,6 @@ namespace WebApplication.Network
                 if (info.StatusCode != HttpStatusCode.OK)
                 {
                     Console.WriteLine(info);
-
                     throw new ErrorException("Database connection lost");
                 }
 
@@ -208,7 +205,6 @@ namespace WebApplication.Network
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
                 Console.WriteLine(httpResponseMessage);
-
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
             string message = await httpResponseMessage.Content.ReadAsStringAsync();

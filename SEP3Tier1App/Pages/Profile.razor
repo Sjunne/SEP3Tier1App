@@ -5,6 +5,7 @@
 @using Blazored.Modal.Services
 @using System.Net.Mime
 @using System.IO
+@using System.Text
 @using BlazorInputFile
 @using SEP3Tier1App.Util
 @inject IModalService Modal
@@ -59,7 +60,7 @@
                         {
                             <button class="btn btn-primary Georgia" type="submit" @onclick="EditAbout" style="float: right">Save</button>
                             <p/>
-                            <input type="text" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
+                            <input type="number" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
                             <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
                             <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
                             <input type="text" class="form-control" placeholder="Instragam" @bind="@ProfileData.spotify"/>
@@ -92,18 +93,25 @@
 
                             </EditForm>
                         }
+                       
 
                     </div>
+                     <p>@ErrorIntro</p>
                 </div>
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Images">
                 <div style="height: 300px">
                     <InputFile OnChange="HandleSelection"/>
+                    <p>@Error</p>
                     <br/>
                     @for (int i = 0; i < Images.Count - 1; i++)
                     {
                         int holder = i;
+                        @if (Images.Count == 0)
+                        {
+                            <p>Upload Pictures to your Profile </p>
+                        }
                         <div class="gallery" style="overflow: hidden;">
                             <a target="_blank" href="@Images[holder]" >
                                 <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
@@ -122,19 +130,19 @@
                 <div style="height: 300px; overflow: scroll;">
                     @foreach (Review review in Reviews)
                     {
-                        <div style="height: 100px; border-width: 1px; border-style: solid; margin-left: 10px; margin-right: 30px;" class="container">
+                        <div style="height: 100px; border-width: 1px; margin-left: 10px; margin-right: 30px;" class="container">
                             <div class="row" style="height: 100%">
-                                <div style="border-style: solid; height: 100%" class="col-md-2">
+                                <div style="height: 100%" class="col-md-2">
                                     <img src="@review.image" alt="@review.username" style="object-fit: fill; border-radius: 50%; width: 100%; height: 70%;"/>
                                     <p style="margin-left: 25%;">@review.username</p>
                                 </div>
 
 
-                                <div class="col-md-8" style="border-style: solid">
+                                <div class="col-md-8">
                                     <p>@review.review</p>
                                 </div>
 
-                                <div class="col-md-2" style="border-style: solid">
+                                <div class="col-md-2">
                                      <p style="float: right;">@review.timestamp</p>
                                 </div>
                             </div>
@@ -152,9 +160,10 @@
     //fjern inline style
 
 
+    private string placeholder;
     private string CoverPicture;
     private string ProfilePicture;
-    private string dataUri;
+    private string dataUri, Error, ErrorIntro;
     private IList<string> Images = new List<string>();
     private IList<Review> Reviews = new List<Review>();
 
@@ -165,6 +174,7 @@
     {
         Reviews.Add(new Review());
         ProfileData.username = username;
+        
         ProfileData.isEditingAbout = false;
 
     //henter data fra databasen til at fylde profilen ud,
@@ -172,21 +182,21 @@
 
         try
         {
+            Task<ProfileData> profile = Network.GetProfile(username);
             CoverPicture = await Network.GetCoverPicture(username);
             Images = await Network.GetPictures(username);
             ProfilePicture = await Network.GetProfilePicture(username);
-            Task<ProfileData> profile = Network.GetProfile(username);
-
-            ProfileData = await profile;
             Reviews = await Network.GetReviews(username);
+            
+            
+            ProfileData = await profile;
         }
         catch (ErrorException e)
         {
             Console.WriteLine(e.Message);
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
-
-
+        
     }
 
     private void Here()
@@ -205,9 +215,15 @@
 
     public async Task EditIntroduction()
     {
+        
         EditIntro();
         ProfileData.username = username;
         ProfileData.intro = ProfileData.intro.Trim();
+        if (ProfileData.intro.Length > 300)
+        {
+            ErrorIntro = "Changes has not been stored! \n Please shorten your introduction to maximum 300 characters.";
+        }
+        else
         await Network.EditIntroduction(ProfileData);
     }
 
@@ -221,16 +237,40 @@
             await image.Data.CopyToAsync(ms);
 
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
-
-            try
+            int length = Encoding.ASCII.GetBytes(dataUri).Length;
+            Console.WriteLine(length + " here");
+            
+            if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")) && 55000 < length)
             {
-                await Network.UploadPicture(username, dataUri);
-                Images = await Network.GetPictures(username);
+                Error = "Only JPG is supported for now. /n Choose a smaller picture.";
+                StateHasChanged();
             }
-            catch (ErrorException e)
+            else if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")))
             {
-                NavigationManager.NavigateTo($"/Error/{e.Message}");
+                Error = "Only JPG is supported for now. ";
+                StateHasChanged();
             }
+            else if (55000 <= length)
+            {
+                Error += "Choose a smaller picture.";
+                StateHasChanged();
+            }
+            else
+            {
+                Error = "";
+                
+                try
+                {
+                    await Network.UploadPicture(username, dataUri);
+                    Images = await Network.GetPictures(username);
+                    StateHasChanged();
+                }
+                catch (ErrorException e)
+                {
+                    NavigationManager.NavigateTo($"/Error/{e.Message}");
+                }
+            }
+            
         }
     }
 
@@ -243,7 +283,12 @@
 
         try
         {
-            await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+            if(ProfileData.age < 18 || ProfileData.age>120)
+                ErrorIntro = "Changes has not been stored! Please select a valid age.";
+            else
+            {
+                await Network.EditProfile(ProfileData, RequestOperationEnum.EDITABOUT);
+            }
         }
         catch (ErrorException e)
         {
@@ -257,6 +302,8 @@
         {
             await Network.ChangeCoverPicture(username + (i + 1));
             CoverPicture = Images[i];
+            StateHasChanged();
+
         }
         catch (Exception e)
         {
@@ -270,6 +317,8 @@
         {
             await Network.ChangeProfilePic(username + (i + 1));
             ProfilePicture = Images[i];
+            StateHasChanged();
+
         }
         catch (Exception e)
         {

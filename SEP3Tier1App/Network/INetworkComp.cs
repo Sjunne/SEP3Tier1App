@@ -3,6 +3,7 @@
  using System.IO;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
+ using SEP3Tier1App.Network;
  using WebApplication.Data;
 
 namespace WebApplication.Network
@@ -31,6 +32,8 @@ namespace WebApplication.Network
         Task<IList<string>> GetMatches(int userId);
 
         Task getConnections(string username);
-        Action<Request> fromNetork();
+
+        Delegating getDelegating();
+
     }
 }

@@ -22,7 +22,7 @@ namespace WebApplication.Network
         CREATEPREFERENCE,
         DELETEPHOTO,
         GETPREFERENCE, 
-        GETCONNECTIONS
+        GETCONNECTIONS,
         EDITPROFILE,
         EDITPREFERENCE
     }

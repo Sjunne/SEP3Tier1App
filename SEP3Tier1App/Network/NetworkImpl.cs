@@ -12,8 +12,10 @@ using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Radzen;
+using SEP3Tier1App.Network;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
+
 
 namespace WebApplication.Network
 {
@@ -22,10 +24,12 @@ namespace WebApplication.Network
         private HttpClient client;
         private NetworkStream _networkStream;
         private string Username = "Maria";
-        public Action<Request> fromNetwork { get; set; }
+        private Delegating _delegating;
+
 
         public NetworkImpl()
         {
+            _delegating = new Delegating();
             _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
@@ -42,13 +46,11 @@ namespace WebApplication.Network
                 var trimEmptyBytes = TrimEmptyBytes(dataFromClient);
                 string s = Encoding.ASCII.GetString(trimEmptyBytes, 0, trimEmptyBytes.Length);
                 Request request = JsonSerializer.Deserialize<Request>(s);
-                Console.WriteLine("Just before Switch");
                 switch (request.requestOperation)
                 {
                     case RequestOperationEnum.GETCONNECTIONS:
                     {   
-                        fromNetwork?.Invoke(request);
-                        Console.WriteLine("i did send it");
+                        _delegating.fromNetwork?.Invoke(request);
                         break;
                     }
                 }
@@ -245,14 +247,13 @@ namespace WebApplication.Network
 
             byte[] bytes = Encoding.ASCII.GetBytes(request);
             _networkStream.Write(bytes, 0, bytes.Length);
-            
-            
         }
 
-        public Action<Request> fromNetork()
+        public Delegating getDelegating()
         {
-            return fromNetwork;
+            return _delegating;
         }
+
 
         public async Task<ProfileData> GetProfile(int userId)
         {

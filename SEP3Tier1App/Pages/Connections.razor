@@ -1,9 +1,12 @@
 ﻿@page "/Connections"
 @using WebApplication.Data
 @using WebApplication.Network
+@using SEP3Tier1App.Network
 @inject INetworkComp Network;
-<h3>Connections</h3>
 
+
+<h3>Connections</h3>
+<!--
 @for (int i = 0; i < allConnections.Count; i++)
 {
     int holder = i;
@@ -30,30 +33,44 @@
             </div>
         </div>
 
+
     </div>
 }
 
-
+-->
 
 @code {
     private IList<Connection> allConnections = new List<Connection>();
     private IList<string> Images = new List<string>();
     private string Username;
-    private Action<Request> fromNetwork;
-    
+    private Delegating _delegate;
 
-    protected override async Task OnInitializedAsync()
+    private bool onceOnly;
+
+
+    protected override Task OnInitializedAsync()
     {
-        fromNetwork = Network.fromNetork();
-        fromNetwork += ReactToNetwork;
-        await Network.getConnections(Username);
+        if (onceOnly == false)
+        {
+            setDelegates();
+        }
+        return base.OnInitializedAsync();
     }
 
     private void ReactToNetwork(Request obj)
     {
-        Console.WriteLine("Worked");
+        Console.WriteLine(obj.o.ToString());
     }
 
-
+    private async void setDelegates()
+    {
+        onceOnly = true;
+        Console.WriteLine("tester1233123");
+        _delegate = Network.getDelegating();
+        _delegate.fromNetwork += ReactToNetwork;
+       
+        
+        await Network.getConnections(Username);
+    }
 
 }

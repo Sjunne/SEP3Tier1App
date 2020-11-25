@@ -41,7 +41,7 @@ namespace SEP3Tier1App
             
             //Network
             // Singleton
-            services.AddSingleton<INetworkComp, NetworkRestImpl>();
+            services.AddSingleton<INetworkComp, NetworkImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

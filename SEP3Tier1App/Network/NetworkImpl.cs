@@ -4,8 +4,10 @@
  using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
@@ -15,13 +17,48 @@ using WebApplication.Data;
 
 namespace WebApplication.Network
 {
-    public class NetworkRestImpl : INetworkComp
+    public class NetworkImpl : INetworkComp
     {
         private HttpClient client;
+        private NetworkStream _networkStream;
+        private string Username = "Maria";
+        public Action<Request> fromNetwork { get; set; }
 
-        public NetworkRestImpl()
+        public NetworkImpl()
         {
+            _networkStream = NetworkStream();
+            SendUsername(Username);
+            Thread thread = new Thread(() => ListenToServer());
+            thread.Start();
             client = new HttpClient();
+        }
+
+        private void ListenToServer()
+        {
+            while (true)
+            {
+                byte[] dataFromClient = new byte[1024];
+                _networkStream.Read(dataFromClient, 0, dataFromClient.Length);
+                var trimEmptyBytes = TrimEmptyBytes(dataFromClient);
+                string s = Encoding.ASCII.GetString(trimEmptyBytes, 0, trimEmptyBytes.Length);
+                Request request = JsonSerializer.Deserialize<Request>(s);
+                Console.WriteLine("Just before Switch");
+                switch (request.requestOperation)
+                {
+                    case RequestOperationEnum.GETCONNECTIONS:
+                    {   
+                        fromNetwork?.Invoke(request);
+                        Console.WriteLine("i did send it");
+                        break;
+                    }
+                }
+            }
+        }
+
+        private void SendUsername(string username)
+        {
+            var bytes = Encoding.ASCII.GetBytes(username);
+            _networkStream.Write(bytes,0,bytes.Length);
         }
 
         public async Task EditIntroduction(ProfileData profileData)
@@ -150,7 +187,7 @@ namespace WebApplication.Network
             Request request = new Request()
             {
                 Username = profileData.username,
-                o = JsonSerializer.Serialize(profileData),
+                o = profileData,
                 requestOperation = requestOperationEnum
             };
             string message = JsonSerializer.Serialize(request);
@@ -173,6 +210,25 @@ namespace WebApplication.Network
             Console.WriteLine(profile.ToString());
             IList<string> profiles = JsonSerializer.Deserialize<IList<string>>(profile);
             return profiles;
+        }
+
+        public async Task getConnections(string username)
+        {
+            string request = JsonSerializer.Serialize(new Request()
+            {
+                Username = username,
+                requestOperation = RequestOperationEnum.GETCONNECTIONS
+            });
+
+            byte[] bytes = Encoding.ASCII.GetBytes(request);
+            _networkStream.Write(bytes, 0, bytes.Length);
+            
+            
+        }
+
+        public Action<Request> fromNetork()
+        {
+            return fromNetwork;
         }
 
         public async Task<ProfileData> GetProfile(int userId)
@@ -256,8 +312,45 @@ namespace WebApplication.Network
                 return false;
             }
         }
+        
+        
+        
+        
+        
+        
+    
+        private static NetworkStream NetworkStream()
+        {
+            NetworkStream stream = null;
+
+            try
+            {
+                TcpClient tcpClient = new TcpClient("127.0.0.1", 4500);
+                stream = tcpClient.GetStream();
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return stream;
+        }
+        
+        
+        private byte[] TrimEmptyBytes(byte[] array)
+        {
+            int i = array.Length - 1;
+            while (array[i] == 0)
+            {
+                --i;
+            }
+
+            byte[] bar = new byte[i + 1];
+            Array.Copy(array, bar, i+1);
+            return bar;
+        }
+        
     }
 
-    
-    
 }

@@ -6,10 +6,22 @@ namespace WebApplication.Network
     public enum RequestOperationEnum
     {
         EDITINTRODUCTION,
+        PROFILE, 
+        COVER,
+        PICTURES,
+        MATCHES,
         UPLOADPICTURE,
         EDITABOUT,
         REVIEWS,
+        UPDATECOVER,
+        PROFILEPIC,
+        UPDATEPROFILEPIC, 
+        SUCCESS,
+        ERROR,
         CREATEPROFILE,
-        CREATEPREFERENCE
+        CREATEPREFERENCE,
+        DELETEPHOTO,
+        GETPREFERENCE, 
+        GETCONNECTIONS
     }
 }

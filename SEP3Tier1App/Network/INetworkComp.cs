@@ -1,4 +1,5 @@
-﻿﻿using System.Collections.Generic;
+﻿﻿using System;
+ using System.Collections.Generic;
  using System.IO;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,8 @@ namespace WebApplication.Network
         Task DeletePhoto(string holder);
         Task<ProfileData> GetPreference(string username);
         Task<IList<string>> GetMatches(int userId);
-        
+
+        Task getConnections(string username);
+        Action<Request> fromNetork();
     }
 }

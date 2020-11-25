@@ -22,9 +22,12 @@ namespace WebApplication.Network
         Task CreateProfile(ProfileData profileData);
 
         Task CreatePreference(ProfileData profileData);
+        Task DeletePhoto(string holder);
         Task<ProfileData> GetPreference(string username);
         Task EditPreference(ProfileData profileData);
         void bigEditProfile(ProfileData profileData);
         void deleteProfile(string username);
+        Task<IList<string>> GetMatches(int userId);
+        
     }
 }

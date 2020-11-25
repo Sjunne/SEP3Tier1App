@@ -54,6 +54,17 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
+        public async Task DeletePhoto(string pictureName)
+        {
+            HttpResponseMessage info = await client.DeleteAsync($"https://localhost:5003/Image/DeletePhoto/{pictureName}");
+            if (info.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(info);
+
+                throw new ErrorException(info.StatusCode + "");
+            }
+        }
+
         public async Task<ProfileData> GetPreference(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Preference?username={username}");
@@ -178,7 +189,23 @@ namespace WebApplication.Network
                 throw new ErrorException(info.StatusCode + "");
             }
         }
+        
+        public async Task<IList<String>> GetMatches(int userId)
+        {
+            string profile = await client.GetStringAsync($"https://localhost:5003/Match?user1={userId}");
+            Console.WriteLine(profile.ToString());
+            IList<string> profiles = JsonSerializer.Deserialize<IList<string>>(profile);
+            return profiles;
+        }
 
+        public async Task<ProfileData> GetProfile(int userId)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Profile?userid={userId}");
+            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            return profileData;
+        }
+
+        
         public async Task ChangeCoverPicture(string pictureName)
         {
             string message = JsonSerializer.Serialize(pictureName);

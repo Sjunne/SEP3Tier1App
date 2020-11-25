@@ -25,5 +25,6 @@ namespace WebApplication.Network
         Task<ProfileData> GetPreference(string username);
         Task EditPreference(ProfileData profileData);
         void bigEditProfile(ProfileData profileData);
+        void deleteProfile(string username);
     }
 }

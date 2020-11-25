@@ -61,6 +61,7 @@
 
 </EditForm>
 
+<button type="button" @onclick="deleteprofile"> DELETE PROFILE</button>
 
 
 @code {
@@ -77,7 +78,11 @@
         ProfileData.preferences.maximumAge = 18;
         editContext= new EditContext(ProfileData);
     }
-    
+
+    public void deleteprofile()
+    {
+        Network.deleteProfile("Kasper");
+    }
 
     public void ConfirmData()
     {
@@ -94,7 +99,6 @@
         {
             ProfileData.username = "Kasper";
             Network.bigEditProfile(ProfileData);
-            NavigationManager.NavigateTo("CreatePreference");
         }
         else
         {

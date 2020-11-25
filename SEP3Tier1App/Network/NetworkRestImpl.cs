@@ -84,6 +84,11 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/bigEditProfile", content);
         }
 
+        public async void deleteProfile(string username)
+        {
+            client.DeleteAsync("https://localhost:5003/Profile/delete?username="+ username);
+        }
+
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");

@@ -1,16 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Text.Json.Serialization;
+using SEP3Tier1App.CustomAttributes;
 
 namespace WebApplication.Data
 {
     public class ProfileData : IProfile
     {
-        public Details self;
-        public Details preferences;
+        [ValidateComplexType]
+        public Details self { get; set; }
+        public Details preferences { get; set; }
 
         public ProfileData()
         {
+            
             self = new Details();
             preferences = new Details();
             
@@ -22,18 +25,22 @@ namespace WebApplication.Data
         
         [Required]
         [StringLength(20)]
+        [NoNumbers]
         public string firstName { get; set; }
         
         [Required]
         [StringLength(20)]
+        [NoNumbers]
         public string lastName { get; set; }
         
         [Required]
         [StringLength(30)]
+        [NoNumbers]
         public string city { get; set; }
         
         [Required]
         [StringLength(40)]
+        [NoNumbers]
         public string education { get; set; }
         
         [StringLength(40)]

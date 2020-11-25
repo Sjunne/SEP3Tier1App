@@ -1,13 +1,14 @@
-﻿@page "/CreateProfile"
+﻿@page "/EditProfile"
 @using WebApplication.Data
 @using WebApplication.Network
 @using System.Text.RegularExpressions
+@using System.Text.Json
 @inject ProfileData ProfileData
 @inject Details Details
-@inject INetworkComp NetWork
+@inject INetworkComp Network
 @inject NavigationManager NavigationManager
 
-<h1>CreateProfile</h1>
+<h1>Edit Profile</h1>
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
     <ObjectGraphDataAnnotationsValidator />
     <ValidationSummary />
@@ -66,12 +67,15 @@
     private string hobby;
     private EditContext editContext;
     private Boolean isValid;
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
+        ProfileData = await Network.GetProfile("Kasper");
         ProfileData.self.maximumAge = 18;
         ProfileData.self.minimumAge = 18;
+        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
         editContext= new EditContext(ProfileData);
     }
+    
 
     public void ConfirmData()
     {
@@ -87,7 +91,7 @@
         if (isValid)
         {
             ProfileData.username = "Kasper";
-            NetWork.CreateProfile(ProfileData);
+            Network.CreateProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");
         }
         else

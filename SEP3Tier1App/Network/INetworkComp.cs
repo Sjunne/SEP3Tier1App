@@ -23,5 +23,8 @@ namespace WebApplication.Network
 
         Task CreatePreference(ProfileData profileData);
         Task DeletePhoto(string holder);
+        Task<ProfileData> GetPreference(string username);
+        Task<IList<string>> GetMatches(int userId);
+        
     }
 }

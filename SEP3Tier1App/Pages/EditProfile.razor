@@ -61,6 +61,7 @@
 
 </EditForm>
 
+<button type="button" @onclick="deleteprofile"> DELETE PROFILE</button>
 
 
 @code {
@@ -70,12 +71,18 @@
     protected override async Task OnInitializedAsync()
     {
         ProfileData = await Network.GetProfile("Kasper");
+        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
         ProfileData.self.maximumAge = 18;
         ProfileData.self.minimumAge = 18;
-        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
+        ProfileData.preferences.minimumAge = 18;
+        ProfileData.preferences.maximumAge = 18;
         editContext= new EditContext(ProfileData);
     }
-    
+
+    public void deleteprofile()
+    {
+        Network.deleteProfile("Kasper");
+    }
 
     public void ConfirmData()
     {
@@ -91,8 +98,7 @@
         if (isValid)
         {
             ProfileData.username = "Kasper";
-            Network.CreateProfile(ProfileData);
-            NavigationManager.NavigateTo("CreatePreference");
+            Network.bigEditProfile(ProfileData);
         }
         else
         {

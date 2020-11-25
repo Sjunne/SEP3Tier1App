@@ -86,6 +86,10 @@
         isValid = editContext.Validate();
         if (isValid)
         {
+            if (ProfileData.self.hobbies.Equals(""))
+            {
+                ProfileData.self.hobbies = "nothing";
+            }
             ProfileData.username = "Kasper";
             NetWork.CreateProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");

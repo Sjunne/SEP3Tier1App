@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
  using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
@@ -54,6 +54,17 @@ namespace WebApplication.Network
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
 
+        public async Task DeletePhoto(string pictureName)
+        {
+            HttpResponseMessage info = await client.DeleteAsync($"https://localhost:5003/Image/DeletePhoto/{pictureName}");
+            if (info.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(info);
+
+                throw new ErrorException(info.StatusCode + "");
+            }
+        }
+
         public async Task<ProfileData> GetPreference(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Preference?username={username}");
@@ -64,6 +75,29 @@ namespace WebApplication.Network
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             
             return profileData;
+        }
+
+        public async Task EditPreference(ProfileData profileData)
+        {
+            profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/EditPreference", content);
+        }
+
+        public async void bigEditProfile(ProfileData profileData)
+        {
+            profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/bigEditProfile", content);
+        }
+
+        public async void deleteProfile(string username)
+        {
+            client.DeleteAsync("https://localhost:5003/Profile/delete?username="+ username);
         }
 
         public async Task<ProfileData> GetProfile(string username)

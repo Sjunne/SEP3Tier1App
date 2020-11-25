@@ -155,8 +155,8 @@ namespace WebApplication.Network
                 throw new ErrorException(info.StatusCode + "");
             }
         }
-
-        public async Task<IList<string>> GetMatches(int userId)
+        
+        public async Task<IList<String>> GetMatches(int userId)
         {
             string profile = await client.GetStringAsync($"https://localhost:5003/Match?user1={userId}");
             Console.WriteLine(profile.ToString());

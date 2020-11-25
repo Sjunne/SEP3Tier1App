@@ -15,7 +15,7 @@
 }
 else
 {
-  @foreach (var item in Profiles)
+  @foreach (String item in Profiles)
   {
     <div class="w3-container">
 
@@ -23,8 +23,8 @@ else
 
         <div class="w3-container w3-center">
           <h3>Match Request</h3>
-          <img src="@Network.GetFilePath(item.username)" alt="Avatar" style="width:80%">
-          <h5>@item.username</h5>
+          <img src="@Network.GetProfilePicture(item)" alt="Avatar" style="width:80%">
+          <h5>@item</h5>
 
           <div class="w3-section">
             <button class="w3-button w3-green">Accept</button>
@@ -38,17 +38,14 @@ else
 }
 </body>
 @code {
-  private IList<ProfileData> Profiles;
+  private IList<String> Profiles;
   private IList<int> matchesId;
   private string username = "Maria";
   
  
   protected override async Task OnInitializedAsync()
   {
-    matchesId = await Network.GetMatches(1);
-    for (int i = 0; i < matchesId.Count; i++)
-    {
-      Profiles.Add(await Network.GetProfile(matchesId[i]));
-    }
+    Profiles = await Network.GetMatches(1);
+   
   }
 }

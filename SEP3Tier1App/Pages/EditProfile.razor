@@ -9,6 +9,8 @@
 @inject NavigationManager NavigationManager
 
 <h1>Edit Profile</h1>
+<button style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
+
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
     <ObjectGraphDataAnnotationsValidator />
     <ValidationSummary />
@@ -61,10 +63,33 @@
 
 </EditForm>
 
-<button type="button" @onclick="deleteprofile"> DELETE PROFILE</button>
+@if (ShowPopup)
+        {
+            <!-- This is the popup to check if you really want to delete profile -->
+            <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Are you sure you want to delete your profile?</h3>
+                            <!-- Button to close the popup -->
+                            <button type="button" class="close"
+                                    @onclick="Cancel">
+                                <span aria-hidden="true">X</span>
+                            </button>
+                        </div>
+                        <!-- Button to delete Profile -->
+                            <button style="background-color: orangered" class="btn btn-primary"
+                                    @onclick="deleteprofile">
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+        }
 
 
 @code {
+    private Boolean ShowPopup = false;
     private string hobby;
     private EditContext editContext;
     private Boolean isValid;
@@ -79,9 +104,18 @@
         editContext= new EditContext(ProfileData);
     }
 
+    public void wantToDelete()
+    {
+        ShowPopup = true;
+    }
     public void deleteprofile()
     {
         Network.deleteProfile("Kasper");
+    }
+
+    public void Cancel()
+    {
+        ShowPopup = false;
     }
 
     public void ConfirmData()

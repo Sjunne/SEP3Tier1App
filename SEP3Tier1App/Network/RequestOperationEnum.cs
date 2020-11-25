@@ -10,6 +10,8 @@ namespace WebApplication.Network
         EDITABOUT,
         REVIEWS,
         CREATEPROFILE,
-        CREATEPREFERENCE
+        CREATEPREFERENCE,
+        EDITPROFILE,
+        EDITPREFERENCE
     }
 }

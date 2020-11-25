@@ -66,6 +66,24 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task EditPreference(ProfileData profileData)
+        {
+            profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/EditPreference", content);
+        }
+
+        public async void bigEditProfile(ProfileData profileData)
+        {
+            profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/bigEditProfile", content);
+        }
+
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");

@@ -162,6 +162,10 @@
 
         if (isValid)
         {
+            if (hobby.Equals(""))
+            {
+                hobby = "nothing";
+            }
             ProfileData.username = "Kasper";
             NetWork.CreatePreference(ProfileData);
         }

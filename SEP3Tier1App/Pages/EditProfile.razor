@@ -70,9 +70,11 @@
     protected override async Task OnInitializedAsync()
     {
         ProfileData = await Network.GetProfile("Kasper");
+        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
         ProfileData.self.maximumAge = 18;
         ProfileData.self.minimumAge = 18;
-        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
+        ProfileData.preferences.minimumAge = 18;
+        ProfileData.preferences.maximumAge = 18;
         editContext= new EditContext(ProfileData);
     }
     
@@ -91,7 +93,7 @@
         if (isValid)
         {
             ProfileData.username = "Kasper";
-            Network.CreateProfile(ProfileData);
+            Network.bigEditProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");
         }
         else

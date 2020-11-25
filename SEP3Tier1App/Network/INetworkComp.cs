@@ -23,5 +23,7 @@ namespace WebApplication.Network
 
         Task CreatePreference(ProfileData profileData);
         Task<ProfileData> GetPreference(string username);
+        Task EditPreference(ProfileData profileData);
+        void bigEditProfile(ProfileData profileData);
     }
 }

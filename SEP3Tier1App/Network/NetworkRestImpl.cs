@@ -2,12 +2,16 @@
  using System.Collections.Generic;
  using System.Drawing;
  using System.IO;
- using System.Net.Http;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
- using WebApplication.Data;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Radzen;
+using SEP3Tier1App.Util;
+using WebApplication.Data;
 
 namespace WebApplication.Network
 {
@@ -25,32 +29,85 @@ namespace WebApplication.Network
             string message = JsonSerializer.Serialize(profileData);
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile", content);
-            //if(info.IsSuccessStatusCode)
+            if (info.StatusCode != HttpStatusCode.Created)
+            {
+                throw new ErrorException(info.StatusCode + "");
+            }
                 
+        }
+        
+        public async Task CreateProfile(ProfileData profileData)
+        {
+            profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreateProfile", content);
+        }
+
+        public async Task CreatePreference(ProfileData profileData)
+        {
+            profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
+            string message = JsonSerializer.Serialize(profileData);
+            Console.WriteLine(message);
+            HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
+        }
+
+        public async Task<ProfileData> GetPreference(string username)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Preference?username={username}");
+            if(httpResponseMessage.StatusCode != HttpStatusCode.OK)
+                throw new ErrorException("Database connection lost");
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            
+            return profileData;
         }
 
         public async Task<ProfileData> GetProfile(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Profile?username={username}");
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException("Database connection lost");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            
             return profileData;
         }
 
-        public async Task<string> GetFilePath(string username)
+        public async Task<string> GetCoverPicture(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image?username=" + username);
-            //string image = JsonSerializer.Deserialize<string>(message);
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image?username=" + username);
+            if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                return "";
+            }
 
-            return message;
-
-
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+            return await httpResponseMessage.Content.ReadAsStringAsync();
         }
 
         public async Task<IList<string>> GetPictures(string username)
         {
-            string message = await client.GetStringAsync("https://localhost:5003/Image/All" + "?username=" + username);
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/All?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode+ "");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
             string[] images = message.Split("å");
-            Console.WriteLine(images.Length + "her");
             return images;
         }
 
@@ -68,8 +125,13 @@ namespace WebApplication.Network
                 Encoding.UTF8,
                 "application/json");
             
-            HttpResponseMessage httpResponseMessage = await client.PostAsync("https://localhost:5003/Image", content);
-            Console.WriteLine(httpResponseMessage);
+            HttpResponseMessage httpResponseMessage = await client.
+                PostAsync("https://localhost:5003/Image", content);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
         }
 
         public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
@@ -77,7 +139,7 @@ namespace WebApplication.Network
             Request request = new Request()
             {
                 Username = profileData.username,
-                o = profileData,
+                o = JsonSerializer.Serialize(profileData),
                 requestOperation = requestOperationEnum
             };
             string message = JsonSerializer.Serialize(request);
@@ -87,6 +149,11 @@ namespace WebApplication.Network
                 "application/json");
                 
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/All", content);
+            if (info.StatusCode != HttpStatusCode.Created)
+            {
+                Console.WriteLine(info);
+                throw new ErrorException(info.StatusCode + "");
+            }
         }
 
         public async Task<IList<string>> GetMatches(int userId)
@@ -111,14 +178,27 @@ namespace WebApplication.Network
 
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
+            if (info.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(info);
+                throw new ErrorException(info.StatusCode + "");
+            }
         }
 
         public async Task<string> GetProfilePicture(string username)
         {
-            string message = await client.GetStringAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
-            //string image = JsonSerializer.Deserialize<string>(message);
-
-            return message;
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/ProfilePic?username=" + username);
+            if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                return "";
+            }
+            else if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            return readAsStringAsync;
         }
 
         public async Task ChangeProfilePic(string picturename)
@@ -128,9 +208,26 @@ namespace WebApplication.Network
 
                 HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
                 HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);
-            
-        }
+                if (info.StatusCode != HttpStatusCode.OK)
+                {
+                    Console.WriteLine(info);
+                    throw new ErrorException("Database connection lost");
+                }
 
+        }
+        
+        public async Task<IList<Review>> GetReviews(string username)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Reviews?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            List<Review> reviews = JsonSerializer.Deserialize<List<Review>>(message);
+            return reviews;        
+        }
 
         public bool ByteArrayToFile(string fileName, byte[] byteArray)
         {

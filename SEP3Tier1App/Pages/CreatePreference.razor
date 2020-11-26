@@ -6,9 +6,22 @@
 @inject ProfileData ProfileData
 @inject INetworkComp NetWork
 <h1>Create preferences.</h1>
+<link rel="stylesheet" href="prefstyle.css">
 <EditForm EditContext=@editContext OnValidSubmit="ConfirmData">
 <DataAnnotationsValidator />
 <ValidationSummary />
+<label id="education" class="errormessagelabel">Education: Cannot be over 300 Characters</label>
+<label id="city" class="errormessagelabel">City: Cannot be over 300 Characters</label>
+<label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
+<label id="haircolor" class="errormessagelabel">Hair Color: Cannot be over 300 Characters</label>
+<label id="eyecolor" class="errormessagelabel">Eye Color: Cannot be over 300 Characters</label>
+<label id="skincolor" class="errormessagelabel">Skin Color: Cannot be over 300 Characters</label>
+<label id="nationality" class="errormessagelabel">Nationality: Cannot be over 300 Characters</label>
+<label id="bodyshape" class="errormessagelabel">Bodyshape: Cannot be over 300 Characters</label>
+<label id="job" class="errormessagelabel">Job: Cannot be over 300 Characters</label>
+<label id="gender" class="errormessagelabel">Gender: Cannot be over 300 Characters</label>
+
+
 <label>Maximum Age</label>
 <InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
 <label>Minimum Age</label>

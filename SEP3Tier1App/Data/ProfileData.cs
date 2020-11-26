@@ -34,12 +34,12 @@ namespace WebApplication.Data
         public string lastName { get; set; }
         
         [Required]
-        [StringLength(30)]
+        [StringLength(20)]
         [NoNumbers]
         public string city { get; set; }
         
         [Required]
-        [StringLength(40)]
+        [StringLength(50)]
         [NoNumbers]
         public string education { get; set; }
         

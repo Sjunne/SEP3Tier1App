@@ -9,6 +9,11 @@
 @inject NavigationManager NavigationManager
 
 <h1>Edit Profile</h1>
+<link rel="stylesheet" href="prefstyle.css">
+@if (showErrorLabel)
+{
+    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
+}
 <button style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
 
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
@@ -25,15 +30,16 @@
     <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
     <label>City</label>
     <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
-    <div>
-        <label>Hobbies</label><br>
-        <label style="font-size: xx-small">You cannot enter numbers</label>
-        <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
-        <button type="button" @onclick="@(() => { if (ProfileData.self.hobbies == null) {ProfileData.self.hobbies += hobby;} else { ProfileData.self.hobbies += ", " + hobby;} hobby = ""; cleanup();})">
-            <i class="oi oi-plus" style="color:red"/>
-            Add</button>
-        <label>So far you have: @ProfileData.self.hobbies</label>
-    </div>
+     <div>
+            <label>Hobbies</label><br>
+            <label style="font-size: xx-small">You cannot enter numbers</label>
+            <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
+            <button type="button" @onclick="@(() => { if (ProfileData.self.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{if (hobby.Length > 300){showErrorLabel = true;} else{ProfileData.self.hobbies += hobby; showErrorLabel = false;}}} else if (ProfileData.self.hobbies.Length + hobby.Length > 300) {ShowErrorLabel();} 
+                                            else { if (hobby.Any(char.IsDigit)){} else{ ProfileData.self.hobbies += ", " + hobby; showErrorLabel = false;}} hobby = ""; /*cleanup();*/})">
+                <i class="oi oi-plus" style="color:red"/>
+                Add</button>
+            <label>So far you have: @ProfileData.self.hobbies</label>
+        </div>
     <label>Hair Color</label>
     <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
     <label>Eye Color</label>
@@ -93,6 +99,7 @@
     private string hobby;
     private EditContext editContext;
     private Boolean isValid;
+    private Boolean showErrorLabel = false;
     protected override async Task OnInitializedAsync()
     {
         ProfileData = await Network.GetProfile("Kasper");
@@ -102,6 +109,7 @@
         ProfileData.preferences.minimumAge = 18;
         ProfileData.preferences.maximumAge = 18;
         editContext= new EditContext(ProfileData);
+        
     }
 
     public void wantToDelete()
@@ -149,6 +157,10 @@
        Console.WriteLine(editContext.Validate());
        Console.WriteLine(isValid);
         
+    }
+    public void ShowErrorLabel()
+    {
+        showErrorLabel = true;
     }
 
 }

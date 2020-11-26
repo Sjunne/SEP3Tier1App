@@ -1,7 +1,6 @@
 ﻿@page "/Connections"
 @using WebApplication.Data
 @using WebApplication.Network
-@using SEP3Tier1App.Network
 @inject INetworkComp Network;
 
 
@@ -43,7 +42,7 @@
     private IList<Connection> allConnections = new List<Connection>();
     private IList<string> Images = new List<string>();
     private string Username;
-    private Delegating _delegate;
+   // private Delegating _delegate;
 
     private bool onceOnly;
 
@@ -52,7 +51,7 @@
     {
         if (onceOnly == false)
         {
-            setDelegates();
+           // setDelegates();
         }
         return base.OnInitializedAsync();
     }
@@ -62,7 +61,7 @@
         Console.WriteLine(obj.o.ToString());
     }
 
-    private async void setDelegates()
+  /*  private async void setDelegates()
     {
         onceOnly = true;
         Console.WriteLine("tester1233123");
@@ -71,6 +70,6 @@
        
         
         await Network.getConnections(Username);
-    }
+    }*/
 
 }

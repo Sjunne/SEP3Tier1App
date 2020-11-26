@@ -7,14 +7,17 @@ namespace WebApplication.Data
     {
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string hairColor { get; set; }
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string skinColor { get; set; }
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string nationality { get; set; }
         
         [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
@@ -25,18 +28,22 @@ namespace WebApplication.Data
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string bodyShape { get; set; }
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string hobbies { get; set; }
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string education { get; set; }
         
         [StringLength(40)]
         [NoNumbers]
+        [Required]
         public string job { get; set; }
         
         public bool kids { get; set; }

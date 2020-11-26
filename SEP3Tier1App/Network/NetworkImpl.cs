@@ -12,7 +12,7 @@ using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Radzen;
-using SEP3Tier1App.Network;
+//using SEP3Tier1App.Network;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
 
@@ -24,12 +24,12 @@ namespace WebApplication.Network
         private HttpClient client;
         private NetworkStream _networkStream;
         private string Username = "Maria";
-        private Delegating _delegating;
+        //private Delegating _delegating;
 
 
         public NetworkImpl()
         {
-            _delegating = new Delegating();
+            //_delegating = new Delegating();
             _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
@@ -50,7 +50,7 @@ namespace WebApplication.Network
                 {
                     case RequestOperationEnum.GETCONNECTIONS:
                     {   
-                        _delegating.fromNetwork?.Invoke(request);
+                        //_delegating.fromNetwork?.Invoke(request);
                         break;
                     }
                 }
@@ -143,11 +143,8 @@ namespace WebApplication.Network
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
-            }
-
+            
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             
@@ -249,10 +246,10 @@ namespace WebApplication.Network
             _networkStream.Write(bytes, 0, bytes.Length);
         }
 
-        public Delegating getDelegating()
+       /* public Delegating getDelegating()
         {
             return _delegating;
-        }
+        }*/
 
 
         public async Task<ProfileData> GetProfile(int userId)

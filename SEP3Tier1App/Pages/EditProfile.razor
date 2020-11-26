@@ -102,14 +102,20 @@
     private Boolean showErrorLabel = false;
     protected override async Task OnInitializedAsync()
     {
-        ProfileData = await Network.GetProfile("Kasper");
-        ProfileData.self=JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
-        ProfileData.self.maximumAge = 18;
-        ProfileData.self.minimumAge = 18;
-        ProfileData.preferences.minimumAge = 18;
-        ProfileData.preferences.maximumAge = 18;
-        editContext= new EditContext(ProfileData);
-        
+        try
+        {
+            ProfileData = await Network.GetProfile("Kasper");
+            ProfileData.self = JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
+            ProfileData.self.maximumAge = 18;
+            ProfileData.self.minimumAge = 18;
+            ProfileData.preferences.minimumAge = 18;
+            ProfileData.preferences.maximumAge = 18;
+            editContext = new EditContext(ProfileData);
+        }catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
+
     }
 
     public void wantToDelete()

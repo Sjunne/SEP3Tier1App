@@ -6,6 +6,7 @@
 @using SEP3Tier1App.CustomAttributes
 @inject ProfileData ProfileData
 @inject INetworkComp Network
+@inject NavigationManager NavigationManager
 <h1>Edit preferences.</h1>
 <link rel="stylesheet" href="prefstyle.css">
 @if (showEducationErrorLabel)
@@ -223,11 +224,17 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ProfileData = await Network.GetPreference("Kasper");
-        ProfileData.preferences=JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
-        editContext = new EditContext(ProfileData.preferences);
-        Console.WriteLine(ProfileData.username);
-        
+        try
+        {
+            ProfileData = await Network.GetPreference("Kasper");
+            ProfileData.preferences = JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
+            editContext = new EditContext(ProfileData.preferences);
+            Console.WriteLine(ProfileData.username);
+        }catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
+
     }
 
     public void ConfirmData()

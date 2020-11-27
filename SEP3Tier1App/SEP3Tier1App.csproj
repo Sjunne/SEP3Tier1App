@@ -11,4 +11,12 @@
       <PackageReference Include="Radzen.Blazor" Version="2.15.19" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\css\images\backgroundPic.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\images\backgroundPic.png" />
+    </ItemGroup>
+
 </Project>

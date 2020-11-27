@@ -23,5 +23,6 @@ namespace WebApplication.Network
 
         Task CreatePreference(ProfileData profileData);
         Task<ProfileData> GetPreference(string username);
+        Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword);
     }
 }

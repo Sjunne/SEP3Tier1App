@@ -66,6 +66,23 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
+            Console.WriteLine(httpResponseMessage);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException("Database connection lost");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            Console.WriteLine(message);
+            Request request = JsonSerializer.Deserialize<Request>(message);
+            
+            return request.requestOperation;
+        }
+
         public async Task<ProfileData> GetProfile(string username)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");

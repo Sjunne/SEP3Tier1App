@@ -1,5 +1,9 @@
 ﻿@inherits LayoutComponentBase
+
+
 @using Blazored.Modal
+@using SEP3Tier1App.Authentication
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
 
 <div class="sidebar">
     <NavMenu/>
@@ -7,7 +11,7 @@
 
 <div class="main">
     <div class="top-row px-4" style="z-index: 50">
-        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <button class="btn btn-primary Georgia" @onclick="LogOut">Log Out</button>
     </div>
 
     <div class="content px-4">
@@ -15,3 +19,11 @@
     </div>
 </div>
 <BlazoredModal />
+
+@code {
+    private void LogOut()
+    {
+        CustomAuthenticationStateProvider.Logout();
+    }
+
+}

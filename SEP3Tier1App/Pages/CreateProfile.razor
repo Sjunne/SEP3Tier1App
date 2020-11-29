@@ -8,6 +8,12 @@
 @inject NavigationManager NavigationManager
 
 <h1>CreateProfile</h1>
+<link rel="stylesheet" href="prefstyle.css">
+@if (showErrorLabel)
+{
+    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
+}
+
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
     <ObjectGraphDataAnnotationsValidator />
     <ValidationSummary />
@@ -26,7 +32,8 @@
         <label>Hobbies</label><br>
         <label style="font-size: xx-small">You cannot enter numbers</label>
         <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
-        <button type="button" @onclick="@(() => { if (ProfileData.self.hobbies == null) {ProfileData.self.hobbies += hobby;} else { ProfileData.self.hobbies += ", " + hobby;} hobby = ""; cleanup();})">
+        <button type="button" @onclick="@(() => { if (ProfileData.self.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{if (hobby.Length > 300){showErrorLabel = true;} else{ProfileData.self.hobbies += hobby; showErrorLabel = false;}}} else if (ProfileData.self.hobbies.Length + hobby.Length > 300) {ShowErrorLabel();} 
+                                        else { if (hobby.Any(char.IsDigit)){} else{ ProfileData.self.hobbies += ", " + hobby; showErrorLabel = false;}} hobby = ""; /*cleanup();*/})">
             <i class="oi oi-plus" style="color:red"/>
             Add</button>
         <label>So far you have: @ProfileData.self.hobbies</label>
@@ -66,6 +73,7 @@
     private string hobby;
     private EditContext editContext;
     private Boolean isValid;
+    private Boolean showErrorLabel = false;
     protected override void OnInitialized()
     {
         ProfileData.self.maximumAge = 18;
@@ -101,7 +109,7 @@
         
     }
 
-    public void cleanup()
+    /*public void cleanup()
     {
         ProfileData.self.hobbies = new String(ProfileData.self.hobbies.Where(c => c != '-' && (c < '0' || c > '9')).ToArray());
         ProfileData.self.hobbies = Regex.Replace((string) ProfileData.self.hobbies, @", ,", ",");
@@ -109,6 +117,10 @@
        Console.WriteLine(editContext.Validate());
        Console.WriteLine(isValid);
         
-    }
+    }*/
 
+    public void ShowErrorLabel()
+    {
+        showErrorLabel = true;
+    }
 }

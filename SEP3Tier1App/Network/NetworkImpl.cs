@@ -16,6 +16,7 @@ using Microsoft.VisualBasic;
 using Radzen;
 using SEP3Tier1App.Network;
 using SEP3Tier1App.Pages;
+//using SEP3Tier1App.Network;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
 
@@ -157,11 +158,8 @@ namespace WebApplication.Network
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
-            {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
-            }
-
+            
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             

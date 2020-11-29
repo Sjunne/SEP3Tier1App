@@ -34,12 +34,12 @@ namespace WebApplication.Data
         public string lastName { get; set; }
         
         [Required]
-        [StringLength(30)]
+        [StringLength(20)]
         [NoNumbers]
         public string city { get; set; }
         
         [Required]
-        [StringLength(40)]
+        [StringLength(50)]
         [NoNumbers]
         public string education { get; set; }
         
@@ -47,7 +47,7 @@ namespace WebApplication.Data
         public string hobbies { get; set; }
 
         public string instagram { get; set; }
-        [Range(18, 150, ErrorMessage = "Must be at least 18")]
+        [Range(18, 150, ErrorMessage = "Must be at least 18 and not above 150")]
         public int age { get; set; }
         public string instragram { get; set; }
         public string idealdate { get; set; }

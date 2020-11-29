@@ -1,6 +1,7 @@
 ﻿using System;
  using System.Collections.Generic;
- using System.Drawing;
+using System.Collections.ObjectModel;
+using System.Drawing;
  using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -11,7 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.VisualBasic;
 using Radzen;
+using SEP3Tier1App.Network;
+using SEP3Tier1App.Pages;
 //using SEP3Tier1App.Network;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
@@ -24,19 +28,17 @@ namespace WebApplication.Network
         private HttpClient client;
         private NetworkStream _networkStream;
         private string Username = "Maria";
-        //private Delegating _delegating;
+        private Delegating _delegating;
 
 
         public NetworkImpl()
         {
-            //_delegating = new Delegating();
-          /*  _networkStream = NetworkStream();
+            _delegating = new Delegating();
+            _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
             thread.Start();
-            */
             client = new HttpClient();
-            
         }
 
         private void ListenToServer()
@@ -52,7 +54,18 @@ namespace WebApplication.Network
                 {
                     case RequestOperationEnum.GETCONNECTIONS:
                     {   
-                        //_delegating.fromNetwork?.Invoke(request);
+                        _delegating.fromNetwork?.Invoke(request);
+                        IList<string> Images = new Collection<string>();
+                        int numberOfImages = JsonSerializer.Deserialize<IList<Connections>>(request.o.ToString()).Count;
+                        for (int i = 0; i < numberOfImages; i++)
+                        {
+                            byte[] newArray = new byte[1024 * 1024];
+                            _networkStream.Read(newArray, 0, newArray.Length);
+                            var trimEmptyBytes2 = TrimEmptyBytes(newArray);
+                            string s2 = Encoding.ASCII.GetString(trimEmptyBytes2, 0, trimEmptyBytes2.Length);
+                            Images.Add(s2);
+                        }
+                        _delegating.ImagesFromNetwork?.Invoke(Images);
                         break;
                     }
                 }
@@ -292,10 +305,10 @@ namespace WebApplication.Network
             _networkStream.Write(bytes, 0, bytes.Length);
         }
 
-       /* public Delegating getDelegating()
+        public Delegating getDelegating()
         {
             return _delegating;
-        }*/
+        }
 
 
         public async Task<ProfileData> GetProfile(int userId)

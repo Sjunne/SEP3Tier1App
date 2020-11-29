@@ -29,7 +29,7 @@ namespace WebApplication.Network
         private HttpClient client;
         private NetworkStream _networkStream;
         private string Username = "Maria";
-        private Delegating _delegating;
+        public Delegating _delegating { get; set; }
 
 
         public NetworkImpl()

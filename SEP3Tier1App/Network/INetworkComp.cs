@@ -2,6 +2,7 @@
  using System.IO;
  using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
+ using SEP3Tier1App.Network;
  //using SEP3Tier1App.Network;
  using WebApplication.Data;
 
@@ -32,7 +33,7 @@ namespace WebApplication.Network
 
         Task getConnections(string username);
 
-        //Delegating getDelegating();
+        Delegating getDelegating();
 
         Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword); 
         Task RegisterUser(User user);

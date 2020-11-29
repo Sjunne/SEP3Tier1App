@@ -112,7 +112,6 @@
 
     protected override Task OnInitializedAsync()
     {
-        var convertFromUtf32 = char.ConvertFromUtf32(0x1F642);
 
         friendUsername = "Maria";
         yourUsername = "Mattias";
@@ -131,7 +130,7 @@
         });
         messages.Add(new PrivateMessage()
         {
-            text = "Klar til Imorgen? :)" + convertFromUtf32,
+            text = "Klar til Imorgen? :)",
             timeSend = "11/28/2020 - 8:58 PM",
             username = "Maria"
         });
@@ -162,10 +161,10 @@
             ShowAndHide = "hidden";
         }
     }
-
+    
 
     public void fillDictionary()
-    {
+    {    
         smileys.Add(char.ConvertFromUtf32(0x1F600));
         smileys.Add(char.ConvertFromUtf32(0x1F601));
         smileys.Add(char.ConvertFromUtf32(0x1F602));

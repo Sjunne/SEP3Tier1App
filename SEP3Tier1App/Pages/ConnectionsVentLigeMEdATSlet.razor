@@ -1,4 +1,4 @@
-﻿@page "/Connections"
+﻿@page "/Connec"
 @using WebApplication.Data
 @using WebApplication.Network
 @inject INetworkComp Network;
@@ -24,7 +24,7 @@
 
 
             <div class="col-md-2">
-                <p style="float: right;">@allConnections[holder].connectionAge</p>
+                <p style="float: right;">@allConnections[holder]</p>
             </div>
 
             <div class="col-md-2">
@@ -39,7 +39,7 @@
 -->
 
 @code {
-    private IList<Connection> allConnections = new List<Connection>();
+    private IList<Connections> allConnections = new List<Connections>();
     private IList<string> Images = new List<string>();
     private string Username;
    // private Delegating _delegate;

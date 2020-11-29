@@ -3,6 +3,7 @@
 @using SEP3Tier1App.Authentication
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
+@inject NavigationManager NavigationManager
 <h3>Login</h3>
 <div>
     <RadzenCard>
@@ -24,6 +25,7 @@
         {
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
             Update = "You have been successfully logged in.";
+            
         }
         else
         {

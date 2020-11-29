@@ -6,7 +6,57 @@
 @using SEP3Tier1App.CustomAttributes
 @inject ProfileData ProfileData
 @inject INetworkComp Network
+@inject NavigationManager NavigationManager
 <h1>Edit preferences.</h1>
+<link rel="stylesheet" href="prefstyle.css">
+@if (showEducationErrorLabel)
+{
+    <label id="education" class="errormessagelabel">Education: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showCityErrorLabel)
+{
+    <label id="city" class="errormessagelabel">City: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showHobbiesErrorLabel)
+{
+    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
+    <br/>
+
+}
+@if (showHairColorErrorLabel)
+{
+    <label id="haircolor" class="errormessagelabel">Hair Color: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showEyeColorErrorLabel)
+{
+    <label id="eyecolor" class="errormessagelabel">Eye Color: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showSkinColorErrorLabel)
+{
+    <label id="skincolor" class="errormessagelabel">Skin Color: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showNationalityErrorLabel)
+{
+    <label id="nationality" class="errormessagelabel">Nationality: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showBodyshapeErrorLabel)
+{
+    <label id="bodyshape" class="errormessagelabel">Bodyshape: Cannot be over 300 Characters</label>
+    <br/>
+}
+@if (showJobErrorLabel)
+{
+    <label id="Job" class="errormessagelabel">Job: Cannot be over 300 Characters</label>
+    <br/>
+}
+
+
 <EditForm Model="ProfileData.preferences" OnValidSubmit="@ConfirmData">
 <DataAnnotationsValidator />
 <ValidationSummary />
@@ -18,7 +68,7 @@
     <label>Education</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Education" @bind-Value="@education"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{ ProfileData.preferences.education += education;}} else {if (education.Any(char.IsDigit)){} else{ProfileData.preferences.education += ", " + education;}} education = ""; })">
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.education == null) {if (education.Any(char.IsDigit)){} else{if (education.Length > 300){showEducationErrorLabel = true;} else{ProfileData.preferences.education += education; showEducationErrorLabel = false;}}} else if (ProfileData.preferences.education.Length + education.Length > 300){showEducationErrorLabel = true;} else {if (education.Any(char.IsDigit)){} else{ProfileData.preferences.education += ", " + education; showEducationErrorLabel = false;}} education = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
     <label>So far you have chosen: @ProfileData.preferences.education</label>
@@ -27,9 +77,10 @@
     <label>City</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="City" @bind-Value="@city"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.city == null) {if (city.Any(char.IsDigit)){} else{ProfileData.preferences.city += city;}}
-                      else { if (city.Any(char.IsDigit)){} else{
-                          ProfileData.preferences.city += ", " + city;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.city == null) {if (city.Any(char.IsDigit)){} else{if (city.Length > 300){showCityErrorLabel = true;} else{ProfileData.preferences.city += city; showCityErrorLabel = false;}}}
+                      else if (ProfileData.preferences.city.Length + city.Length > 300) { showCityErrorLabel = true; }
+                                    else { if (city.Any(char.IsDigit)){} else{
+                          ProfileData.preferences.city += ", " + city; showCityErrorLabel = false;}}
                                   city = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -39,9 +90,11 @@
     <label>Hobbies</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{ProfileData.preferences.hobbies += hobby;}}
-                      else { if (hobby.Any(char.IsDigit)){} else{
-                          ProfileData.preferences.hobbies += ", " + hobby;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{if (hobby.Length > 300){showHobbiesErrorLabel = true;} else{ProfileData.preferences.hobbies += hobby; showHobbiesErrorLabel = false;}}}
+                      else if (ProfileData.preferences.hobbies.Length + hobby.Length > 300){showHobbiesErrorLabel = true;}
+                                    
+                                    else { if (hobby.Any(char.IsDigit)){} else{
+                          ProfileData.preferences.hobbies += ", " + hobby; showHobbiesErrorLabel = false;}}
                                   hobby = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -51,9 +104,10 @@
     <label>Hair Colors</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="HairColor" @bind-Value="@hairColor"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {if (hairColor.Any(char.IsDigit)){} else{ProfileData.preferences.hairColor += hairColor;}}
-                      else { if (hairColor.Any(char.IsDigit)){} else {
-                          ProfileData.preferences.hairColor += ", " + hairColor;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.hairColor == null) {if (hairColor.Any(char.IsDigit)){} else{if (hairColor.Length > 300){showHairColorErrorLabel = true;} else{ProfileData.preferences.hairColor += hairColor; showHairColorErrorLabel = false;}}}
+                      else if (ProfileData.preferences.hairColor.Length + hairColor.Length > 300){showHairColorErrorLabel = true;}
+                                    else { if (hairColor.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.hairColor += ", " + hairColor; showHairColorErrorLabel = false;}}
                                   hairColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -63,9 +117,10 @@
     <label>Eye Colors</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="EyeColor" @bind-Value="@eyeColor"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {if (eyeColor.Any(char.IsDigit)){} else{ ProfileData.preferences.eyeColor += eyeColor;}}
-                      else { if (eyeColor.Any(char.IsDigit)){} else {
-                          ProfileData.preferences.eyeColor += ", " + eyeColor;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.eyeColor == null) {if (eyeColor.Any(char.IsDigit)){} else{if (eyeColor.Length > 300){showEyeColorErrorLabel = true;} else{ProfileData.preferences.eyeColor += eyeColor; showEyeColorErrorLabel = false;}}}
+                      else if (ProfileData.preferences.eyeColor.Length + eyeColor.Length > 300){showEyeColorErrorLabel = true;}
+                                    else { if (eyeColor.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.eyeColor += ", " + eyeColor; showEyeColorErrorLabel = false;}}
                                   eyeColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -75,9 +130,11 @@
     <label>Skin Colors</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="SkinColor" @bind-Value="@skinColor"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {if (skinColor.Any(char.IsDigit)){} else {ProfileData.preferences.skinColor += skinColor;}}
-                                  else { if (skinColor.Any(char.IsDigit)){} else{
-                                      ProfileData.preferences.skinColor += ", " + skinColor;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.skinColor == null) {if (skinColor.Any(char.IsDigit)){} else {if (skinColor.Length > 300){showSkinColorErrorLabel = true;} else{ProfileData.preferences.skinColor += skinColor; showSkinColorErrorLabel = false;}}}
+                                  else if (ProfileData.preferences.skinColor.Length + skinColor.Length > 300){showSkinColorErrorLabel = true;}
+                                    
+                                    else { if (skinColor.Any(char.IsDigit)){} else{
+                                      ProfileData.preferences.skinColor += ", " + skinColor; showSkinColorErrorLabel = false;}}
                                   skinColor = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -87,9 +144,10 @@
     <label>Nationalities</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Nationality" @bind-Value="@nationality"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.nationality == null) {if (nationality.Any(char.IsDigit)){} else {ProfileData.preferences.nationality += nationality;}}
-                      else { if (nationality.Any(char.IsDigit)){} else {
-                          ProfileData.preferences.nationality += ", " + nationality;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.nationality == null) {if (nationality.Any(char.IsDigit)){} else {if (nationality.Length > 300){showNationalityErrorLabel = true;} else{ProfileData.preferences.nationality += nationality; showNationalityErrorLabel = false;}}}
+                      else if (ProfileData.preferences.nationality.Length + nationality.Length > 300){showNationalityErrorLabel = true;}
+                                    else { if (nationality.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.nationality += ", " + nationality;showNationalityErrorLabel = false;}}
                                   nationality = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -99,9 +157,10 @@
     <label>Bodyshape</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="BodyShape" @bind-Value="@bodyshape"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {if (bodyshape.Any(char.IsDigit)){} else { ProfileData.preferences.bodyShape += bodyshape;}}
-                      else { if (bodyshape.Any(char.IsDigit)){} else {
-                          ProfileData.preferences.bodyShape += ", " + bodyshape;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.bodyShape == null) {if (bodyshape.Any(char.IsDigit)){} else {if (bodyshape.Length > 300){showBodyshapeErrorLabel = true;} else{ProfileData.preferences.bodyShape += bodyshape; showBodyshapeErrorLabel = false;}}}
+                     else if (ProfileData.preferences.bodyShape.Length + bodyshape.Length > 300) { showBodyshapeErrorLabel = true; }
+                                    else { if (bodyshape.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.bodyShape += ", " + bodyshape; showBodyshapeErrorLabel = false;}}
                                   bodyshape = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -111,9 +170,11 @@
     <label>Jobs</label><br>
     <label style="font-size: xx-small">You cannot enter numbers</label>
     <InputText class="form-control" placeholder="Job" @bind-Value="@job"/>
-    <button type="button" @onclick="@(() => { if (ProfileData.preferences.job == null) {if (job.Any(char.IsDigit)){} else {ProfileData.preferences.job += job;}}
-                      else { if (job.Any(char.IsDigit)){} else {
-                          ProfileData.preferences.job += ", " + job;}}
+    <button type="button" @onclick="@(() => { if (ProfileData.preferences.job == null) {if (job.Any(char.IsDigit)){} else {if (job.Length > 300){showJobErrorLabel = true;} else{ProfileData.preferences.job += job; showJobErrorLabel = false;}}}
+                      else if (ProfileData.preferences.job.Length + job.Length > 300){showJobErrorLabel = true;}
+                                    
+                                    else { if (job.Any(char.IsDigit)){} else {
+                          ProfileData.preferences.job += ", " + job; showJobErrorLabel = false;}}
                                   job = ""; })">
         <i class="oi oi-plus" style="color:red"/>
         Add</button>
@@ -151,14 +212,29 @@
     private string education;
     private string city;
     private EditContext editContext;
+    private Boolean showEducationErrorLabel = false;
+    private Boolean showCityErrorLabel = false;
+    private Boolean showHobbiesErrorLabel = false;
+    private Boolean showHairColorErrorLabel = false;
+    private Boolean showEyeColorErrorLabel = false;
+    private Boolean showSkinColorErrorLabel = false;
+    private Boolean showNationalityErrorLabel = false;
+    private Boolean showBodyshapeErrorLabel = false;
+    private Boolean showJobErrorLabel = false;
 
     protected override async Task OnInitializedAsync()
     {
-        ProfileData = await Network.GetPreference("Kasper");
-        ProfileData.preferences=JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
-        editContext = new EditContext(ProfileData.preferences);
-        Console.WriteLine(ProfileData.username);
-        
+        try
+        {
+            ProfileData = await Network.GetPreference("Kasper");
+            ProfileData.preferences = JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
+            editContext = new EditContext(ProfileData.preferences);
+            Console.WriteLine(ProfileData.username);
+        }catch (Exception e)
+        {
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
+        }
+
     }
 
     public void ConfirmData()
@@ -168,7 +244,7 @@
         if (isValid)
         {
             ProfileData.username = "Kasper";
-            Network.CreatePreference(ProfileData);
+            Network.EditPreference(ProfileData);
         }
        
     }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SEP3Tier1App.Authentication;
+//using SEP3Tier1App.Network;
 using WebApplication.Data;
 using WebApplication.Network;
 
@@ -44,7 +45,7 @@ namespace SEP3Tier1App
             
             //Network
             //Singleton
-            services.AddSingleton<INetworkComp, NetworkRestImpl>();
+            services.AddSingleton<INetworkComp, NetworkImpl>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

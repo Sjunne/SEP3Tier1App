@@ -1,0 +1,39 @@
+﻿﻿body {
+    background-color: lightgrey;
+}
+
+.form {
+    width: 500px;
+    margin: auto;
+}
+
+.textbox {
+    height: 40px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.passwordbox {
+    height: 40px;
+    width: 245px;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+h2 {
+    font-size: 35px;
+}
+
+h1 {
+    font-size: 60px;
+}
+
+.button {
+    height: 45px;
+    width: 110px;
+    background-color: hotpink;
+    color: white;
+    border: 0;
+}

@@ -2,7 +2,7 @@
 
 namespace WebApplication.Data
 {
-    public class Connection
+    public class Connections
     {
         public string Username { get; set; }
         public string connectionAge { get; set; }

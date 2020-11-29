@@ -1,6 +1,7 @@
 ﻿using System;
  using System.Collections.Generic;
- using System.Drawing;
+using System.Collections.ObjectModel;
+using System.Drawing;
  using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -11,8 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.VisualBasic;
 using Radzen;
 using SEP3Tier1App.Network;
+using SEP3Tier1App.Pages;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
 
@@ -51,6 +54,17 @@ namespace WebApplication.Network
                     case RequestOperationEnum.GETCONNECTIONS:
                     {   
                         _delegating.fromNetwork?.Invoke(request);
+                        IList<string> Images = new Collection<string>();
+                        int numberOfImages = JsonSerializer.Deserialize<IList<Connections>>(request.o.ToString()).Count;
+                        for (int i = 0; i < numberOfImages; i++)
+                        {
+                            byte[] newArray = new byte[1024 * 1024];
+                            _networkStream.Read(newArray, 0, newArray.Length);
+                            var trimEmptyBytes2 = TrimEmptyBytes(newArray);
+                            string s2 = Encoding.ASCII.GetString(trimEmptyBytes2, 0, trimEmptyBytes2.Length);
+                            Images.Add(s2);
+                        }
+                        _delegating.ImagesFromNetwork?.Invoke(Images);
                         break;
                     }
                 }

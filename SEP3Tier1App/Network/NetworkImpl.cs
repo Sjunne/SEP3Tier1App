@@ -34,11 +34,13 @@ namespace WebApplication.Network
 
         public NetworkImpl()
         {
+            /*
             _delegating = new Delegating();
             _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
             thread.Start();
+            */
             client = new HttpClient();
         }
 
@@ -135,15 +137,15 @@ namespace WebApplication.Network
         public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
-            Console.WriteLine(httpResponseMessage);
+            
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine(httpResponseMessage);
-                throw new ErrorException("Database connection lost");
+                Console.WriteLine(httpResponseMessage.RequestMessage.ToString());
+                throw new ErrorException(httpResponseMessage.RequestMessage.ToString());
             }
-
+            
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
-            Console.WriteLine(message);
+            
             Request request = JsonSerializer.Deserialize<Request>(message);
             
             return request.requestOperation;

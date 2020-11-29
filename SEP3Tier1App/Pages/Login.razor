@@ -4,6 +4,7 @@
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
+@inject ProfileData ProfileData
 <h3>Login</h3>
 <div>
     <RadzenCard>
@@ -20,17 +21,31 @@
 
     private async void OnLogin(LoginArgs args, string loginWithRegisterAndPasswordReset)
     {
+        Update = "";
         RequestOperationEnum requestOperationEnum = await NetworkComp.ValidateLogin(args.Username, args.Password);
+
         if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
         {
+            Console.WriteLine("success");
+
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
-            Update = "You have been successfully logged in.";
-            
+            ProfileData.username = args.Username;
+            NavigationManager.NavigateTo($"/Profile");
         }
-        else
+        else if(requestOperationEnum == RequestOperationEnum.WRONGPASSWORD)
         {
-            Update = "Either username or password was incorrect";
+            Console.WriteLine("incorrect");
+            Update = "Password was incorrect";
+            StateHasChanged();
         }
+        else if (requestOperationEnum == RequestOperationEnum.ERROR)
+        {
+            Console.WriteLine("both incorrect");
+
+            Update = "Username and password was incorrect";
+            StateHasChanged();
+        }
+            
     }
 
     private void OnResetPassword(string args, string loginWithRegisterAndPasswordReset)

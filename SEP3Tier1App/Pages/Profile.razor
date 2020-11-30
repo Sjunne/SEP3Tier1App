@@ -31,7 +31,7 @@
     </div>
 
     <div id="top">
-        <h2 class="Georgia">Maria Frandsen</h2>
+        <h2 class="Georgia">@ProfileData.firstName @ProfileData.lastName</h2>
 
     </div>
 </div>
@@ -43,7 +43,7 @@
                 <div style="height: 300px">
                     <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
 
-                        <h5 class="Georgia" style="float: left">About Maria</h5>
+                        <h5 class="Georgia" style="float: left">About @ProfileData.firstName</h5>
 
                         @if (!ProfileData.isEditingAbout)
                         {
@@ -112,16 +112,16 @@
                         {
                             <p>Upload Pictures to your Profile </p>
                         }
-                        <div class="gallery" style="overflow: hidden;">
-                            <a target="_blank" href="@Images[holder]" >
-                                <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
-                            </a>
-                            <div>
-                                <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
-                                <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
-                                <button @onclick="@(e => DeletePhoto(holder))" style="bottom: 0; right: 32%; position: absolute; background-color: red">Delete</button>
-                            </div>
-                        </div>
+                                 <div class="gallery" style="overflow: hidden;">
+                                     <a target="_blank" href="@Images[holder]" >
+                                         <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
+                                     </a>
+                                     <div>
+                                         <button @onclick="@(e => ChooseProfilePic(holder))" style="position: absolute; bottom: 0;">Profile</button>
+                                         <button @onclick="@(e => ChooseCover(holder))" style="bottom: 0; right: 0; position: absolute;">Cover</button>
+                                         <button @onclick="@(e => DeletePhoto(holder))" style="bottom: 0; right: 32%; position: absolute; background-color: red">Delete</button>
+                                     </div>
+                                 </div>
                     }
                 </div>
 
@@ -170,15 +170,12 @@
     private string dataUri, Error, ErrorIntro;
     private IList<string> Images = new List<string>();
     private IList<Review> Reviews = new List<Review>();
-
-
-    private string username = "Maria";
+    
+    private string username;
 
     protected override async Task OnInitializedAsync()
     {
         Reviews.Add(new Review());
-        ProfileData.username = username;
-        
         ProfileData.isEditingAbout = false;
 
     //henter data fra databasen til at fylde profilen ud,
@@ -194,6 +191,7 @@
             
             
             ProfileData = await profile;
+            username = ProfileData.username;
         }
         catch (ErrorException e)
         {
@@ -221,7 +219,6 @@
     {
         
         EditIntro();
-        ProfileData.username = username;
         ProfileData.intro = ProfileData.intro.Trim();
         if (ProfileData.intro.Length > 300)
         {
@@ -233,6 +230,7 @@
 
     async Task HandleSelection(IFileListEntry[] files)
     {
+        Error = "";
         var file = files.FirstOrDefault();
         if (file != null)
         {

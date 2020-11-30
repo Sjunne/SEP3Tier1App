@@ -135,15 +135,15 @@ namespace WebApplication.Network
         public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
-            Console.WriteLine(httpResponseMessage);
+            
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine(httpResponseMessage);
-                throw new ErrorException("Database connection lost");
+                Console.WriteLine(httpResponseMessage.RequestMessage.ToString());
+                throw new ErrorException(httpResponseMessage.RequestMessage.ToString());
             }
-
+            
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
-            Console.WriteLine(message);
+            
             Request request = JsonSerializer.Deserialize<Request>(message);
             
             return request.requestOperation;
@@ -165,12 +165,32 @@ namespace WebApplication.Network
             
             HttpResponseMessage httpResponseMessage = await client.
                 PostAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {
                 Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
 
+        }
+
+        public async Task<RequestOperationEnum> ChangePassword(User user)
+        {
+            Request request = new Request()
+            {
+                o = user,
+                Username = user.username,
+                requestOperation = RequestOperationEnum.CHANGEPASSWORD
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            
+            HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            Console.WriteLine(readAsStringAsync);
+            return response.requestOperation;
         }
 
         public async Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername)
@@ -194,7 +214,7 @@ namespace WebApplication.Network
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
             string message = JsonSerializer.Serialize(profileData);
-            Console.WriteLine(message);
+            
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/EditPreference", content);
         }

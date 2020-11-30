@@ -20,10 +20,10 @@ namespace WebApplication.Data
         [Required]
         public string nationality { get; set; }
         
-        [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
+        [Range(18, 120, ErrorMessage = "must be at least 18 and not over 150")]
         public int minimumAge { get; set; }
         
-        [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
+        [Range(18, 120, ErrorMessage = "must be at least 18 and not over 150")]
         public int maximumAge { get; set; }
         
         [StringLength(40)]

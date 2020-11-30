@@ -5,8 +5,8 @@
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
 @inject ProfileData ProfileData
-<h3>Login</h3>
-<div>
+
+<div class="centerLogin">
     <RadzenCard>
         <RadzenLogin Login=@(args => OnLogin(args, "")) 
                      ResetPassword=@(args => OnResetPassword(args, ""))

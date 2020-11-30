@@ -24,6 +24,7 @@
         Update = "";
         RequestOperationEnum requestOperationEnum = await NetworkComp.ValidateLogin(args.Username, args.Password);
 
+        //TODO Brug o i stedet for requestEnum
         if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
         {
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
@@ -45,7 +46,7 @@
 
     private void OnResetPassword(string args, string loginWithRegisterAndPasswordReset)
     {
-        NavigationManager.NavigateTo($"/ChangePassword");
+        //Find ud om man kan sende en aktiveringslink eller email
     }
 
     private void OnRegister(string loginWithRegisterAndPasswordReset)

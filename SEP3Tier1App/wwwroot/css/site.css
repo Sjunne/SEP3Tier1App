@@ -20,6 +20,12 @@ input[type='file'] {
     padding: 10px;
 }
 
+.centerSecurity {
+    margin: auto;
+    width: 55%;
+    padding: 10px;
+}
+
 .center {
     margin: auto;
     width: 60%;

@@ -4,21 +4,25 @@
 @inject INetworkComp NetworkComp;
 @inject ProfileData ProfileData;
 @inject NavigationManager NavigationManager;
-<h1>Security</h1>
 
-<div class="row centerDiv">
-    <div class="col-md-6">
-        <p>Title</p>
+<h2 style="color: black !important;">Security</h2>
+
+<div class="row centerSecurity" style=" border: 3px solid green; margin-bottom: 5px;">
+    <div class="col-md-12">
+        <ChangePassword/>
     </div>
-    <div class="col-md-6">
+</div>
+
+<div class="row centerSecurity" style="border: 3px solid green; margin-bottom: 5px;">
+    <div class="col-md-12">
         <ChangePassword/>
     </div>
 </div>
 
 
-<div class="row centerDiv">
+<div class="row centerSecurity" style=" border: 3px solid red;">
     <div class="col-md-6">
-        <h3>Delete Your Profile</h3>
+            <p class="Georgia" style="font-weight: bold;  color: black !important;">Delete Your Profile</p>
     </div>
     <div class="col-md-6">
         <button class="btn btn-primary Georgia" style="float: right; background-color: red; " type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>

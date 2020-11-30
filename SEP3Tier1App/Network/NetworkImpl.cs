@@ -132,6 +132,47 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
+            Console.WriteLine(httpResponseMessage);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException("Database connection lost");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            Console.WriteLine(message);
+            Request request = JsonSerializer.Deserialize<Request>(message);
+            
+            return request.requestOperation;
+        }
+
+        public async Task RegisterUser(User user)
+        {
+            Request request = new Request()
+            {
+                Username = user.username,
+                o = user,
+                requestOperation = RequestOperationEnum.REGISTERUSER
+            };
+
+            HttpContent content = new StringContent(
+                JsonSerializer.Serialize(request),
+                Encoding.UTF8,
+                "application/json");
+            
+            HttpResponseMessage httpResponseMessage = await client.
+                PostAsync("https://localhost:5003/Login", content);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
@@ -159,8 +200,11 @@ namespace WebApplication.Network
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
-            
+            }
+
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             

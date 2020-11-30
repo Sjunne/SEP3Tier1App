@@ -5,11 +5,13 @@ using System.Threading.Tasks;
 using Blazored.Modal;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SEP3Tier1App.Authentication;
 //using SEP3Tier1App.Network;
 using WebApplication.Data;
 using WebApplication.Network;
@@ -39,9 +41,10 @@ namespace SEP3Tier1App
             // Scoped
             services.AddScoped<ProfileData>();
             services.AddScoped<Details>();
+            services.AddScoped<CustomAuthenticationStateProvider>();
             
             //Network
-            // Singleton
+            //Singleton
             services.AddSingleton<INetworkComp, NetworkImpl>();
         }
 

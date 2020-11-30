@@ -289,10 +289,13 @@ namespace WebApplication.Network
 
         public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
         {
+            profileData.jsonPref = null;
+            profileData.jsonSelf = null;
+            
             Request request = new Request()
             {
                 Username = profileData.username,
-                o = profileData,
+                o = JsonSerializer.Serialize(profileData),
                 requestOperation = requestOperationEnum
             };
             string message = JsonSerializer.Serialize(request);

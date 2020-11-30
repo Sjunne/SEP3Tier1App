@@ -25,6 +25,7 @@ namespace WebApplication.Network
         GETCONNECTIONS,
         EDITPROFILE,
         EDITPREFERENCE,
-        REGISTERUSER
+        REGISTERUSER,
+        GETALLMESSAGES
     }
 }

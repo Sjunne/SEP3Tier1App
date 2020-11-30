@@ -5,17 +5,17 @@ namespace WebApplication.Data
 {
     public class Details : IDetails
     {
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         [Required]
         public string hairColor { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         [Required]
         public string skinColor { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         [Required]
         public string nationality { get; set; }
@@ -26,22 +26,22 @@ namespace WebApplication.Data
         [Range(18, 150, ErrorMessage = "must be at least 18 and not over 150")]
         public int maximumAge { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         [Required]
         public string bodyShape { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         [Required]
         public string hobbies { get; set; }
         
-        [StringLength(40)]
+        [StringLength(50)]
         [NoNumbers]
         [Required]
         public string education { get; set; }
         
-        [StringLength(40)]
+        [StringLength(50)]
         [NoNumbers]
         [Required]
         public string job { get; set; }
@@ -50,15 +50,14 @@ namespace WebApplication.Data
         
         public bool lookingFor { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         public string eyeColor { get; set; }
         
-        [StringLength(40)]
         [Gender]
         public string gender { get; set; }
         
-        [StringLength(40)]
+        [StringLength(20)]
         [NoNumbers]
         public string city { get; set; }
         

@@ -240,6 +240,12 @@
     public void ConfirmData()
     {
         Boolean isValid = editContext.Validate();
+        if (ProfileData.preferences.maximumAge < ProfileData.preferences.minimumAge)
+        {
+            int maxAgeTemp = ProfileData.preferences.maximumAge;
+            ProfileData.preferences.maximumAge=ProfileData.preferences.minimumAge;
+            ProfileData.preferences.minimumAge = maxAgeTemp;
+        }
 
         if (isValid)
         {

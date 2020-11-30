@@ -12,7 +12,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="pictures" />
+      <_ContentIncludedByDefault Remove="wwwroot\css\images\backgroundPic.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\images\backgroundPic.png" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
  using System.Collections.Generic;
- using System.Drawing;
+using System.Collections.ObjectModel;
+using System.Drawing;
  using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -11,10 +12,14 @@ using System.Threading;
 using System.Threading.Tasks;
  using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.VisualBasic;
 using Radzen;
+using SEP3Tier1App.Network;
+using SEP3Tier1App.Pages;
 //using SEP3Tier1App.Network;
 using SEP3Tier1App.Util;
 using WebApplication.Data;
+using Connections = WebApplication.Data.Connections;
 
 
 namespace WebApplication.Network
@@ -24,12 +29,12 @@ namespace WebApplication.Network
         private HttpClient client;
         private NetworkStream _networkStream;
         private string Username = "Maria";
-        //private Delegating _delegating;
+        public Delegating _delegating { get; set; }
 
 
         public NetworkImpl()
         {
-            //_delegating = new Delegating();
+            _delegating = new Delegating();
             _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
@@ -50,7 +55,18 @@ namespace WebApplication.Network
                 {
                     case RequestOperationEnum.GETCONNECTIONS:
                     {   
-                        //_delegating.fromNetwork?.Invoke(request);
+                        _delegating.fromNetwork?.Invoke(request);
+                        IList<string> Images = new Collection<string>();
+                        int numberOfImages = JsonSerializer.Deserialize<IList<Connections>>(request.o.ToString()).Count;
+                        for (int i = 0; i < numberOfImages; i++)
+                        {
+                            byte[] newArray = new byte[1024 * 1024];
+                            _networkStream.Read(newArray, 0, newArray.Length);
+                            var trimEmptyBytes2 = TrimEmptyBytes(newArray);
+                            string s2 = Encoding.ASCII.GetString(trimEmptyBytes2, 0, trimEmptyBytes2.Length);
+                            Images.Add(s2);
+                        }
+                        _delegating.ImagesFromNetwork?.Invoke(Images);
                         break;
                     }
                 }
@@ -116,6 +132,47 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
+            Console.WriteLine(httpResponseMessage);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException("Database connection lost");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            Console.WriteLine(message);
+            Request request = JsonSerializer.Deserialize<Request>(message);
+            
+            return request.requestOperation;
+        }
+
+        public async Task RegisterUser(User user)
+        {
+            Request request = new Request()
+            {
+                Username = user.username,
+                o = user,
+                requestOperation = RequestOperationEnum.REGISTERUSER
+            };
+
+            HttpContent content = new StringContent(
+                JsonSerializer.Serialize(request),
+                Encoding.UTF8,
+                "application/json");
+            
+            HttpResponseMessage httpResponseMessage = await client.
+                PostAsync("https://localhost:5003/Login", content);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
+            {
+                Console.WriteLine(httpResponseMessage);
+                throw new ErrorException(httpResponseMessage.StatusCode + "");
+            }
+
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
@@ -143,8 +200,11 @@ namespace WebApplication.Network
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
-            
+            }
+
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             
@@ -206,10 +266,13 @@ namespace WebApplication.Network
 
         public async Task EditProfile(ProfileData profileData, RequestOperationEnum requestOperationEnum)
         {
+            profileData.jsonPref = null;
+            profileData.jsonSelf = null;
+            
             Request request = new Request()
             {
                 Username = profileData.username,
-                o = profileData,
+                o = JsonSerializer.Serialize(profileData),
                 requestOperation = requestOperationEnum
             };
             string message = JsonSerializer.Serialize(request);
@@ -246,10 +309,10 @@ namespace WebApplication.Network
             _networkStream.Write(bytes, 0, bytes.Length);
         }
 
-       /* public Delegating getDelegating()
+        public Delegating getDelegating()
         {
             return _delegating;
-        }*/
+        }
 
 
         public async Task<ProfileData> GetProfile(int userId)

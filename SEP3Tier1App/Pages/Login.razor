@@ -1,0 +1,46 @@
+﻿@using WebApplication.Data
+@using WebApplication.Network
+@using SEP3Tier1App.Authentication
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
+@inject INetworkComp NetworkComp;
+@inject NavigationManager NavigationManager
+<h3>Login</h3>
+<div>
+    <RadzenCard>
+        <RadzenLogin Login=@(args => OnLogin(args, "")) 
+                     ResetPassword=@(args => OnResetPassword(args, ""))
+                     Register=@(args => OnRegister("")) Style="margin-bottom: 20px;" />
+    </RadzenCard>
+</div>
+
+<p>@Update</p>
+@code {
+    private User User = new User();
+    private string Update;
+
+    private async void OnLogin(LoginArgs args, string loginWithRegisterAndPasswordReset)
+    {
+        RequestOperationEnum requestOperationEnum = await NetworkComp.ValidateLogin(args.Username, args.Password);
+        if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
+        {
+            CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
+            Update = "You have been successfully logged in.";
+            
+        }
+        else
+        {
+            Update = "Either username or password was incorrect";
+        }
+    }
+
+    private void OnResetPassword(string args, string loginWithRegisterAndPasswordReset)
+    {
+        Console.WriteLine("Reset password");
+    }
+
+    private void OnRegister(string loginWithRegisterAndPasswordReset)
+    {
+        Console.WriteLine("loginwithregister");
+    }
+
+}

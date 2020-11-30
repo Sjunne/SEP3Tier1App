@@ -24,6 +24,7 @@ namespace WebApplication.Network
         GETPREFERENCE, 
         GETCONNECTIONS,
         EDITPROFILE,
-        EDITPREFERENCE
+        EDITPREFERENCE,
+        REGISTERUSER
     }
 }

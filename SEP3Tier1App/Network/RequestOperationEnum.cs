@@ -26,6 +26,9 @@ namespace WebApplication.Network
         EDITPROFILE,
         EDITPREFERENCE,
         REGISTERUSER,
-        WRONGPASSWORD
+        WRONGPASSWORD,
+        NOTFOUND,
+        CHANGEPASSWORD,
+        WRONGUSERNAME
     }
 }

@@ -2,17 +2,18 @@
 @using WebApplication.Data
 @using WebApplication.Network
 @inject INetworkComp NetworkImpl
+@inject NavigationManager NavigationManager;
 <h1>Create a New Account</h1>
 <h2>And Find Your Next Mistake</h2>
 <link rel="stylesheet" href="style.css">
 <div id="Form" class="form">
     
-    <input @bind="user.username" type="text" class="textbox" placeholder="Enter UserName" id="UserName" required/>
-    <input @bind="user.email" type="Email" class="textbox" placeholder="Enter Email" id="Email" required/>
-    <input @bind="user.password" type="password" class="passwordbox" placeholder="Enter Password" id="Password" required/>
-    <input @bind="user.pwdagain"type="password" class="passwordbox" style="float: right" placeholder="Enter Password Again" id="PasswordAgain" required/>
+    <input @bind="username" type="text" class="textbox" placeholder="Enter UserName" id="UserName" required/>
+    <input @bind="email" type="Email" class="textbox" placeholder="Enter Email" id="Email" required/>
+    <input @bind="password" type="password" class="passwordbox" placeholder="Enter Password" id="Password" required/>
+    <input @bind="pwdagain"type="password" class="passwordbox" style="float: right" placeholder="Enter Password Again" id="PasswordAgain" required/>
     <div id="checkboxAbove18div">
-        <input @bind="user.above18"type="checkbox" id="checkboxAbove18" required>
+        <input @bind="above18"type="checkbox" id="checkboxAbove18" required>
         <label for="checkboxAbove18">I am above 18</label>
     </div>
     <div>
@@ -25,23 +26,46 @@
     private string username, email, password, pwdagain;
     private bool above18;
     private string Update;
-    private User user = new User();
 
     private async void RegisterUser()
     {
-        Console.WriteLine($" {user.username} {user.password}  {user.pwdagain}  {user.email} {user.above18}");
-        if (!user.password.Equals(user.pwdagain))
+        if (checkNull())
         {
-            Update = "Both password fields must match + \n";
+            Update = "Please fill out all fields. \n";
         }
-        if (!user.above18)
+        else if ((username.Equals("") || email.Equals("") || !password.Equals(pwdagain) || !above18))
         {
-            Update = "You must above 18 years old. \n";
+            //ændre else if condition
+            if (username.Equals("") || email.Equals(""))
+            {
+                Update = "Please fill out all fields.\n";
+            }
+            if (!password.Equals(pwdagain))
+            {
+                Update = "Both password fields must match. \n";
+            }
+            if (!above18)
+            {
+                Update = "You must be above 18 years old. \n";
+            }
         }
+        
         else
         {
+            User user = new User()
+            {
+                username =  username,
+                password =  password,
+                email =  email
+            };
             await NetworkImpl.RegisterUser(user);
+            //NavigationManager.NavigateTo($"/CreateProfile");
         }
+    }
+
+    private bool checkNull()
+    {
+        return username == null || password == null || pwdagain == null || email == null;
     }
 
 }

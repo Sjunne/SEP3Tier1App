@@ -167,6 +167,9 @@ namespace WebApplication.Network
             
             HttpResponseMessage httpResponseMessage = await client.
                 PostAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            Console.WriteLine(readAsStringAsync + " 123");
+
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {
                 Console.WriteLine(httpResponseMessage);
@@ -175,11 +178,29 @@ namespace WebApplication.Network
 
         }
 
+        public async Task<RequestOperationEnum> ChangePassword(User user)
+        {
+            Request request = new Request()
+            {
+                o = user,
+                Username = user.username,
+                requestOperation = RequestOperationEnum.CHANGEPASSWORD
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            
+            HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            Console.WriteLine(readAsStringAsync);
+            return response.requestOperation;
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
             string message = JsonSerializer.Serialize(profileData);
-            Console.WriteLine(message);
+            
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/EditPreference", content);
         }

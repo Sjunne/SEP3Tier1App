@@ -26,22 +26,17 @@
 
         if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
         {
-            Console.WriteLine("success");
-
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
             ProfileData.username = args.Username;
             NavigationManager.NavigateTo($"/Profile");
         }
         else if(requestOperationEnum == RequestOperationEnum.WRONGPASSWORD)
         {
-            Console.WriteLine("incorrect");
             Update = "Password was incorrect";
             StateHasChanged();
         }
-        else if (requestOperationEnum == RequestOperationEnum.ERROR)
+        else if (requestOperationEnum == RequestOperationEnum.NOTFOUND)
         {
-            Console.WriteLine("both incorrect");
-
             Update = "Username and password was incorrect";
             StateHasChanged();
         }
@@ -50,12 +45,12 @@
 
     private void OnResetPassword(string args, string loginWithRegisterAndPasswordReset)
     {
-        Console.WriteLine("Reset password");
+        NavigationManager.NavigateTo($"/ChangePassword");
     }
 
     private void OnRegister(string loginWithRegisterAndPasswordReset)
     {
-        Console.WriteLine("loginwithregister");
+        NavigationManager.NavigateTo($"/Register");
     }
 
 }

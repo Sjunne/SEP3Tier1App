@@ -17,29 +17,30 @@
 <p>@Update</p>
 @code {
     private User User = new User();
-    private string Update;
+    private string Update = " Hello";
 
     private async void OnLogin(LoginArgs args, string loginWithRegisterAndPasswordReset)
     {
-        Update = "";
-        RequestOperationEnum requestOperationEnum = await NetworkComp.ValidateLogin(args.Username, args.Password);
-
-        //TODO Brug o i stedet for requestEnum
-        if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
+        try
         {
-            CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
-            ProfileData.username = args.Username;
-            NavigationManager.NavigateTo($"/Profile");
+            Request request = await NetworkComp.ValidateLogin(args.Username, args.Password);
+        
+            if (request.o.ToString().Equals("Logged in"))
+            {
+                CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
+                ProfileData.username = args.Username;
+                NavigationManager.NavigateTo($"/Profile");
+            }
+            else
+            {
+                Update = request.o.ToString() + "";
+                StateHasChanged();
+            }
         }
-        else if(requestOperationEnum == RequestOperationEnum.WRONGPASSWORD)
+        catch (Exception e)
         {
-            Update = "Password was incorrect";
-            StateHasChanged();
-        }
-        else if (requestOperationEnum == RequestOperationEnum.NOTFOUND)
-        {
-            Update = "Username and password was incorrect";
-            StateHasChanged();
+            Console.WriteLine(e);
+            NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
             
     }

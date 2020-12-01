@@ -35,8 +35,8 @@ namespace WebApplication.Network
 
         Delegating getDelegating();
 
-        Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword); 
-        Task RegisterUser(User user);
-        Task<RequestOperationEnum> ChangePassword(User user);
+        Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
+        Task<Request> RegisterUser(User user);
+        Task<Request> ChangePassword(User user);
     }
 }

@@ -33,7 +33,7 @@
         {
             Update = "Please fill out all fields. \n";
         }
-        else if ((username.Equals("") || email.Equals("") || !password.Equals(pwdagain) || !above18))
+        else if (username.Equals("") || email.Equals("") || !password.Equals(pwdagain) || !above18)
         {
             //ændre else if condition
             if (username.Equals("") || email.Equals(""))
@@ -58,8 +58,25 @@
                 password =  password,
                 email =  email
             };
-            await NetworkImpl.RegisterUser(user);
-            //NavigationManager.NavigateTo($"/CreateProfile");
+            try
+            {
+                Request request = await NetworkImpl.RegisterUser(user);
+                if (request.o.ToString().Equals("Registered"))
+                {
+                    NavigationManager.NavigateTo($"/CreateProfile");
+                }
+                else
+                {
+                    Update = request.o.ToString();
+                    StateHasChanged();
+                }
+            }
+            catch (Exception e)
+            {
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+            }
+
+            
         }
     }
 

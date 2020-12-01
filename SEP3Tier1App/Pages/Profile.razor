@@ -7,11 +7,13 @@
 @using System.IO
 @using System.Text
 @using BlazorInputFile
+@using SEP3Tier1App.Authentication
 @using SEP3Tier1App.Util
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
 @inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 
 
 <head>
@@ -177,7 +179,9 @@
     {
         Reviews.Add(new Review());
         ProfileData.isEditingAbout = false;
-        username = ProfileData.username;
+        Console.WriteLine(CustomAuthenticationStateProvider.getCachedUser().username + " hello");
+        username = CustomAuthenticationStateProvider.getCachedUser().username;
+        ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
 
     //henter data fra databasen til at fylde profilen ud,
     //kunne optimeres
@@ -190,9 +194,7 @@
             ProfilePicture = await Network.GetProfilePicture(username);
             Reviews = await Network.GetReviews(username);
             
-            
             ProfileData = await profile;
-            username = ProfileData.username;
         }
         catch (ErrorException e)
         {
@@ -226,7 +228,10 @@
             ErrorIntro = "Changes has not been stored! \n Please shorten your introduction to maximum 300 characters.";
         }
         else
-        await Network.EditIntroduction(ProfileData);
+        {
+           Console.WriteLine(ProfileData.intro + "here");
+            await Network.EditIntroduction(ProfileData);
+        }
     }
 
     async Task HandleSelection(IFileListEntry[] files)

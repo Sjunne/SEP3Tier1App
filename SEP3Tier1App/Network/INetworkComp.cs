@@ -38,5 +38,6 @@ namespace WebApplication.Network
         Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
         Task<Request> RegisterUser(User user);
         Task<Request> ChangePassword(User user);
+        Task<Request> ChangeUsername(User user, string profileDataUsername);
     }
 }

@@ -3,13 +3,13 @@
 @using WebApplication.Data
 @using Microsoft.AspNetCore.Identity
 @inject INetworkComp NetworkComp;
-<h3>Change Your Password</h3>
+@inject NavigationManager NavigationManager
+@inject ProfileData ProfileData
+<h3>Change Your Username</h3>
 <link rel="stylesheet" href="style.css">
 <div id="Form" class="form">
     
-    <input @bind="username" type="text" class="textbox" placeholder="Enter UserName" id="UserName" required/>
-    <input @bind="password" type="password" class="passwordbox" placeholder="Enter Password" id="Password" required/>
-    <input @bind="newpassword"type="password" class="passwordbox" style="float: right" placeholder="Enter New Password" id="NewPassword" required/>
+    <input @bind="newusername" type="text" class="textbox" placeholder="Enter New UserName" id="NewUserName" required/>
     <br/>
     <div>
         <input type="submit" class="button" id="submitButton" value="Change" @onclick="ChangeUserPassword">
@@ -18,41 +18,39 @@
 </div>
 
 @code {
-    private string username ="", password, newpassword;
+    private string newusername;
     private string Update = "";
 
     private async void ChangeUserPassword()
     {
         try
         {
-            if (password.Equals(newpassword))
-            {
-                Update = "New password is the same as old password.";
-            }
-            else
-            {
-                User user = new User()
+            
+            User user = new User()
                 {
-                    username = username,
-                    password = password,
-                    newPassword = newpassword
+                    username = newusername,
                 };
-                Request response = await NetworkComp.ChangePassword(user);
+            try
+            {
+                Request response = await NetworkComp.ChangeUsername(user, ProfileData.username);
                 if (response.requestOperation == RequestOperationEnum.SUCCESS)
                 {
+                    Console.WriteLine(response.o.ToString());
                     Update = response.o.ToString();
                     StateHasChanged();
                 }
-                else if (response.requestOperation == RequestOperationEnum.ERROR)
-                {
-    //Navigate to Error page with database connection lost
-                }
             }
+            catch (Exception e)
+            {
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+
+            }
+                
+            
         }
         catch (NullReferenceException e)
         {
-            password = "";
-            newpassword = "";
+            newusername = "";
             Update = "Fill out all fields.";
         }
     }

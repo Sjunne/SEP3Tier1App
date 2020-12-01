@@ -201,6 +201,28 @@ namespace WebApplication.Network
             return response;
         }
 
+        public async Task<Request> ChangeUsername(User user, string profileDataUsername)
+        {
+            Request request = new Request()
+            {
+                o = user,
+                Username = profileDataUsername,
+                requestOperation = RequestOperationEnum.CHANGEUSERNAME
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            
+            HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            if (info.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                throw new ErrorException(info.StatusCode + " " + readAsStringAsync);
+            }
+
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            return response;
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);

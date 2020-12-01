@@ -1,7 +1,7 @@
 @page "/Chatting/{friendUsername}"
 @using WebApplication.Data
 @using WebApplication.Network
-@inject ProfileData _profileData;
+@inject ProfileData ProfileData;
 @inject INetworkComp _Network;
 
 <h3>Chatting</h3>
@@ -45,7 +45,7 @@
                @for (int j = 0; j < messages.Count; j++)
                {
                    int holder = j;
-                   if (messages[holder].username.Equals(friendUsername))
+                   if (messages[holder].usernameFrom.Equals(friendUsername))
                    {
                        <div class="chat-message-left pb-4">
                            <div>
@@ -122,9 +122,8 @@
 
     protected override Task OnInitializedAsync()
     {
-    //yourUsername = _profileData.username;
-        yourUsername = "Maria";
-     
+        yourUsername = ProfileData.username;
+        Console.WriteLine(yourUsername + "chatting");
 
   
 
@@ -140,7 +139,7 @@
         friendProfilePic = await _Network.GetProfilePicture(friendUsername);
         yourProfilePic = await _Network.GetProfilePicture(yourUsername);
         messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
-
+        Console.WriteLine(messages[0].text);
         StateHasChanged();
     }
 

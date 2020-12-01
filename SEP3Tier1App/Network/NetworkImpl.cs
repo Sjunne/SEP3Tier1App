@@ -195,21 +195,12 @@ namespace WebApplication.Network
 
         public async Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername)
         {
-            Request request = new Request()
-            {
-                Username = yourUsername,
-                o = friendUsername,
-                requestOperation = RequestOperationEnum.GETALLMESSAGES
-            };
-
-            var serialize = JsonSerializer.Serialize(request);
-
-            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Chatting?request=" + serialize);
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Chatting?request=" + yourUsername + "|" +  friendUsername);
             string s = await httpResponseMessage.Content.ReadAsStringAsync();
             var privateMessages = JsonSerializer.Deserialize<IList<PrivateMessage>>(s);
             return privateMessages;
         }
-
+ 
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);

@@ -28,6 +28,7 @@
         {
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
             ProfileData.username = args.Username;
+            Console.WriteLine(args.Username);
             NavigationManager.NavigateTo($"/Profile");
         }
         else if(requestOperationEnum == RequestOperationEnum.WRONGPASSWORD)

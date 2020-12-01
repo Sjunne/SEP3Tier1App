@@ -1,9 +1,12 @@
+using System;
+
 namespace WebApplication.Data
 {
     public class PrivateMessage
     {
         public string text { get; set; }
-        public string username { get; set; }
+        public string usernameFrom { get; set; }
+        public string usernameTo { get; set; }
         public string timeSend { get; set; }
     }
 }

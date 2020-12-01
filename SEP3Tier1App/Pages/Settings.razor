@@ -1,6 +1,50 @@
 ﻿@page "/Settings"
-<h3>Settings</h3>
+<h1 class="Georgia" style="margin-bottom: 10px; display: flex;
+                                                 flex-direction: column;
+                                                 justify-content: center;
+                                                 text-align: center;">Settings</h1>
+
+<a href="@editProfile">
+    <div class="row centerDiv" style="margin-bottom: 10px;">
+        <div class="col-md-6">
+            <img src="/images/icon-person.png" style="height:50px; width: 50px;">
+        </div>
+
+        <div class="col-md-6">
+            <p class="Georgia" style="font-weight: bold; color: black !important;">Edit Your Personal Information</p>
+            <p class="Georgia" style="color: grey;">Change interests, hair color, education etc...</p>
+        </div>
+    </div>
+</a>
+<a href="@editPreferences">
+    <div class="row centerDiv" style="margin-bottom: 10px;">
+        <div class="col-md-6">
+            <img src="/images/icon-preferences.png" style="height:50px; width: 50px;">
+        </div>
+
+        <div class="col-md-6">
+            <p class="Georgia" style="font-weight: bold; color: black !important;">Edit Your Preferences</p>
+            <p class="Georgia" style="color: grey;">Change bodyshape, hobbies, job etc...</p>
+        </div>
+    </div>
+</a>
+<a href="@security">
+    <div class="row centerDiv" style="margin-bottom: 10px;">
+        <div class="col-md-6">
+            <img src="/images/icon-security.png" style="height:50px; width: 50px;">
+        </div>
+
+        <div class="col-md-6">
+            <p class="Georgia" style="font-weight: bold;  color: black !important;">Security</p>
+            <p class="Georgia" style="color: grey;">Change username, password or delete profile</p>
+        </div>
+    </div>
+</a>
+
 
 @code {
-    
+    private string editPreferences = "https://localhost:5001/Editpreference";
+    private string editProfile = "https://localhost:5001/EditProfile";
+    private string security = "https://localhost:5001/Security";
+
 }

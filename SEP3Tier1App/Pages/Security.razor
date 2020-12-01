@@ -1,0 +1,75 @@
+﻿@page "/Security"
+@using WebApplication.Network
+@using WebApplication.Data
+@inject INetworkComp NetworkComp;
+@inject ProfileData ProfileData;
+@inject NavigationManager NavigationManager;
+
+<h2 style="color: black !important;">Security</h2>
+
+<div class="row centerSecurity" style=" border: 3px solid green; margin-bottom: 5px;">
+    <div class="col-md-12">
+        <ChangePassword/>
+    </div>
+</div>
+
+<div class="row centerSecurity" style="border: 3px solid green; margin-bottom: 5px;">
+    <div class="col-md-12">
+        <ChangeUsername/>
+    </div>
+</div>
+
+
+<div class="row centerSecurity" style=" border: 3px solid red;">
+    <div class="col-md-6">
+            <p class="Georgia" style="font-weight: bold;  color: black !important;">Delete Your Profile</p>
+    </div>
+    <div class="col-md-6">
+        <button class="btn btn-primary Georgia" style="float: right; background-color: red; " type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
+    </div>
+</div>
+
+@if (ShowPopup)
+{
+    <!-- This is the popup to check if you really want to delete profile -->
+    <div class="modal" tabindex="-1" style="display:block" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Are you sure you want to delete your profile?</h3>
+                    <!-- Button to close the popup -->
+                    <button type="button" class="close"
+                            @onclick="Cancel">
+                        <span aria-hidden="true">X</span>
+                    </button>
+                </div>
+                <!-- Button to delete Profile -->
+                <button style="background-color: orangered" class="btn btn-primary"
+                        @onclick="DeleteProfile">
+                    Delete
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool ShowPopup;
+
+    public void DeleteProfile()
+    {
+        NetworkComp.deleteProfile(ProfileData.username);
+        NavigationManager.NavigateTo("/Frontpage");
+    }
+
+    public void wantToDelete()
+    {
+        ShowPopup = true;
+    }
+
+    public void Cancel()
+    {
+        ShowPopup = false;
+    }
+
+}

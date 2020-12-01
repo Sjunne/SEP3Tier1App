@@ -27,9 +27,7 @@ namespace WebApplication.Network
         EDITPREFERENCE,
         GETALLMESSAGES,
         REGISTERUSER,
-        WRONGPASSWORD,
-        NOTFOUND,
         CHANGEPASSWORD,
-        WRONGUSERNAME
+        CHANGEUSERNAME
     }
 }

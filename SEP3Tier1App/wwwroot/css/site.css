@@ -13,6 +13,26 @@ input[type='file'] {
     color:transparent;
 }
 
+.centerDiv {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+}
+
+.centerLogin {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+}
+
+
+.centerSecurity {
+    margin: auto;
+    width: 55%;
+    padding: 10px;
+}
+
 .center {
     margin: auto;
     width: 60%;

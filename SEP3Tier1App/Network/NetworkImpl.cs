@@ -132,24 +132,25 @@ namespace WebApplication.Network
             return profileData;
         }
 
-        public async Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword)
+        public async Task<Request> ValidateLogin(string argsUsername, string argsPassword)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
             
-            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            if (httpResponseMessage.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
+                string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
                 Console.WriteLine(httpResponseMessage.RequestMessage.ToString());
-                throw new ErrorException(httpResponseMessage.RequestMessage.ToString());
+                throw new ErrorException(httpResponseMessage.StatusCode + " " + readAsStringAsync);
             }
             
             string message = await httpResponseMessage.Content.ReadAsStringAsync();
             
             Request request = JsonSerializer.Deserialize<Request>(message);
             
-            return request.requestOperation;
+            return request;
         }
 
-        public async Task RegisterUser(User user)
+        public async Task<Request> RegisterUser(User user)
         {
             Request request = new Request()
             {
@@ -167,15 +168,17 @@ namespace WebApplication.Network
                 PostAsync("https://localhost:5003/Login", content);
             string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
 
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {
                 Console.WriteLine(httpResponseMessage);
-                throw new ErrorException(httpResponseMessage.StatusCode + "");
+                throw new ErrorException(httpResponseMessage.StatusCode + response.o.ToString());
             }
 
+            return response;
         }
 
-        public async Task<RequestOperationEnum> ChangePassword(User user)
+        public async Task<Request> ChangePassword(User user)
         {
             Request request = new Request()
             {
@@ -188,9 +191,35 @@ namespace WebApplication.Network
             HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Login", content);
             string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            if (info.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                throw new ErrorException(info.StatusCode + " " + readAsStringAsync);
+            }
+
             Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
-            Console.WriteLine(readAsStringAsync);
-            return response.requestOperation;
+            return response;
+        }
+
+        public async Task<Request> ChangeUsername(User user, string profileDataUsername)
+        {
+            Request request = new Request()
+            {
+                o = user,
+                Username = profileDataUsername,
+                requestOperation = RequestOperationEnum.CHANGEUSERNAME
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            
+            HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Login", content);
+            string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            if (info.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                throw new ErrorException(info.StatusCode + " " + readAsStringAsync);
+            }
+
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            return response;
         }
 
         public async Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername)

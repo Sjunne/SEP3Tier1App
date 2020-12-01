@@ -7,11 +7,13 @@
 @using System.IO
 @using System.Text
 @using BlazorInputFile
+@using SEP3Tier1App.Authentication
 @using SEP3Tier1App.Util
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
 @inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 
 
 <head>
@@ -83,7 +85,7 @@
                         }
                         else
                         {
-                            <button lass="btn btn-primary Georgia" type="submit" @onclick="EditIntroduction" style="float: right">Save</button>
+                            <button class="btn btn-primary Georgia" type="submit" @onclick="EditIntroduction" style="float: right">Save</button>
                             <br/>
                             <EditForm Model="@ProfileData" OnValidSubmit="Here">
                                 <DataAnnotationsValidator/>
@@ -158,7 +160,6 @@
         </Tabs>
     </RadzenTabs>
 </div>
-<button @onclick="Slet123">TRYK HER</button>
 @code {
     //comment siden
     //fjern inline style
@@ -212,21 +213,21 @@
         
         Reviews.Add(new Review());
         ProfileData.isEditingAbout = false;
-        username = ProfileData.username;
+        
+        username = CustomAuthenticationStateProvider.getCachedUser().username;
 
-    //henter data fra databasen til at fylde profilen ud,
-    //kunne optimeres
+        //henter data fra databasen til at fylde profilen ud,
+        //kunne optimeres
 
         try
         {
-            Console.WriteLine(username + "hejsa");
             Task<ProfileData> profile = Network.GetProfile(username);
             CoverPicture = await Network.GetCoverPicture(username);
             Images = await Network.GetPictures(username);
             ProfilePicture = await Network.GetProfilePicture(username);
             Reviews = await Network.GetReviews(username);
+            
             ProfileData = await profile;
-            username = ProfileData.username;
         }
         catch (ErrorException e)
         {
@@ -262,11 +263,7 @@
             ErrorIntro = "Changes has not been stored! \n Please shorten your introduction to maximum 300 characters.";
         }
         else
-        {
-            Console.WriteLine("det var sgu her");
-            await Network.EditIntroduction(ProfileData);
-            
-        }
+        await Network.EditIntroduction(ProfileData);
     }
 
     async Task HandleSelection(IFileListEntry[] files)
@@ -376,10 +373,4 @@
         Images = await Network.GetPictures(username);
         StateHasChanged();
     }
-
-    private void Slet123()
-    {
-        NavigationManager.NavigateTo($"/Chatting/Mattias");
-    }
-
 }

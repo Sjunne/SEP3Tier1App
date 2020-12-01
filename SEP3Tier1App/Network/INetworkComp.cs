@@ -37,5 +37,6 @@ namespace WebApplication.Network
 
         Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword); 
         Task RegisterUser(User user);
+        Task<RequestOperationEnum> ChangePassword(User user);
     }
 }

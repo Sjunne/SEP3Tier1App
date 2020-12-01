@@ -4,8 +4,9 @@
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
-<h3>Login</h3>
-<div>
+@inject ProfileData ProfileData
+
+<div class="centerLogin">
     <RadzenCard>
         <RadzenLogin Login=@(args => OnLogin(args, "")) 
                      ResetPassword=@(args => OnResetPassword(args, ""))
@@ -20,27 +21,37 @@
 
     private async void OnLogin(LoginArgs args, string loginWithRegisterAndPasswordReset)
     {
+        Update = "";
         RequestOperationEnum requestOperationEnum = await NetworkComp.ValidateLogin(args.Username, args.Password);
+
+        //TODO Brug o i stedet for requestEnum
         if (requestOperationEnum ==  RequestOperationEnum.SUCCESS)
         {
             CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
-            Update = "You have been successfully logged in.";
-            
+            ProfileData.username = args.Username;
+            NavigationManager.NavigateTo($"/Profile");
         }
-        else
+        else if(requestOperationEnum == RequestOperationEnum.WRONGPASSWORD)
         {
-            Update = "Either username or password was incorrect";
+            Update = "Password was incorrect";
+            StateHasChanged();
         }
+        else if (requestOperationEnum == RequestOperationEnum.NOTFOUND)
+        {
+            Update = "Username and password was incorrect";
+            StateHasChanged();
+        }
+            
     }
 
     private void OnResetPassword(string args, string loginWithRegisterAndPasswordReset)
     {
-        Console.WriteLine("Reset password");
+        //Find ud om man kan sende en aktiveringslink eller email
     }
 
     private void OnRegister(string loginWithRegisterAndPasswordReset)
     {
-        Console.WriteLine("loginwithregister");
+        NavigationManager.NavigateTo($"/Register");
     }
 
 }

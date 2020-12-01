@@ -14,7 +14,7 @@
 {
     <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
 }
-<button style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
+<button class="" style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
 
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
     <ObjectGraphDataAnnotationsValidator />
@@ -126,6 +126,8 @@
     {
         Network.deleteProfile("Kasper");
     }
+    
+    
 
     public void Cancel()
     {
@@ -138,9 +140,6 @@
         {
             
         }
-        
-       
-        Console.WriteLine(isValid.ToString());
 
         isValid = editContext.Validate();
         if (isValid)
@@ -159,9 +158,7 @@
     {
         ProfileData.self.hobbies = new String(ProfileData.self.hobbies.Where(c => c != '-' && (c < '0' || c > '9')).ToArray());
         ProfileData.self.hobbies = Regex.Replace((string) ProfileData.self.hobbies, @", ,", ",");
-        Console.WriteLine( ProfileData.self.hobbies.ToString());
-       Console.WriteLine(editContext.Validate());
-       Console.WriteLine(isValid);
+       
         
     }
     public void ShowErrorLabel()

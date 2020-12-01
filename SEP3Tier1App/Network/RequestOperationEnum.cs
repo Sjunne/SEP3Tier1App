@@ -25,6 +25,10 @@ namespace WebApplication.Network
         GETCONNECTIONS,
         EDITPROFILE,
         EDITPREFERENCE,
-        REGISTERUSER
+        REGISTERUSER,
+        WRONGPASSWORD,
+        NOTFOUND,
+        CHANGEPASSWORD,
+        WRONGUSERNAME
     }
 }

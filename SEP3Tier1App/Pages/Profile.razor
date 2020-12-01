@@ -179,12 +179,11 @@
     {
         Reviews.Add(new Review());
         ProfileData.isEditingAbout = false;
-        Console.WriteLine(CustomAuthenticationStateProvider.getCachedUser().username + " hello");
+        
         username = CustomAuthenticationStateProvider.getCachedUser().username;
-        ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
 
-    //henter data fra databasen til at fylde profilen ud,
-    //kunne optimeres
+        //henter data fra databasen til at fylde profilen ud,
+        //kunne optimeres
 
         try
         {

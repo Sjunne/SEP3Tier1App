@@ -134,6 +134,17 @@ namespace WebApplication.Network
             return profileData;
         }
 
+        public async Task DeclineMatch(IList<string> usernames)
+        {
+            string message = JsonSerializer.Serialize(usernames);
+            HttpContent content = new StringContent(
+                message,
+                Encoding.UTF8,
+                "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match/Decline", content);
+
+        }
+
         public async Task<Request> ValidateLogin(string argsUsername, string argsPassword)
         {
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Login?username={argsUsername}&&password={argsPassword}");
@@ -231,7 +242,8 @@ namespace WebApplication.Network
                 message,
                 Encoding.UTF8,
                 "application/json");
-            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match", content);
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match/Accept", content);
+            
         }
 
         public async Task EditPreference(ProfileData profileData)

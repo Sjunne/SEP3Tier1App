@@ -37,6 +37,7 @@ namespace WebApplication.Network
         
 
         Task AcceptMatch(IList<string> usernames);
+        Task DeclineMatch(IList<string> usernames);
         Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
         Task<Request> RegisterUser(User user);
         Task<Request> ChangePassword(User user);

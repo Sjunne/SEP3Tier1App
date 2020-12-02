@@ -84,13 +84,12 @@ else
     Network.AcceptMatch(usernames);
   }
 
-  private bool Decline(string username)
+  private void Decline(string username2)
   {
-    if (username!=null)
-    {
-      return true;
-    }
-    return false;
+    IList<string> usernames = new List<string>();
+    usernames.Add(username);
+    usernames.Add(username2);
+    Network.DeclineMatch(usernames);
   }
 
   private async Task<IList<string>> getProfilePictures(IList<string> username)

@@ -26,6 +26,7 @@ namespace WebApplication.Network
         EDITPROFILE,
         EDITPREFERENCE,
         REGISTERUSER,
+        GETPROFILEID,
         CHANGEPASSWORD,
         CHANGEUSERNAME
     }

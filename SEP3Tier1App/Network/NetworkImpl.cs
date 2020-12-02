@@ -35,7 +35,7 @@ namespace WebApplication.Network
         public NetworkImpl()
         {
             /*
-            _delegating = new Delegating();
+            /*_delegating = new Delegating();
             _networkStream = NetworkStream();
             SendUsername(Username);
             Thread thread = new Thread(() => ListenToServer());
@@ -178,6 +178,7 @@ namespace WebApplication.Network
 
             return response;
         }
+        
 
         public async Task<Request> ChangePassword(User user)
         {
@@ -221,6 +222,16 @@ namespace WebApplication.Network
 
             Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
             return response;
+        }
+
+        public async Task AcceptMatch(IList<string> usernames)
+        {
+            string message = JsonSerializer.Serialize(usernames);
+            HttpContent content = new StringContent(
+                message,
+                Encoding.UTF8,
+                "application/json");
+            HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match", content);
         }
 
         public async Task EditPreference(ProfileData profileData)
@@ -339,11 +350,11 @@ namespace WebApplication.Network
             }
         }
         
-        public async Task<IList<String>> GetMatches(int userId)
+        public async Task<IList<String>> GetMatches(string username)
         {
-            string profile = await client.GetStringAsync($"https://localhost:5003/Match?user1={userId}");
-            Console.WriteLine(profile.ToString());
+            string profile = await client.GetStringAsync($"https://localhost:5003/Match?username={username}");
             IList<string> profiles = JsonSerializer.Deserialize<IList<string>>(profile);
+            Console.WriteLine(username);
             return profiles;
         }
 
@@ -365,12 +376,7 @@ namespace WebApplication.Network
         }
 
 
-        public async Task<ProfileData> GetProfile(int userId)
-        {
-            string message = await client.GetStringAsync($"https://localhost:5003/Profile?userid={userId}");
-            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
-            return profileData;
-        }
+        
 
         
         public async Task ChangeCoverPicture(string pictureName)

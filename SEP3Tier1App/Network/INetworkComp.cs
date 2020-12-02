@@ -29,12 +29,14 @@ namespace WebApplication.Network
         Task EditPreference(ProfileData profileData);
         void bigEditProfile(ProfileData profileData);
         void deleteProfile(string username);
-        Task<IList<string>> GetMatches(int userId);
+        Task<IList<string>> GetMatches(string username);
 
         Task getConnections(string username);
 
         Delegating getDelegating();
+        
 
+        Task AcceptMatch(IList<string> usernames);
         Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
         Task<Request> RegisterUser(User user);
         Task<Request> ChangePassword(User user);

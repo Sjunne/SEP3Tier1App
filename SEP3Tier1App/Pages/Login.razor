@@ -1,6 +1,7 @@
 ﻿@using WebApplication.Data
 @using WebApplication.Network
 @using SEP3Tier1App.Authentication
+@using System.Security.Claims
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
@@ -29,6 +30,7 @@
             {
                 CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
                 ProfileData.username = args.Username;
+                
                 NavigationManager.NavigateTo($"/Profile");
             }
             else

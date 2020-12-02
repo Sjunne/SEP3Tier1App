@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Dynamic;
 
 namespace WebApplication.Data
 {
@@ -8,6 +9,11 @@ namespace WebApplication.Data
         [Required] public string password { get; set; }
         public string email { get; set; }
         public string newPassword { get; set; }
+
+        public string City { get; set; }
+        
+        public string Role { get; set; }
+
 
         public override string ToString()
         {

@@ -2,9 +2,13 @@
 @using WebApplication.Data
 @using WebApplication.Network
 @using System.Diagnostics.Eventing.Reader
+@using SEP3Tier1App.Authentication
 @using SEP3Tier1App.CustomAttributes
 @inject ProfileData ProfileData
 @inject INetworkComp NetWork
+@inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+
 <h1>Create preferences.</h1>
 <link rel="stylesheet" href="prefstyle.css">
 <EditForm EditContext=@editContext OnValidSubmit="ConfirmData">
@@ -198,6 +202,11 @@
     Submit</button>
 </EditForm>
 
+<button style="background-color: green" class="btn btn-primary"
+                        @onclick="FinishAndGoToProfile">
+                    Finish!
+                </button>
+
 @code {
     private string hobby;
     private string hairColor;
@@ -223,7 +232,14 @@
 
     protected override void OnInitialized()
     {
-        editContext = new EditContext(ProfileData.preferences);
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            editContext = new EditContext(ProfileData.preferences);
+        }
     }
 
     public void ConfirmData()
@@ -241,6 +257,12 @@
         }
        
     }
-    
-    
+
+
+    private void FinishAndGoToProfile()
+    {
+        NavigationManager.NavigateTo("/Profile");
+
+    }
+
 }

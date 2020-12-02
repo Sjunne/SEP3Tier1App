@@ -3,10 +3,12 @@
 @using WebApplication.Network
 @using System.Text.RegularExpressions
 @using System.Text.Json
+@using SEP3Tier1App.Authentication
 @inject ProfileData ProfileData
 @inject Details Details
 @inject INetworkComp Network
 @inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h1>Edit Profile</h1>
 <link rel="stylesheet" href="prefstyle.css">
@@ -102,18 +104,26 @@
     private Boolean showErrorLabel = false;
     protected override async Task OnInitializedAsync()
     {
-        try
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
         {
-            ProfileData = await Network.GetProfile("Kasper");
-            ProfileData.self = JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
-            ProfileData.self.maximumAge = 18;
-            ProfileData.self.minimumAge = 18;
-            ProfileData.preferences.minimumAge = 18;
-            ProfileData.preferences.maximumAge = 18;
-            editContext = new EditContext(ProfileData);
-        }catch (Exception e)
+            NavigationManager.NavigateTo("/");
+        }
+        else
         {
-            NavigationManager.NavigateTo($"/Error/{e.Message}");
+            try
+            {
+                ProfileData = await Network.GetProfile(ProfileData.username);
+                ProfileData.self = JsonSerializer.Deserialize<Details>(ProfileData.jsonSelf);
+                ProfileData.self.maximumAge = 18;
+                ProfileData.self.minimumAge = 18;
+                ProfileData.preferences.minimumAge = 18;
+                ProfileData.preferences.maximumAge = 18;
+                editContext = new EditContext(ProfileData);
+            }
+            catch (Exception e)
+            {
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+            }
         }
 
     }

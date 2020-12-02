@@ -54,7 +54,9 @@ namespace SEP3Tier1App.Authentication
                 User user = new User()
                 {
                     username =  username,
-                    password =  password
+                    password =  password,
+                    City = "Vissing",
+                    Role = "Role"
                 };
                 identity = SetupClaimsForUser(user);
                 string serialisedData = JsonSerializer.Serialize(user);
@@ -78,15 +80,18 @@ namespace SEP3Tier1App.Authentication
             var user = new ClaimsPrincipal(new ClaimsIdentity());
             jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", "");
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
-            Console.WriteLine(cachedUser);
         }
 
         private ClaimsIdentity SetupClaimsForUser(User user)
         {
             List<Claim> claims = new List<Claim>();
-            /*claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            claims.Add(new Claim("Role", user.Role));
+            claims.Add(new Claim(ClaimTypes.Name, user.username));
+            claims.Add(new Claim("Username", user.username));
             claims.Add(new Claim("City", user.City));
+            claims.Add(new Claim("MustBeTeacher", user.Role));
+            
+
+            /*
             claims.Add(new Claim("Domain", user.Domain));
             claims.Add(new Claim("BirthYear", user.BirthYear.ToString()));
             claims.Add(new Claim("Level", user.SecurityLevel.ToString()));

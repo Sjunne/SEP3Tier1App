@@ -2,10 +2,12 @@
 @using WebApplication.Data
 @using WebApplication.Network
 @using Microsoft.AspNetCore.Http
+@using SEP3Tier1App.Authentication
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
 @inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider Authentication
 
 <h3>Matches</h3>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,7 +61,7 @@ else
 
   protected override async Task OnInitializedAsync()
   {
-    username = "Maria";
+    username = Authentication.getCachedUser().username;
     Usernames = await Network.GetMatches(username);
     ProfilePictures = await getProfilePictures(Usernames);
 

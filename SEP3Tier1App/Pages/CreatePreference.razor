@@ -250,10 +250,12 @@
         {
             if (hobby.Equals(""))
             {
-                hobby = "nothing";
+                hobby = "Nothing";
             }
-            ProfileData.username = "Kasper";
+            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             NetWork.CreatePreference(ProfileData);
+            NavigationManager.NavigateTo("/Profile");
+
         }
        
     }

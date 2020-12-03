@@ -259,7 +259,7 @@
 
         if (isValid)
         {
-            ProfileData.username = "Kasper";
+            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             Network.EditPreference(ProfileData);
         }
        

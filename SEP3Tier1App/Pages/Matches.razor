@@ -61,19 +61,26 @@ else
 
   protected override async Task OnInitializedAsync()
   {
-    username = Authentication.getCachedUser().username;
-    Usernames = await Network.GetMatches(username);
-    ProfilePictures = await getProfilePictures(Usernames);
+    if (Authentication.getCachedUser() == null || ProfileData.username == null)
+    {
+      NavigationManager.NavigateTo("/");
+    }
+    else
+    {
+      username = Authentication.getCachedUser().username;
+      Usernames = await Network.GetMatches(username);
+      ProfilePictures = await getProfilePictures(Usernames);
+    }
 
   }
 
   private void ButtonClicked(string item)
   {
     Console.WriteLine(item + "here");
-    if (item != null)
-    {
-      NavigationManager.NavigateTo($"/ProfileOfOthers/{item}");
-    }
+      if (item != null)
+      {
+        NavigationManager.NavigateTo($"/ProfileOfOthers/{item}");
+      }
   }
 
   private void Accept(string username2)

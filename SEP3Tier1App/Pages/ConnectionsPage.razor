@@ -3,9 +3,12 @@
 @using WebApplication.Network
 @using SEP3Tier1App.Network
 @using System.Text.Json
+@using SEP3Tier1App.Authentication
 @inject INetworkComp Network;
 @inject INetworkSocket NetworkSocket;
 @inject NavigationManager Manager;
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject ProfileData ProfileData
 
 
 <h3>Connections</h3>
@@ -60,9 +63,19 @@
     protected override Task OnInitializedAsync()
     {
         
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            Manager.NavigateTo("/");
+        }
+        else
+        {
+
             setDelegates();
-        
+
+            return base.OnInitializedAsync();
+        }
         return base.OnInitializedAsync();
+
     }
 
     private async void ReactToNetwork(Request obj)

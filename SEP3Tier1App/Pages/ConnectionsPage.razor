@@ -4,6 +4,7 @@
 @using SEP3Tier1App.Network
 @using System.Text.Json
 @inject INetworkComp Network;
+@inject INetworkSocket NetworkSocket;
 @inject NavigationManager Manager;
 
 
@@ -58,10 +59,9 @@
 
     protected override Task OnInitializedAsync()
     {
-        if (onceOnly == false)
-        {
+        
             setDelegates();
-        }
+        
         return base.OnInitializedAsync();
     }
 
@@ -74,11 +74,11 @@
     private async void setDelegates()
     {
         onceOnly = true;
-        _delegate = Network.getDelegating();
-        _delegate.fromNetwork = ReactToNetwork;
+        _delegate = NetworkSocket.getDelegating();
+        _delegate.GetConnectionsFromNetwork = ReactToNetwork;
         _delegate.ImagesFromNetwork = ReactToNetWorkSetImages;
     
-        await Network.getConnections(Username);
+        await NetworkSocket.getConnections(Username);
     }
 
     private async void ReactToNetWorkSetImages(IList<string> obj)

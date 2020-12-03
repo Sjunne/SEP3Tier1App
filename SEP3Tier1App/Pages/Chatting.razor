@@ -1,8 +1,10 @@
 @page "/Chatting/{friendUsername}"
 @using WebApplication.Data
 @using WebApplication.Network
+@using SEP3Tier1App.Network
 @inject ProfileData ProfileData;
 @inject INetworkComp _Network;
+@inject INetworkSocket _NetworkSocket;
 
 <h3>Chatting</h3>
 <div class="col-12 col-lg-7 col-xl-9">
@@ -82,7 +84,7 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Type your message" @bind="BindedWithTextArea">
             <button class="btn btn-primary" @onclick="ShowAndHideFunction">@smileys[0]</button>
-            <button class="btn btn-primary">Send</button>
+            <button class="btn btn-primary" @onclick="SendMessage">Send</button>
         </div>
          <div style="visibility: @ShowAndHide">
                   <br>
@@ -111,6 +113,8 @@
     private string friendProfilePic;
     private string yourProfilePic;
     private string BindedWithTextArea;
+    private Delegating _delegate;
+
 
 
     private string ShowAndHide = "hidden";
@@ -123,15 +127,26 @@
     protected override Task OnInitializedAsync()
     {
         yourUsername = ProfileData.username;
-        Console.WriteLine(yourUsername + "chatting");
 
-  
-
-
+        setDelegates();
         FillInInformation();
-     
         fillDictionary();
         return base.OnInitializedAsync();
+    }
+
+    private async void setDelegates()
+    {
+        Console.WriteLine("jeg sætter delegates");
+        _delegate = _NetworkSocket.getDelegating();
+        _delegate.NotfifyAboutNewMessage = GetAllMessageAgain;
+    
+    }
+
+    private async void GetAllMessageAgain()
+    {
+        Console.WriteLine("jeg kom herind");
+        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
+        await InvokeAsync(StateHasChanged);
     }
 
     private async void FillInInformation()
@@ -183,4 +198,22 @@
         smileys.Add(char.ConvertFromUtf32(0x1F610));
         smileys.Add(char.ConvertFromUtf32(0x1F611));
     }
+
+    private async void SendMessage()
+    {
+        string text = BindedWithTextArea;
+
+        PrivateMessage message = new PrivateMessage()
+        {
+            text = text,
+            usernameFrom = yourUsername,
+            usernameTo = friendUsername
+        };
+
+        _NetworkSocket.SendMessage(message);
+        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
+        
+        StateHasChanged();
+    }
+
 }

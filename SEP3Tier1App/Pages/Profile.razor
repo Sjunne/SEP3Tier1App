@@ -174,13 +174,13 @@
     
     private string username;
 
-
+    /*
     protected override async Task OnParametersSetAsync()
     {
-        /*
+        
         Reviews.Add(new Review());
         ProfileData.isEditingAbout = false;
-        username = ProfileData.username;
+        username = CustomAuthenticationStateProvider.getCachedUser().username;
 
     //henter data fra databasen til at fylde profilen ud,
     //kunne optimeres
@@ -203,14 +203,13 @@
             Console.WriteLine(e.Message);
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
-       // return base.OnParametersSetAsync();
-        */
+       await base.OnParametersSetAsync();
+        
     }
 
-
+   */
     protected override async Task OnInitializedAsync()
     {
-        
         Reviews.Add(new Review());
         ProfileData.isEditingAbout = false;
         
@@ -221,13 +220,16 @@
 
         try
         {
+            Console.WriteLine(username + "før profile");
             Task<ProfileData> profile = Network.GetProfile(username);
             CoverPicture = await Network.GetCoverPicture(username);
             Images = await Network.GetPictures(username);
             ProfilePicture = await Network.GetProfilePicture(username);
             Reviews = await Network.GetReviews(username);
-            
+            Console.WriteLine(ProfileData.username);
             ProfileData = await profile;
+            Console.WriteLine(ProfileData.username + "2nd time");
+            username = ProfileData.username;
         }
         catch (ErrorException e)
         {
@@ -238,6 +240,7 @@
 
         
     }
+ 
 
     private void Here()
     {

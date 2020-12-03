@@ -31,7 +31,6 @@ namespace WebApplication.Network
         void deleteProfile(string username);
         Task<IList<string>> GetMatches(int userId);
 
-        Task getConnections(string username);
 
         Delegating getDelegating();
 

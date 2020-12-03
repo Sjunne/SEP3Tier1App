@@ -28,6 +28,8 @@ namespace WebApplication.Network
         GETALLMESSAGES,
         REGISTERUSER,
         CHANGEPASSWORD,
-        CHANGEUSERNAME
+        CHANGEUSERNAME,
+        SENDMESSAGE,
+        NOTIFYABOUTMESSAGES
     }
 }

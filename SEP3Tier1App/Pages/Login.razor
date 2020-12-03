@@ -1,10 +1,12 @@
 ﻿@using WebApplication.Data
 @using WebApplication.Network
 @using SEP3Tier1App.Authentication
+@using SEP3Tier1App.Network
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
 @inject ProfileData ProfileData
+@inject INetworkSocket NetworkSocket;
 
 <div class="centerLogin">
     <RadzenCard>
@@ -29,6 +31,8 @@
             {
                 CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
                 ProfileData.username = args.Username;
+                NetworkSocket.setUsername(args.Username);
+                NetworkSocket.SendUsername();
                 NavigationManager.NavigateTo($"/Profile");
             }
             else

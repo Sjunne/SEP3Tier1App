@@ -337,7 +337,7 @@ h2, a{
 .chat-messages {
     display: flex;
     flex-direction: column;
-    max-height: 800px;
+    max-height: 400px;
     overflow-y: scroll
 }
 

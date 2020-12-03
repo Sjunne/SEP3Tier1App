@@ -6,9 +6,8 @@ namespace SEP3Tier1App.Network
 {
     public class Delegating
     {
-        public Action<Request> fromNetwork { get; set; }
+        public Action<Request> GetConnectionsFromNetwork { get; set; }
         public Action<IList<string>> ImagesFromNetwork { get; set; }
-        
-        
+        public Action NotfifyAboutNewMessage { get; set; }
     }
 }

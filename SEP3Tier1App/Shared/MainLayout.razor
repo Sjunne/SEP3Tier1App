@@ -3,7 +3,9 @@
 
 @using Blazored.Modal
 @using SEP3Tier1App.Authentication
+@using SEP3Tier1App.Network
 @inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject INetworkSocket NetworkSocket;
 
 <div class="sidebar">
     <NavMenu/>

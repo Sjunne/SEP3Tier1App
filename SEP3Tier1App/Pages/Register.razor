@@ -1,8 +1,10 @@
 ﻿@page "/Register"
 @using WebApplication.Data
 @using WebApplication.Network
+@using SEP3Tier1App.Authentication
 @inject INetworkComp NetworkImpl
 @inject NavigationManager NavigationManager;
+@inject CustomAuthenticationStateProvider _CustomAuthenticationStateProvider;
 <h1>Create a New Account</h1>
 <h2>And Find Your Next Mistake</h2>
 <link rel="stylesheet" href="style.css">
@@ -33,7 +35,7 @@
         {
             Update = "Please fill out all fields. \n";
         }
-        else if ((username.Equals("") || email.Equals("") || !password.Equals(pwdagain) || !above18))
+        else if (username.Equals("") || email.Equals("") || !password.Equals(pwdagain) || !above18)
         {
             //ændre else if condition
             if (username.Equals("") || email.Equals(""))
@@ -58,8 +60,26 @@
                 password =  password,
                 email =  email
             };
-            await NetworkImpl.RegisterUser(user);
-            //NavigationManager.NavigateTo($"/CreateProfile");
+            try
+            {
+                Request request = await NetworkImpl.RegisterUser(user);
+                if (request.o.ToString().Equals("Registered"))
+                {
+                    _CustomAuthenticationStateProvider.SetCachedUser(user);
+                    NavigationManager.NavigateTo($"/CreateProfile");
+                }
+                else
+                {
+                    Update = request.o.ToString();
+                    StateHasChanged();
+                }
+            }
+            catch (Exception e)
+            {
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+            }
+
+            
         }
     }
 

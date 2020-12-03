@@ -2,10 +2,12 @@
 @using WebApplication.Data
 @using WebApplication.Network
 @using System.Text.RegularExpressions
+@using SEP3Tier1App.Authentication
 @inject ProfileData ProfileData
 @inject Details Details
 @inject INetworkComp NetWork
 @inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h1>CreateProfile</h1>
 <link rel="stylesheet" href="prefstyle.css">
@@ -67,6 +69,10 @@
 
 </EditForm>
 
+<button style="background-color: green" class="btn btn-primary"
+                        @onclick="NextCreatePreference">
+                    Set up Your Preferences!
+                </button>
 
 
 @code {
@@ -76,21 +82,28 @@
     private Boolean showErrorLabel = false;
     protected override void OnInitialized()
     {
-        ProfileData.self.maximumAge = 18;
-        ProfileData.self.minimumAge = 18;
-        editContext= new EditContext(ProfileData);
+        if (CustomAuthenticationStateProvider.getCachedUser() == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            ProfileData.self.maximumAge = 18;
+            ProfileData.self.minimumAge = 18;
+            ProfileData.self.education = " ";
+            ProfileData.preferences.education = " ";
+            editContext = new EditContext(ProfileData);
+        }
     }
 
     public void ConfirmData()
     {
-        /*if (ProfileData.self.hobbies != null)
+        if (ProfileData.self.hobbies != null)
         {
-            
-        }*/
+            //TODO: Fill out
+        }
         
-       
-        Console.WriteLine(isValid.ToString());
-
+        
         isValid = editContext.Validate();
         if (isValid)
         {
@@ -98,7 +111,7 @@
             {
                 ProfileData.self.hobbies = "nothing";
             }
-            ProfileData.username = "Kasper";
+            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             NetWork.CreateProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");
         }
@@ -123,4 +136,10 @@
     {
         showErrorLabel = true;
     }
+
+    private void NextCreatePreference()
+    {
+        NavigationManager.NavigateTo("/Createpreference");
+    }
+
 }

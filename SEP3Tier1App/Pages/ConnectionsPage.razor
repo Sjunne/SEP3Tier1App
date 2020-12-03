@@ -3,7 +3,12 @@
 @using WebApplication.Network
 @using SEP3Tier1App.Network
 @using System.Text.Json
+@using SEP3Tier1App.Authentication
 @inject INetworkComp Network;
+@inject INetworkSocket NetworkSocket;
+@inject NavigationManager Manager;
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject ProfileData ProfileData
 
 
 <h3>Connections</h3>
@@ -33,7 +38,7 @@
                     </div>
                     <div class="col-sm-2" style="float: left">
                         <br>
-                        <a href="#" class="myButton">chat</a>
+                        <a  @onclick="@(() => OpenChatting(allConnections[holder].Username))" href="" class="myButton">Chat</a>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -44,43 +49,12 @@
     </div>
 </div>
 
-<!--
-@for (int i = 0; i < allConnections.Count; i++)
-{
-    int holder = i;
-    <div style="height: 100px; border-width: 1px; margin-left: 10px; margin-right: 30px;" class="container">
-        <div class="row" style="height: 100%">
-            <div style="height: 100%" class="col-md-2">
-                <img src="@Images[holder]" alt="@allConnections[holder].Username" style="object-fit: fill; border-radius: 50%; width: 100%; height: 70%;"/>
-
-            </div>
-
-
-            <div class="col-md-6">
-                <p style="margin-left: 25%;">@allConnections[holder].Username</p>
-
-            </div>
-
-
-            <div class="col-md-2">
-                <p style="float: right;">@allConnections[holder].connectionAge</p>
-            </div>
-
-            <div class="col-md-2">
-                <button>Chat</button>
-            </div>
-        </div>
-
-
-    </div>
-}
--->
-
 
 @code {
     private IList<Connections> allConnections = new List<Connections>();
     private IList<string> Images = new List<string>();
-    private string Username;
+    
+    private string Username { get; set; }
     private Delegating _delegate;
 
     private bool onceOnly;
@@ -88,16 +62,24 @@
 
     protected override Task OnInitializedAsync()
     {
-        if (onceOnly == false)
+        
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
         {
+            Manager.NavigateTo("/");
+        }
+        else
+        {
+
             setDelegates();
+
+            return base.OnInitializedAsync();
         }
         return base.OnInitializedAsync();
+
     }
 
     private async void ReactToNetwork(Request obj)
     {
-        Console.WriteLine(obj.o.ToString());
         allConnections = JsonSerializer.Deserialize<IList<Connections>>(obj.o.ToString());
         Console.WriteLine(allConnections.Count);
     }
@@ -105,18 +87,22 @@
     private async void setDelegates()
     {
         onceOnly = true;
-        _delegate = Network.getDelegating();
-        _delegate.fromNetwork = ReactToNetwork;
+        _delegate = NetworkSocket.getDelegating();
+        _delegate.GetConnectionsFromNetwork = ReactToNetwork;
         _delegate.ImagesFromNetwork = ReactToNetWorkSetImages;
     
-        await Network.getConnections(Username);
+        await NetworkSocket.getConnections(Username);
     }
 
     private async void ReactToNetWorkSetImages(IList<string> obj)
     {
         Images = obj;
-        Console.WriteLine(Images.Count);
         await InvokeAsync(StateHasChanged);
+    }
+
+    private void OpenChatting(string username)
+    {
+        Manager.NavigateTo($"/Chatting/{username}");
     }
 
 }

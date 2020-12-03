@@ -1,13 +1,20 @@
-@page "/Chatting"
+@page "/Chatting/{friendUsername}"
 @using WebApplication.Data
-
+@using WebApplication.Network
+@using SEP3Tier1App.Network
+@using SEP3Tier1App.Authentication
+@inject ProfileData ProfileData;
+@inject INetworkComp _Network;
+@inject INetworkSocket _NetworkSocket;
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <h3>Chatting</h3>
 <div class="col-12 col-lg-7 col-xl-9">
     <div class="py-2 px-4 border-bottom d-none d-lg-block">
         <div class="d-flex align-items-center py-1">
             <div class="position-relative">
-                <img src="/123.jpg" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
+                <img src="@friendProfilePic" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
             </div>
             <div class="flex-grow-1 pl-3">
 
@@ -38,35 +45,41 @@
 
     <div class="position-relative">
         <div class="chat-messages p-4">
-            @for (int j = 0; j < messages.Count; j++)
-            {
-                if (messages[j].username.Equals(friendUsername))
-                {
-                    <div class="chat-message-left pb-4">
-                        <div>
-                            <img src="/123.jpg" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
-                            <div class="text-muted small text-nowrap mt-2">@messages[j].timeSend</div>
-                        </div>
-                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                            <div class="font-weight-bold mb-1">@friendUsername</div>
-                            <p> @messages[j].text</p>
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="chat-message-right pb-4">
-                        <div>
-                            <img src="/Mattias1.jpg" class="rounded-circle mr-1" alt="@yourUsername" width="40" height="40">
-                            <div class="text-muted small text-nowrap mt-2">@messages[j].timeSend</div>
-                        </div>
-                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                            <div class="font-weight-bold mb-1">You</div>
-                            @messages[j].text
-                        </div>
-                    </div>
-                }
-            }
+           @if (messages.Count > 0)
+           {
+               @for (int j = 0; j < messages.Count; j++)
+               {
+                   int holder = j;
+                   if (messages[holder].usernameFrom.Equals(friendUsername))
+                   {
+                       <div class="chat-message-left pb-4">
+                           <div>
+                               <img src="@friendProfilePic" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
+                               <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
+                           </div>
+                           <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                               <div class="font-weight-bold mb-1">@friendUsername</div>
+                               <p> @messages[holder].text</p>
+                           </div>
+                       </div>
+                   }
+                   else
+                   {
+                       <div class="chat-message-right pb-4">
+                           <div>
+                               <img src="@yourProfilePic" class="rounded-circle mr-1" alt="@yourUsername" width="40" height="40">
+                               <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
+                           </div>
+                           <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                               <div class="font-weight-bold mb-1">You</div>
+                               @messages[holder].text
+                           </div>
+                       </div>
+                   }
+               }
+           }
+                
+
         </div>
     </div>
 
@@ -74,7 +87,7 @@
         <div class="input-group">
             <input type="text" class="form-control" placeholder="Type your message" @bind="BindedWithTextArea">
             <button class="btn btn-primary" @onclick="ShowAndHideFunction">@smileys[0]</button>
-            <button class="btn btn-primary">Send</button>
+            <button class="btn btn-primary" @onclick="SendMessage">Send</button>
         </div>
          <div style="visibility: @ShowAndHide">
                   <br>
@@ -95,12 +108,16 @@
 </div>
 
 @code {
-    private string friendUsername;
+    [Parameter]
+    public string friendUsername { get; set; }
+
     private string yourUsername;
     private IList<PrivateMessage> messages = new List<PrivateMessage>();
     private string friendProfilePic;
     private string yourProfilePic;
     private string BindedWithTextArea;
+    private Delegating _delegate;
+
 
 
     private string ShowAndHide = "hidden";
@@ -112,38 +129,46 @@
 
     protected override Task OnInitializedAsync()
     {
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            yourUsername = ProfileData.username;
 
-        friendUsername = "Maria";
-        yourUsername = "Mattias";
-
-        messages.Add(new PrivateMessage()
-        {
-            text = "Hej Mattias",
-            timeSend = "11/28/2020 - 8:54 PM",
-            username = "Maria"
-        });
-        messages.Add(new PrivateMessage()
-        {
-            text = "Hej Maria",
-            timeSend = "11/28/2020 - 8:55 PM",
-            username = "Mattias"
-        });
-        messages.Add(new PrivateMessage()
-        {
-            text = "Klar til Imorgen? :)",
-            timeSend = "11/28/2020 - 8:58 PM",
-            username = "Maria"
-        });
-        messages.Add(new PrivateMessage()
-        {
-            text = "Ja helt sikkert, tester lige en lang besked her, Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit. Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.",
-            timeSend = "11/28/2020 - 9:02 PM",
-            username = "Mattias"
-        });
-        fillDictionary();
-
+            setDelegates();
+            FillInInformation();
+            fillDictionary();
+            return base.OnInitializedAsync();
+        }
         return base.OnInitializedAsync();
     }
+
+    private async void setDelegates()
+    {
+        Console.WriteLine("jeg sætter delegates");
+        _delegate = _NetworkSocket.getDelegating();
+        _delegate.NotfifyAboutNewMessage = GetAllMessageAgain;
+    
+    }
+
+    private async void GetAllMessageAgain()
+    {
+        Console.WriteLine("jeg kom herind");
+        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async void FillInInformation()
+    {
+        friendProfilePic = await _Network.GetProfilePicture(friendUsername);
+        yourProfilePic = await _Network.GetProfilePicture(yourUsername);
+        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
+        Console.WriteLine(messages[0].text);
+        StateHasChanged();
+    }
+
 
     private void AddSmiley(string SmileyString)
     {
@@ -184,4 +209,22 @@
         smileys.Add(char.ConvertFromUtf32(0x1F610));
         smileys.Add(char.ConvertFromUtf32(0x1F611));
     }
+
+    private async void SendMessage()
+    {
+        string text = BindedWithTextArea;
+
+        PrivateMessage message = new PrivateMessage()
+        {
+            text = text,
+            usernameFrom = yourUsername,
+            usernameTo = friendUsername
+        };
+
+        _NetworkSocket.SendMessage(message);
+        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
+        
+        StateHasChanged();
+    }
+
 }

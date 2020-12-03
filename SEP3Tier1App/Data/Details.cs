@@ -38,7 +38,6 @@ namespace WebApplication.Data
         
         [StringLength(50)]
         [NoNumbers]
-        [Required]
         public string education { get; set; }
         
         [StringLength(50)]

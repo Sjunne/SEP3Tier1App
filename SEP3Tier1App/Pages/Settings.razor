@@ -1,4 +1,10 @@
 ﻿@page "/Settings"
+@using WebApplication.Data
+@using SEP3Tier1App.Authentication
+@inject ProfileData ProfileData
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
 <h1 class="Georgia" style="margin-bottom: 10px; display: flex;
                                                  flex-direction: column;
                                                  justify-content: center;
@@ -40,11 +46,30 @@
         </div>
     </div>
 </a>
+<button style="background-color: green" class="btn btn-primary"
+                        @onclick="GoBackToProfile">
+                    Back
+                </button>
 
 
 @code {
     private string editPreferences = "https://localhost:5001/Editpreference";
     private string editProfile = "https://localhost:5001/EditProfile";
     private string security = "https://localhost:5001/Security";
+    
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+    }
+
+    private void GoBackToProfile()
+    {
+        NavigationManager.NavigateTo("/Profile");
+    }
 
 }

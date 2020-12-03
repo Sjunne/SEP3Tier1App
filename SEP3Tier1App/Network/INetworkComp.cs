@@ -29,14 +29,18 @@ namespace WebApplication.Network
         Task EditPreference(ProfileData profileData);
         void bigEditProfile(ProfileData profileData);
         void deleteProfile(string username);
-        Task<IList<string>> GetMatches(int userId);
+        Task<IList<string>> GetMatches(string username);
 
-        Task getConnections(string username);
 
         Delegating getDelegating();
+        
 
-        Task<RequestOperationEnum> ValidateLogin(string argsUsername, string argsPassword); 
-        Task RegisterUser(User user);
-        Task<RequestOperationEnum> ChangePassword(User user);
+        Task AcceptMatch(IList<string> usernames);
+        Task DeclineMatch(IList<string> usernames);
+        Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
+        Task<Request> RegisterUser(User user);
+        Task<Request> ChangePassword(User user);
+        Task<Request> ChangeUsername(User user, string profileDataUsername);
+        Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername);
     }
 }

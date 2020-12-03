@@ -1,34 +1,47 @@
 ﻿@page "/Matches"
 @using WebApplication.Data
 @using WebApplication.Network
+@using Microsoft.AspNetCore.Http
+@using SEP3Tier1App.Authentication
 @inject IModalService Modal
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
+@inject NavigationManager NavigationManager
+@inject CustomAuthenticationStateProvider Authentication
+
 <h3>Matches</h3>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <body>
 
-@if (Profiles == null)
+@if (Usernames == null)
 {
   <p><em>No matches found</em></p>
 }
 else
 {
-  @foreach (String item in Profiles)
+  @for (int i = 0; i < Usernames.Count; i++)
   {
+    string holder = Usernames[i];
     <div class="w3-container">
 
       <div class="w3-card-4 w3-dark-grey" style="width:50%">
 
         <div class="w3-container w3-center">
           <h3>Match Request</h3>
-          <img src="@Network.GetProfilePicture(item)" alt="Avatar" style="width:80%">
-          <h5>@item</h5>
+        
+        <a @onclick="@(() => ButtonClicked(holder))">
+         
+        
+                  <img src="@ProfilePictures[i]" style="width: 70%;height: 250px;" alt=""/>
+             
+        </a>
+       
+          <h5>@holder</h5>
 
           <div class="w3-section">
-            <button class="w3-button w3-green">Accept</button>
-            <button class="w3-button w3-red">Decline</button>
+            <button class="w3-button w3-green" @onclick="@(() =>Accept(holder))" >Accept</button>
+            <button class="w3-button w3-red" @onclick="@(() =>Decline(holder))">Decline</button>
           </div>
         </div>
 
@@ -38,14 +51,58 @@ else
 }
 </body>
 @code {
-  private IList<String> Profiles;
+  private IList<String> Usernames;
   private IList<int> matchesId;
-  private string username = "Maria";
-  
- 
+  ProfileOfOthers ProfileOfOthers;
+  private IList<string> ProfilePictures;
+  private string username;
+
+
+
   protected override async Task OnInitializedAsync()
   {
-    Profiles = await Network.GetMatches(1);
-   
+    username = Authentication.getCachedUser().username;
+    Usernames = await Network.GetMatches(username);
+    ProfilePictures = await getProfilePictures(Usernames);
+
   }
+
+  private void ButtonClicked(string item)
+  {
+    Console.WriteLine(item + "here");
+    if (item != null)
+    {
+      NavigationManager.NavigateTo($"/ProfileOfOthers/{item}");
+    }
+  }
+
+  private void Accept(string username2)
+  {
+    IList<string> usernames = new List<string>();
+    usernames.Add(username);
+    usernames.Add(username2);
+    Network.AcceptMatch(usernames);
+  }
+
+  private void Decline(string username2)
+  {
+    IList<string> usernames = new List<string>();
+    usernames.Add(username);
+    usernames.Add(username2);
+    Network.DeclineMatch(usernames);
+  }
+
+  private async Task<IList<string>> getProfilePictures(IList<string> username)
+  {
+    IList<string> pictures = new List<string>();
+    for (int i = 0; i < username.Count; i++)
+    {
+      string profilePicture = await Network.GetProfilePicture(username[i]);
+      pictures.Add(profilePicture);
+    }
+    return pictures;
+  }
+
+
+
 }

@@ -25,8 +25,12 @@ namespace WebApplication.Network
         GETCONNECTIONS,
         EDITPROFILE,
         EDITPREFERENCE,
+        GETALLMESSAGES,
         REGISTERUSER,
+        GETPROFILEID,
         CHANGEPASSWORD,
-        CHANGEUSERNAME
+        CHANGEUSERNAME,
+        SENDMESSAGE,
+        NOTIFYABOUTMESSAGES
     }
 }

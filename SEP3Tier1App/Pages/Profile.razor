@@ -160,7 +160,6 @@
         </Tabs>
     </RadzenTabs>
 </div>
-
 @code {
     //comment siden
     //fjern inline style
@@ -186,10 +185,10 @@
             //Reviews.Add(new Review());
             ProfileData.isEditingAbout = false;
         
-            username =ProfileData.username;
+        username = CustomAuthenticationStateProvider.getCachedUser().username;
 
-            //henter data fra databasen til at fylde profilen ud
-            //kunne optimeres
+        //henter data fra databasen til at fylde profilen ud,
+        //kunne optimeres
 
             try
             {
@@ -207,8 +206,6 @@
                 NavigationManager.NavigateTo($"/Error/{e.Message}");
             }    
         }
-        
-        
     }
 
     private void Here()
@@ -236,7 +233,6 @@
         }
         else
         {
-           Console.WriteLine(ProfileData.intro + "here");
             await Network.EditIntroduction(ProfileData);
         }
     }

@@ -31,9 +31,9 @@ namespace WebApplication.Data
         [Required]
         public string bodyShape { get; set; }
         
-        [StringLength(20)]
+        [StringLength(300)]
         [NoNumbers]
-        [Required]
+        //[Required]
         public string hobbies { get; set; }
         
         [StringLength(50)]

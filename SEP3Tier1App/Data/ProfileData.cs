@@ -43,7 +43,7 @@ namespace WebApplication.Data
         [NoNumbers]
         public string education { get; set; }
         
-        [StringLength(40)]
+        [StringLength(300)]
         public string hobbies { get; set; }
 
         public string instagram { get; set; }

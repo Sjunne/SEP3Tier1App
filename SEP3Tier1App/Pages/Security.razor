@@ -1,9 +1,11 @@
 ﻿@page "/Security"
 @using WebApplication.Network
 @using WebApplication.Data
+@using SEP3Tier1App.Authentication
 @inject INetworkComp NetworkComp;
 @inject ProfileData ProfileData;
 @inject NavigationManager NavigationManager;
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h2 style="color: black !important;">Security</h2>
 
@@ -55,6 +57,15 @@
 
 @code {
     private bool ShowPopup;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+    }
 
     public void DeleteProfile()
     {

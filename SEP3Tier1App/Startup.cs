@@ -48,6 +48,19 @@ namespace SEP3Tier1App
             //Network
             //Singleton
             services.AddScoped<INetworkComp, NetworkImpl>();
+            
+            services.AddAuthorization(options => {
+                options.AddPolicy("Vissing",  a => 
+                    a.RequireAuthenticatedUser().RequireClaim("City", "Vissing"));
+        
+                options.AddPolicy("SecurityLevel4",  a => 
+                    a.RequireAuthenticatedUser().RequireClaim("Level", "4","5"));
+        
+                options.AddPolicy("MustBeTeacher",  a => 
+                    a.RequireAuthenticatedUser().RequireClaim("Role", "Teacher"));
+                
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

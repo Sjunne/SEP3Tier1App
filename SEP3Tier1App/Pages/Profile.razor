@@ -174,73 +174,39 @@
     
     private string username;
 
-    /*
-    protected override async Task OnParametersSetAsync()
-    {
-        
-        Reviews.Add(new Review());
-        ProfileData.isEditingAbout = false;
-        username = CustomAuthenticationStateProvider.getCachedUser().username;
-
-    //henter data fra databasen til at fylde profilen ud,
-    //kunne optimeres
-
-        try
-        {
-            Console.WriteLine(username + "hejsa");
-            Task<ProfileData> profile = Network.GetProfile(username);
-            CoverPicture = await Network.GetCoverPicture(username);
-            Images = await Network.GetPictures(username);
-            ProfilePicture = await Network.GetProfilePicture(username);
-            Reviews = await Network.GetReviews(username);
-            
-            
-            ProfileData = await profile;
-            username = ProfileData.username;
-        }
-        catch (ErrorException e)
-        {
-            Console.WriteLine(e.Message);
-            NavigationManager.NavigateTo($"/Error/{e.Message}");
-        }
-       await base.OnParametersSetAsync();
-        
-    }
-
-   */
     protected override async Task OnInitializedAsync()
     {
-        Reviews.Add(new Review());
-        ProfileData.isEditingAbout = false;
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            //Reviews.Add(new Review());
+            ProfileData.isEditingAbout = false;
         
         username = CustomAuthenticationStateProvider.getCachedUser().username;
 
         //henter data fra databasen til at fylde profilen ud,
         //kunne optimeres
 
-        try
-        {
-            Console.WriteLine(username + "før profile");
-            Task<ProfileData> profile = Network.GetProfile(username);
-            CoverPicture = await Network.GetCoverPicture(username);
-            Images = await Network.GetPictures(username);
-            ProfilePicture = await Network.GetProfilePicture(username);
-            Reviews = await Network.GetReviews(username);
-            Console.WriteLine(ProfileData.username);
-            ProfileData = await profile;
-            Console.WriteLine(ProfileData.username + "2nd time");
-            username = ProfileData.username;
+            try
+            {
+                Task<ProfileData> profile = Network.GetProfile(username);
+                CoverPicture = await Network.GetCoverPicture(username);
+                Images = await Network.GetPictures(username);
+                ProfilePicture = await Network.GetProfilePicture(username);
+                Reviews = await Network.GetReviews(username);
+            
+                ProfileData = await profile;
+            }
+            catch (ErrorException e)
+            {
+                Console.WriteLine(e.Message);
+                NavigationManager.NavigateTo($"/Error/{e.Message}");
+            }    
         }
-        catch (ErrorException e)
-        {
-            Console.WriteLine(e.Message);
-            NavigationManager.NavigateTo($"/Error/{e.Message}");
-        }
-        
-
-        
     }
- 
 
     private void Here()
     {
@@ -266,7 +232,9 @@
             ErrorIntro = "Changes has not been stored! \n Please shorten your introduction to maximum 300 characters.";
         }
         else
-        await Network.EditIntroduction(ProfileData);
+        {
+            await Network.EditIntroduction(ProfileData);
+        }
     }
 
     async Task HandleSelection(IFileListEntry[] files)

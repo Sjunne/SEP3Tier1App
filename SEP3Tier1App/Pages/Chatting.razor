@@ -2,9 +2,12 @@
 @using WebApplication.Data
 @using WebApplication.Network
 @using SEP3Tier1App.Network
+@using SEP3Tier1App.Authentication
 @inject ProfileData ProfileData;
 @inject INetworkComp _Network;
 @inject INetworkSocket _NetworkSocket;
+@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject NavigationManager NavigationManager
 
 <h3>Chatting</h3>
 <div class="col-12 col-lg-7 col-xl-9">
@@ -126,11 +129,19 @@
 
     protected override Task OnInitializedAsync()
     {
-        yourUsername = ProfileData.username;
+        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            yourUsername = ProfileData.username;
 
-        setDelegates();
-        FillInInformation();
-        fillDictionary();
+            setDelegates();
+            FillInInformation();
+            fillDictionary();
+            return base.OnInitializedAsync();
+        }
         return base.OnInitializedAsync();
     }
 

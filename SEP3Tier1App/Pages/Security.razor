@@ -53,6 +53,7 @@
             </div>
         </div>
     </div>
+    
 }
 
 @code {
@@ -81,6 +82,11 @@
     public void Cancel()
     {
         ShowPopup = false;
+    }
+    
+    private void GoBackToSettings()
+    {
+        NavigationManager.NavigateTo("/Settings");
     }
 
 }

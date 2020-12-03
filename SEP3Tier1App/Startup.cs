@@ -48,7 +48,7 @@ namespace SEP3Tier1App
             services.AddSingleton<INetworkComp, NetworkImpl>();
             
             services.AddAuthorization(options => {
-                options.AddPolicy("Vissing",  a => 
+                options.AddPolicy("RightCity",  a => 
                     a.RequireAuthenticatedUser().RequireClaim("City", "Vissing"));
         
                 options.AddPolicy("SecurityLevel4",  a => 

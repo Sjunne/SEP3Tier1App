@@ -46,6 +46,10 @@
         </div>
     </div>
 </a>
+<button style="background-color: green" class="btn btn-primary"
+                        @onclick="GoBackToProfile">
+                    Back
+                </button>
 
 
 @code {
@@ -61,6 +65,11 @@
             NavigationManager.NavigateTo("/");
         }
 
+    }
+
+    private void GoBackToProfile()
+    {
+        NavigationManager.NavigateTo("/Profile");
     }
 
 }

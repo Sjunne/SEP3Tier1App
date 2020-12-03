@@ -56,7 +56,7 @@ namespace SEP3Tier1App.Authentication
                     username =  username,
                     password =  password,
                     City = "Vissing",
-                    Role = "Role"
+                    Role = "Teacher"
                 };
                 identity = SetupClaimsForUser(user);
                 string serialisedData = JsonSerializer.Serialize(user);
@@ -90,13 +90,6 @@ namespace SEP3Tier1App.Authentication
             claims.Add(new Claim("City", user.City));
             claims.Add(new Claim("MustBeTeacher", user.Role));
             
-
-            /*
-            claims.Add(new Claim("Domain", user.Domain));
-            claims.Add(new Claim("BirthYear", user.BirthYear.ToString()));
-            claims.Add(new Claim("Level", user.SecurityLevel.ToString()));
-            */
-
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
         }

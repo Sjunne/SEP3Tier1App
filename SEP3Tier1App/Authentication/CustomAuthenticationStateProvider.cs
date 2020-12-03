@@ -90,5 +90,11 @@ namespace SEP3Tier1App.Authentication
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
         }
+
+        public void SetCachedUser(User user)
+        {
+            cachedUser = user;
+        }
+
     }
 }

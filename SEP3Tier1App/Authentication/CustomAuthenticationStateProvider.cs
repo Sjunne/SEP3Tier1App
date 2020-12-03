@@ -94,6 +94,11 @@ namespace SEP3Tier1App.Authentication
             return identity;
         }
 
+        public void SetCachedUser(User user)
+        {
+            cachedUser = user;
+        }
+
         public User getCachedUser()
         {
             return cachedUser;

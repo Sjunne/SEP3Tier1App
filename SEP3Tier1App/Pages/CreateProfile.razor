@@ -82,7 +82,7 @@
     private Boolean showErrorLabel = false;
     protected override void OnInitialized()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (CustomAuthenticationStateProvider.getCachedUser() == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -90,6 +90,8 @@
         {
             ProfileData.self.maximumAge = 18;
             ProfileData.self.minimumAge = 18;
+            ProfileData.self.education = " ";
+            ProfileData.preferences.education = " ";
             editContext = new EditContext(ProfileData);
         }
     }
@@ -109,7 +111,7 @@
             {
                 ProfileData.self.hobbies = "nothing";
             }
-            ProfileData.username = "Kasper";
+            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             NetWork.CreateProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");
         }

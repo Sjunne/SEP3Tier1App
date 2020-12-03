@@ -10,11 +10,6 @@ namespace WebApplication.Data
         public string email { get; set; }
         public string newPassword { get; set; }
 
-        public string City { get; set; }
-        
-        public string Role { get; set; }
-
-
         public override string ToString()
         {
             return username + " " + password;

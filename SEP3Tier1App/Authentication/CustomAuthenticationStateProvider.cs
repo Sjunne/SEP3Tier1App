@@ -44,10 +44,7 @@ namespace SEP3Tier1App.Authentication
 
         public void SetClaimsIdentity(string username, string password)
         {
-            Console.WriteLine("Validating log in");
-            //if (string.IsNullOrEmpty(username)) throw new Exception("Enter username");
-            //if (string.IsNullOrEmpty(password)) throw new Exception("Enter password");
-
+            
             ClaimsIdentity identity = new ClaimsIdentity();
             try
             {
@@ -55,14 +52,11 @@ namespace SEP3Tier1App.Authentication
                 {
                     username =  username,
                     password =  password,
-                    City = "Vissing",
-                    Role = "Teacher"
                 };
                 identity = SetupClaimsForUser(user);
                 string serialisedData = JsonSerializer.Serialize(user);
                 jsRuntime.InvokeVoidAsync("sessionStorage.setItem", "currentUser", serialisedData);
                 cachedUser = user;
-                Console.WriteLine("You can been logged in!" + user.ToString());
             }
             catch (Exception e)
             {
@@ -87,9 +81,7 @@ namespace SEP3Tier1App.Authentication
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.username));
             claims.Add(new Claim("Username", user.username));
-            claims.Add(new Claim("City", user.City));
-            claims.Add(new Claim("MustBeTeacher", user.Role));
-            
+
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
         }

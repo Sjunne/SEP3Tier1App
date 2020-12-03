@@ -15,7 +15,12 @@ namespace SEP3Tier1App.Authentication
 
         private User cachedUser;
 
-        public CustomAuthenticationStateProvider(IJSRuntime jsRuntime)
+        public User getCachedUser()
+        {
+            return cachedUser;
+        }
+        
+             public CustomAuthenticationStateProvider(IJSRuntime jsRuntime)
         {
             this.jsRuntime = jsRuntime;
         }
@@ -84,11 +89,6 @@ namespace SEP3Tier1App.Authentication
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;
-        }
-
-        public User getCachedUser()
-        {
-            return cachedUser;
         }
     }
 }

@@ -28,59 +28,18 @@ namespace WebApplication.Network
     {
         private HttpClient client;
         private NetworkStream _networkStream;
-        private string Username = "Maria";
         public Delegating _delegating { get; set; }
 
 
         public NetworkImpl()
         {
-            /*
-            /*_delegating = new Delegating();
-            _networkStream = NetworkStream();
-            SendUsername(Username);
-            Thread thread = new Thread(() => ListenToServer());
-            thread.Start();
-            */
+            _delegating = new Delegating();
+            
             client = new HttpClient();
         }
+        
 
-        private void ListenToServer()
-        {
-            while (true)
-            {
-                byte[] dataFromClient = new byte[1024];
-                _networkStream.Read(dataFromClient, 0, dataFromClient.Length);
-                var trimEmptyBytes = TrimEmptyBytes(dataFromClient);
-                string s = Encoding.ASCII.GetString(trimEmptyBytes, 0, trimEmptyBytes.Length);
-                Request request = JsonSerializer.Deserialize<Request>(s);
-                switch (request.requestOperation)
-                {
-                    case RequestOperationEnum.GETCONNECTIONS:
-                    {   
-                        _delegating.fromNetwork?.Invoke(request);
-                        IList<string> Images = new Collection<string>();
-                        int numberOfImages = JsonSerializer.Deserialize<IList<Connections>>(request.o.ToString()).Count;
-                        for (int i = 0; i < numberOfImages; i++)
-                        {
-                            byte[] newArray = new byte[1024 * 1024];
-                            _networkStream.Read(newArray, 0, newArray.Length);
-                            var trimEmptyBytes2 = TrimEmptyBytes(newArray);
-                            string s2 = Encoding.ASCII.GetString(trimEmptyBytes2, 0, trimEmptyBytes2.Length);
-                            Images.Add(s2);
-                        }
-                        _delegating.ImagesFromNetwork?.Invoke(Images);
-                        break;
-                    }
-                }
-            }
-        }
-
-        private void SendUsername(string username)
-        {
-            var bytes = Encoding.ASCII.GetBytes(username);
-            _networkStream.Write(bytes,0,bytes.Length);
-        }
-
+      
         public async Task EditIntroduction(ProfileData profileData)
         {
             string message = JsonSerializer.Serialize(profileData);
@@ -189,7 +148,6 @@ namespace WebApplication.Network
 
             return response;
         }
-        
 
         public async Task<Request> ChangePassword(User user)
         {
@@ -246,6 +204,14 @@ namespace WebApplication.Network
             
         }
 
+        public async Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Chatting?request=" + yourUsername + "|" +  friendUsername);
+            string s = await httpResponseMessage.Content.ReadAsStringAsync();
+            var privateMessages = JsonSerializer.Deserialize<IList<PrivateMessage>>(s);
+            return privateMessages;
+        }
+ 
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
@@ -366,21 +332,9 @@ namespace WebApplication.Network
         {
             string profile = await client.GetStringAsync($"https://localhost:5003/Match?username={username}");
             IList<string> profiles = JsonSerializer.Deserialize<IList<string>>(profile);
-            Console.WriteLine(username);
             return profiles;
         }
-
-        public async Task getConnections(string username)
-        {
-            string request = JsonSerializer.Serialize(new Request()
-            {
-                Username = username,
-                requestOperation = RequestOperationEnum.GETCONNECTIONS
-            });
-
-            byte[] bytes = Encoding.ASCII.GetBytes(request);
-            _networkStream.Write(bytes, 0, bytes.Length);
-        }
+        
 
         public Delegating getDelegating()
         {
@@ -388,7 +342,12 @@ namespace WebApplication.Network
         }
 
 
-        
+        public async Task<ProfileData> GetProfile(int userId)
+        {
+            string message = await client.GetStringAsync($"https://localhost:5003/Profile?userid={userId}");
+            ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
+            return profileData;
+        }
 
         
         public async Task ChangeCoverPicture(string pictureName)
@@ -471,23 +430,7 @@ namespace WebApplication.Network
         
         
     
-        private static NetworkStream NetworkStream()
-        {
-            NetworkStream stream = null;
-
-            try
-            {
-                TcpClient tcpClient = new TcpClient("127.0.0.1", 4500);
-                stream = tcpClient.GetStream();
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-            return stream;
-        }
+       
         
         
         private byte[] TrimEmptyBytes(byte[] array)

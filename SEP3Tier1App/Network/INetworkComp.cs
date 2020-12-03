@@ -31,7 +31,6 @@ namespace WebApplication.Network
         void deleteProfile(string username);
         Task<IList<string>> GetMatches(string username);
 
-        Task getConnections(string username);
 
         Delegating getDelegating();
         
@@ -42,5 +41,6 @@ namespace WebApplication.Network
         Task<Request> RegisterUser(User user);
         Task<Request> ChangePassword(User user);
         Task<Request> ChangeUsername(User user, string profileDataUsername);
+        Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername);
     }
 }

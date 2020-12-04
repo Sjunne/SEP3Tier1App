@@ -124,7 +124,7 @@
     }
     public void deleteprofile()
     {
-        Network.deleteProfile(ProfileData.username);
+        Network.deleteProfile(ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username);
     }
     
     
@@ -151,6 +151,7 @@
         isValid = editContext.Validate();
         if (isValid)
         {
+            ProfileData.username = ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;;
             ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
             ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
             ProfileData.education = fixWhiteSpace(ProfileData.education);

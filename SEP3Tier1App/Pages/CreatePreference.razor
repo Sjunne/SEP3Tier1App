@@ -188,9 +188,10 @@
             ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
             ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
             ProfileData.interests = fixWhiteSpace(ProfileData.interests);
-
             ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             NetWork.CreatePreference(ProfileData);
+            NavigationManager.NavigateTo("/Profile");
+
         }
        
     }

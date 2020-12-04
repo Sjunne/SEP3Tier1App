@@ -26,24 +26,30 @@ namespace WebApplication.Data
         [Required]
         [StringLength(20)]
         [NoNumbers]
+        [NoSpecialCharacters]
         public string firstName { get; set; }
         
         [Required]
         [StringLength(20)]
         [NoNumbers]
+        [NoSpecialCharacters]
         public string lastName { get; set; }
         
         [Required]
         [StringLength(20)]
         [NoNumbers]
+        [NoSpecialCharacters]
         public string city { get; set; }
         
         [Required]
         [StringLength(50)]
         [NoNumbers]
+        [NoSpecialCharacters]
         public string education { get; set; }
         
         [StringLength(300)]
+        [NoSpecialCharacters]
+        [LengthPerItem(20)]
         public string hobbies { get; set; }
 
         public string instagram { get; set; }

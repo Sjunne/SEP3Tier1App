@@ -171,6 +171,13 @@
 
     }
 
+    public string fixWhiteSpace(string hej)
+    {
+        string stringToBeFixed = "\"" + hej + "\"";
+        return stringToBeFixed;
+
+    }
+    
     public void ConfirmData()
     {
         Boolean isValid = editContext.Validate();
@@ -183,6 +190,11 @@
 
         if (isValid)
         {
+            ProfileData.intro = fixWhiteSpace(ProfileData.intro);
+            ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
+            ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
+            ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
+            ProfileData.interests = fixWhiteSpace(ProfileData.interests);
             ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             Network.EditPreference(ProfileData);
         }

@@ -90,8 +90,16 @@
         }
     }
 
+    public string fixWhiteSpace(string hej)
+    {
+        string stringToBeFixed = "\"" + hej + "\"";
+        return stringToBeFixed;
+
+    }
+    
     public void ConfirmData()
     {
+        
         if (ProfileData.self.hobbies != null)
         {
             //TODO: Fill out
@@ -101,6 +109,16 @@
         isValid = editContext.Validate();
         if (isValid)
         {
+            ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
+            ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
+            ProfileData.education = fixWhiteSpace(ProfileData.education);
+            ProfileData.city = fixWhiteSpace(ProfileData.city);
+            ProfileData.intro = fixWhiteSpace(ProfileData.intro);
+            ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
+            ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
+            ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
+            ProfileData.interests = fixWhiteSpace(ProfileData.interests);
+
             if (ProfileData.self.hobbies.Equals(""))
             {
                 ProfileData.self.hobbies = "nothing";

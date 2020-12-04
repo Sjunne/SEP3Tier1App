@@ -12,10 +12,6 @@
 
 <h1>Edit Profile</h1>
 <link rel="stylesheet" href="prefstyle.css">
-@if (showErrorLabel)
-{
-    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
-}
 <button class="" style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
 
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
@@ -137,6 +133,13 @@
     {
         ShowPopup = false;
     }
+    
+    public string fixWhiteSpace(string hej)
+    {
+        string stringToBeFixed = "\"" + hej + "\"";
+        return stringToBeFixed;
+
+    }
 
     public void ConfirmData()
     {
@@ -148,6 +151,16 @@
         isValid = editContext.Validate();
         if (isValid)
         {
+            ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
+            ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
+            ProfileData.education = fixWhiteSpace(ProfileData.education);
+            ProfileData.city = fixWhiteSpace(ProfileData.city);
+            ProfileData.intro = fixWhiteSpace(ProfileData.intro);
+            ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
+            ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
+            ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
+            ProfileData.interests = fixWhiteSpace(ProfileData.interests);
+
             ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             Network.bigEditProfile(ProfileData);
         }
@@ -165,9 +178,6 @@
        
         
     }
-    public void ShowErrorLabel()
-    {
-        showErrorLabel = true;
-    }
+ 
 
 }

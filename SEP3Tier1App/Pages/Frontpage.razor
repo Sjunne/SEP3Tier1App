@@ -1,6 +1,11 @@
 @page "/"
+@using SEP3Tier1App.Authentication
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 <link rel="stylesheet" href="frontpage.css">
 <Login/>
 @code {
-    
+    protected override async Task OnInitializedAsync()
+    {
+        ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).Logout();
+    }
 }

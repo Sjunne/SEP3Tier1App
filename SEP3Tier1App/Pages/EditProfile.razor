@@ -8,7 +8,7 @@
 @inject Details Details
 @inject INetworkComp Network
 @inject NavigationManager NavigationManager
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h1>Edit Profile</h1>
 <link rel="stylesheet" href="prefstyle.css">
@@ -94,7 +94,7 @@
     private Boolean showErrorLabel = false;
     protected override async Task OnInitializedAsync()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -124,7 +124,7 @@
     }
     public void deleteprofile()
     {
-        Network.deleteProfile(ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username);
+        Network.deleteProfile(ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username);
     }
     
     
@@ -151,7 +151,7 @@
         isValid = editContext.Validate();
         if (isValid)
         {
-            ProfileData.username = ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;;
+            ProfileData.username = ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;;
             ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
             ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
             ProfileData.education = fixWhiteSpace(ProfileData.education);
@@ -162,7 +162,7 @@
             ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
             ProfileData.interests = fixWhiteSpace(ProfileData.interests);
 
-            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
+            ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             Network.bigEditProfile(ProfileData);
         }
         else

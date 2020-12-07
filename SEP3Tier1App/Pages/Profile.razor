@@ -13,7 +13,7 @@
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
 @inject NavigationManager NavigationManager
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider;
 
 
 <head>
@@ -176,7 +176,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -185,7 +185,7 @@
             //Reviews.Add(new Review());
             ProfileData.isEditingAbout = false;
         
-        username = CustomAuthenticationStateProvider.getCachedUser().username;
+        username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
 
         //henter data fra databasen til at fylde profilen ud,
         //kunne optimeres

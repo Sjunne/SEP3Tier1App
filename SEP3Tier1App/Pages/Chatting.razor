@@ -6,7 +6,7 @@
 @inject ProfileData ProfileData;
 @inject INetworkComp _Network;
 @inject INetworkSocket _NetworkSocket;
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
 <h3>Chatting</h3>
@@ -129,7 +129,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -145,19 +145,16 @@
         return base.OnInitializedAsync();
     }
 
-    private async void setDelegates()
+    private void setDelegates()
     {
-        Console.WriteLine("jeg sætter delegates");
         _delegate = _NetworkSocket.getDelegating();
         _delegate.NotfifyAboutNewMessage = GetAllMessageAgain;
-    
     }
 
-    private async void GetAllMessageAgain()
+    private void GetAllMessageAgain()
     {
-        Console.WriteLine("jeg kom herind");
-        messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
-        await InvokeAsync(StateHasChanged);
+        messages =  _Network.getAllPrivateMessages(yourUsername, friendUsername).GetAwaiter().GetResult();
+        InvokeAsync(StateHasChanged);
     }
 
     private async void FillInInformation()

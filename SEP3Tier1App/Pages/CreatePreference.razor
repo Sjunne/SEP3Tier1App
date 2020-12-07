@@ -7,7 +7,7 @@
 @inject ProfileData ProfileData
 @inject INetworkComp NetWork
 @inject NavigationManager NavigationManager
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h1>Create preferences.</h1>
 <link rel="stylesheet" href="prefstyle.css">
@@ -160,7 +160,7 @@
 
     protected override void OnInitialized()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -188,7 +188,7 @@
             ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
             ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
             ProfileData.interests = fixWhiteSpace(ProfileData.interests);
-            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
+            ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             NetWork.CreatePreference(ProfileData);
             NavigationManager.NavigateTo("/Profile");
 

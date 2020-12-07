@@ -7,7 +7,7 @@
 @inject INetworkComp Network;
 @inject INetworkSocket NetworkSocket;
 @inject NavigationManager Manager;
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 @inject ProfileData ProfileData
 
 
@@ -63,7 +63,7 @@
     protected override Task OnInitializedAsync()
     {
         
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             Manager.NavigateTo("/");
         }

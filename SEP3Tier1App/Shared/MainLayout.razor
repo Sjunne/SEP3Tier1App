@@ -4,17 +4,20 @@
 @using Blazored.Modal
 @using SEP3Tier1App.Authentication
 @using SEP3Tier1App.Network
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 @inject INetworkSocket NetworkSocket;
+@inject NavigationManager NavigationManager
 
 <div class="sidebar">
     <NavMenu/>
 </div>
 
 <div class="main">
+    <AuthorizeView>
     <div class="top-row px-4" style="z-index: 50">
         <button class="btn btn-primary Georgia" @onclick="LogOut">Log Out</button>
     </div>
+    </AuthorizeView>
 
     <div class="content px-4">
         @Body
@@ -25,7 +28,8 @@
 @code {
     private void LogOut()
     {
-        CustomAuthenticationStateProvider.Logout();
+        ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).Logout();
+        NavigationManager.NavigateTo("/");
     }
 
 }

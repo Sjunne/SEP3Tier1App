@@ -7,7 +7,7 @@
 @inject Details Details
 @inject INetworkComp NetWork
 @inject NavigationManager NavigationManager
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h1>CreateProfile</h1>
 <link rel="stylesheet" href="prefstyle.css">
@@ -76,7 +76,7 @@
     private Boolean showErrorLabel = false;
     protected override void OnInitialized()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null)
         {
             NavigationManager.NavigateTo("/");
         }
@@ -123,7 +123,7 @@
             {
                 ProfileData.self.hobbies = "nothing";
             }
-            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
+            ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             NetWork.CreateProfile(ProfileData);
             NavigationManager.NavigateTo("CreatePreference");
         }

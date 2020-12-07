@@ -2,7 +2,7 @@
 @using WebApplication.Data
 @using SEP3Tier1App.Authentication
 @inject ProfileData ProfileData
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 @inject NavigationManager NavigationManager
 
 <h1 class="Georgia" style="margin-bottom: 10px; display: flex;
@@ -60,7 +60,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }

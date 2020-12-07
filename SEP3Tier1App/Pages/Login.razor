@@ -3,7 +3,7 @@
 @using SEP3Tier1App.Authentication
 @using System.Security.Claims
 @using SEP3Tier1App.Network
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider;
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider;
 @inject INetworkComp NetworkComp;
 @inject NavigationManager NavigationManager
 @inject ProfileData ProfileData
@@ -30,7 +30,7 @@
         
             if (request.o.ToString().Equals("Logged in"))
             {
-                CustomAuthenticationStateProvider.SetClaimsIdentity(args.Username, args.Password);
+                ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).SetClaimsIdentity(args.Username, args.Password);
                 ProfileData.username = args.Username;
                 NetworkSocket.setUsername(args.Username);
                 NetworkSocket.SendUsername();

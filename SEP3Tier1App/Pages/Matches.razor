@@ -7,7 +7,7 @@
 @inject ProfileData ProfileData
 @inject INetworkComp Network;
 @inject NavigationManager NavigationManager
-@inject CustomAuthenticationStateProvider Authentication
+@inject AuthenticationStateProvider Authentication
 
 <h3>Matches</h3>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -61,13 +61,13 @@ else
 
   protected override async Task OnInitializedAsync()
   {
-    if (Authentication.getCachedUser() == null || ProfileData.username == null)
+    if (((CustomAuthenticationStateProvider) Authentication).getCachedUser() == null || ProfileData.username == null)
     {
       NavigationManager.NavigateTo("/");
     }
     else
     {
-      username = Authentication.getCachedUser().username;
+      username = ((CustomAuthenticationStateProvider) Authentication).getCachedUser().username;
       Usernames = await Network.GetMatches(username);
       ProfilePictures = await getProfilePictures(Usernames);
     }

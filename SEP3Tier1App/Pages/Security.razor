@@ -5,7 +5,7 @@
 @inject INetworkComp NetworkComp;
 @inject ProfileData ProfileData;
 @inject NavigationManager NavigationManager;
-@inject CustomAuthenticationStateProvider CustomAuthenticationStateProvider
+@inject AuthenticationStateProvider CustomAuthenticationStateProvider
 
 <h2 style="color: black !important;">Security</h2>
 
@@ -61,7 +61,7 @@
     
     protected override async Task OnInitializedAsync()
     {
-        if (CustomAuthenticationStateProvider.getCachedUser() == null || ProfileData.username == null)
+        if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }

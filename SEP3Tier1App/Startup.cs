@@ -42,7 +42,7 @@ namespace SEP3Tier1App
             // Scoped
             services.AddScoped<ProfileData>();
             services.AddScoped<Details>();
-            services.AddScoped<CustomAuthenticationStateProvider>();
+            services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddScoped<INetworkSocket, NetworkSocketImpl>();
             
             //Network

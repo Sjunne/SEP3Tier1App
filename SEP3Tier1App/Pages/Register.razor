@@ -5,7 +5,7 @@
 @using System.Text.RegularExpressions
 @inject INetworkComp NetworkImpl
 @inject NavigationManager NavigationManager;
-@inject CustomAuthenticationStateProvider _CustomAuthenticationStateProvider;
+@inject AuthenticationStateProvider _CustomAuthenticationStateProvider;
 <h1>Create a New Account</h1>
 <h2>And Find Your Next Mistake</h2>
 <link rel="stylesheet" href="style.css">
@@ -70,7 +70,7 @@
                 Request request = await NetworkImpl.RegisterUser(user);
                 if (request.o.ToString().Equals("Registered"))
                 {
-                    _CustomAuthenticationStateProvider.SetCachedUser(user);
+                    ((CustomAuthenticationStateProvider) _CustomAuthenticationStateProvider).SetCachedUser(user);
                     NavigationManager.NavigateTo($"/CreateProfile");
                 }
                 else

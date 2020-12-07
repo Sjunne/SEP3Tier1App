@@ -56,6 +56,7 @@ else
   ProfileOfOthers ProfileOfOthers;
   private IList<string> ProfilePictures;
   private string username;
+  Match _match;
 
 
 
@@ -68,6 +69,7 @@ else
     else
     {
       username = ((CustomAuthenticationStateProvider) Authentication).getCachedUser().username;
+      _match = new Match();
       Usernames = await Network.GetMatches(username);
       ProfilePictures = await getProfilePictures(Usernames);
     }
@@ -83,20 +85,22 @@ else
       }
   }
 
-  private void Accept(string username2)
+  private async void Accept(string username2)
   {
-    IList<string> usernames = new List<string>();
-    usernames.Add(username);
-    usernames.Add(username2);
-    Network.AcceptMatch(usernames);
+   _match.MakeMatch(username,username2);
+    Network.AcceptMatch(_match);
+    Usernames = await Network.GetMatches(username);
+    _match.usernames.Clear();
+    StateHasChanged();
   }
 
-  private void Decline(string username2)
+  private async void Decline(string username2)
   {
-    IList<string> usernames = new List<string>();
-    usernames.Add(username);
-    usernames.Add(username2);
-    Network.DeclineMatch(usernames);
+    _match.MakeMatch(username,username2);
+    Network.DeclineMatch(_match);
+    Usernames = await Network.GetMatches(username);
+    _match.usernames.Clear();
+    StateHasChanged();
   }
 
   private async Task<IList<string>> getProfilePictures(IList<string> username)

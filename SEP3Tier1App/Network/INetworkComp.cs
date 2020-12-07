@@ -35,8 +35,8 @@ namespace WebApplication.Network
         Delegating getDelegating();
         
 
-        Task AcceptMatch(IList<string> usernames);
-        Task DeclineMatch(IList<string> usernames);
+        Task AcceptMatch(Match match);
+        Task DeclineMatch(Match match);
         Task<Request> ValidateLogin(string argsUsername, string argsPassword); 
         Task<Request> RegisterUser(User user);
         Task<Request> ChangePassword(User user);

@@ -12,10 +12,6 @@
 
 <h1>Edit Profile</h1>
 <link rel="stylesheet" href="prefstyle.css">
-@if (showErrorLabel)
-{
-    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
-}
 <button class="" style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
 
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
@@ -34,14 +30,9 @@
     <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
      <div>
             <label>Hobbies</label><br>
-            <label style="font-size: xx-small">You cannot enter numbers</label>
-            <InputText class="form-control" placeholder="Hobbies" @bind-Value="@hobby"/>
-            <button type="button" @onclick="@(() => { if (ProfileData.self.hobbies == null) {if (hobby.Any(char.IsDigit)){} else{if (hobby.Length > 300){showErrorLabel = true;} else{ProfileData.self.hobbies += hobby; showErrorLabel = false;}}} else if (ProfileData.self.hobbies.Length + hobby.Length > 300) {ShowErrorLabel();} 
-                                            else { if (hobby.Any(char.IsDigit)){} else{ ProfileData.self.hobbies += ", " + hobby; showErrorLabel = false;}} hobby = ""; /*cleanup();*/})">
-                <i class="oi oi-plus" style="color:red"/>
-                Add</button>
-            <label>So far you have: @ProfileData.self.hobbies</label>
-        </div>
+    <label style="font-size: xx-small">Please separate each item with a comma</label>
+            <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.self.hobbies"/>
+     </div>
     <label>Hair Color</label>
     <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
     <label>Eye Color</label>
@@ -98,7 +89,6 @@
 
 @code {
     private Boolean ShowPopup = false;
-    private string hobby;
     private EditContext editContext;
     private Boolean isValid;
     private Boolean showErrorLabel = false;
@@ -143,6 +133,13 @@
     {
         ShowPopup = false;
     }
+    
+    public string fixWhiteSpace(string hej)
+    {
+        string stringToBeFixed = "\"" + hej + "\"";
+        return stringToBeFixed;
+
+    }
 
     public void ConfirmData()
     {
@@ -155,6 +152,17 @@
         if (isValid)
         {
             ProfileData.username = ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;;
+            ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
+            ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
+            ProfileData.education = fixWhiteSpace(ProfileData.education);
+            ProfileData.city = fixWhiteSpace(ProfileData.city);
+            ProfileData.intro = fixWhiteSpace(ProfileData.intro);
+            ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
+            ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
+            ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
+            ProfileData.interests = fixWhiteSpace(ProfileData.interests);
+
+            ProfileData.username = CustomAuthenticationStateProvider.getCachedUser().username;
             Network.bigEditProfile(ProfileData);
         }
         else
@@ -171,9 +179,6 @@
        
         
     }
-    public void ShowErrorLabel()
-    {
-        showErrorLabel = true;
-    }
+ 
 
 }

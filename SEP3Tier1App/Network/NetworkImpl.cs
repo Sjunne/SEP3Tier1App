@@ -93,9 +93,9 @@ namespace WebApplication.Network
             return profileData;
         }
 
-        public async Task DeclineMatch(IList<string> usernames)
+        public async Task DeclineMatch(Match match)
         {
-            string message = JsonSerializer.Serialize(usernames);
+            string message = JsonSerializer.Serialize(match);
             HttpContent content = new StringContent(
                 message,
                 Encoding.UTF8,
@@ -193,9 +193,9 @@ namespace WebApplication.Network
             return response;
         }
 
-        public async Task AcceptMatch(IList<string> usernames)
+        public async Task AcceptMatch(Match match)
         {
-            string message = JsonSerializer.Serialize(usernames);
+            string message = JsonSerializer.Serialize(match);
             HttpContent content = new StringContent(
                 message,
                 Encoding.UTF8,

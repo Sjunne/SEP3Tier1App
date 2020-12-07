@@ -21,7 +21,6 @@ namespace SEP3Tier1App.Network
 
         public NetworkSocketImpl()
         {
-            Console.WriteLine("constructor");
             _delegating = new Delegating();
             _networkStream = NetworkStream();
             Thread thread = new Thread(() => ListenToServer());

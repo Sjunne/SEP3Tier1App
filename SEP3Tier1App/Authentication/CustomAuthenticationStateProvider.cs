@@ -85,7 +85,7 @@ namespace SEP3Tier1App.Authentication
         {
             List<Claim> claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Name, user.username));
-            claims.Add(new Claim("Username", user.username));
+//          claims.Add(new Claim("Username", user.username));
 
             ClaimsIdentity identity = new ClaimsIdentity(claims, "apiauth_type");
             return identity;

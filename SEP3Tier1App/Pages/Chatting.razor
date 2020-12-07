@@ -47,7 +47,7 @@
         <div class="chat-messages p-4">
            @if (messages.Count > 0)
            {
-               @for (int j = 0; j < messages.Count; j++)
+               @for (int j = messages.Count-1; j >= 0; j--)
                {
                    int holder = j;
                    if (messages[holder].usernameFrom.Equals(friendUsername))
@@ -117,14 +117,10 @@
     private string yourProfilePic;
     private string BindedWithTextArea;
     private Delegating _delegate;
-
-
-
+    
     private string ShowAndHide = "hidden";
 
     IList<string> smileys = new List<string>();
-    
-    
 
 
     protected override Task OnInitializedAsync()
@@ -162,7 +158,6 @@
         friendProfilePic = await _Network.GetProfilePicture(friendUsername);
         yourProfilePic = await _Network.GetProfilePicture(yourUsername);
         messages = await _Network.getAllPrivateMessages(yourUsername, friendUsername);
-        Console.WriteLine(messages[0].text);
         StateHasChanged();
     }
 

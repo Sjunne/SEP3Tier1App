@@ -12,79 +12,60 @@
 
 <h1>Edit Profile</h1>
 <link rel="stylesheet" href="prefstyle.css">
-<button class="" style="float: right; background-color: red; "  type="button" @onclick="wantToDelete"> DELETE PROFILE</button><br><br>
 
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
-    <ObjectGraphDataAnnotationsValidator />
-    <ValidationSummary />
-    <label>First Name</label>
-    <InputText class="form-control" placeholder="FirstName" @bind-Value="@ProfileData.firstName"/>
-    <label>Last Name</label>
-    <InputText class="form-control" placeholder="LastName" @bind-Value="@ProfileData.lastName"/>
 
-    <label>Age</label>
-    <InputNumber class="form-control" placeholder="Age" @bind-Value="@ProfileData.age"/>
-    <label>Education</label>
-    <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
-    <label>City</label>
-    <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
-     <div>
-            <label>Hobbies</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-            <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.self.hobbies"/>
-     </div>
-    <label>Hair Color</label>
-    <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
-    <label>Eye Color</label>
-    <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.self.eyeColor"/>
-    <label>Skin Color</label>
-    <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.self.skinColor"/>
-    <label>Nationality</label>
-    <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.self.nationality"/>
-    <label>Body Shape</label>
-    <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.self.bodyShape"/>
-    <label>Job</label>
-    <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.self.job"/>
-    <label>Gender</label>
-    <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.self.gender"/>
-    <div>
-        <label>Do you have kids?</label>
-        <input type="checkbox" @bind="@ProfileData.self.kids"/>
+    <ObjectGraphDataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="row">
+        <div class="col-md-6 " >
+            <label>First Name</label>
+            <InputText class="form-control" placeholder="FirstName" @bind-Value="@ProfileData.firstName"/>
+            <label>Last Name</label>
+            <InputText class="form-control" placeholder="LastName" @bind-Value="@ProfileData.lastName"/>
+
+            <label>Age</label>
+            <InputNumber class="form-control" placeholder="Age" @bind-Value="@ProfileData.age"/>
+            <label>Education</label>
+            <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
+            <label>City</label>
+            <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
+            <div>
+                <label>Hobbies</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.self.hobbies"/>
+            </div>
+            <label>Hair Color</label>
+            <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
+        </div>
+        <div class="col-md-6">
+            <label>Eye Color</label>
+            <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.self.eyeColor"/>
+            <label>Skin Color</label>
+            <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.self.skinColor"/>
+            <label>Nationality</label>
+            <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.self.nationality"/>
+            <label>Body Shape</label>
+            <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.self.bodyShape"/>
+            <label>Job</label>
+            <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.self.job"/>
+            <label>Gender</label>
+            <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.self.gender"/>
+            <div>
+                <label>Do you have kids?</label>
+                <input type="checkbox" @bind="@ProfileData.self.kids"/>
+            </div>
+            <div>
+                <label>Seeks Relationship</label>
+                <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
+            </div>
+        </div>
+        <button class="btn btn-primary Georgia" @onclick="Refresh">
+            <i class="oi oi-submit" style="color:red"/>
+            Submit
+        </button>
     </div>
-    <div>
-        <label>Seeks Relationship</label>
-        <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
-    </div>
-
-    <button>
-        <i class="oi oi-submit" style="color:red"/>
-        Submit</button>
-
 </EditForm>
-
-@if (ShowPopup)
-        {
-            <!-- This is the popup to check if you really want to delete profile -->
-            <div class="modal" tabindex="-1" style="display:block" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h3 class="modal-title">Are you sure you want to delete your profile?</h3>
-                            <!-- Button to close the popup -->
-                            <button type="button" class="close"
-                                    @onclick="Cancel">
-                                <span aria-hidden="true">X</span>
-                            </button>
-                        </div>
-                        <!-- Button to delete Profile -->
-                            <button style="background-color: orangered" class="btn btn-primary"
-                                    @onclick="deleteprofile">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-        }
 
 
 @code {
@@ -92,6 +73,7 @@
     private EditContext editContext;
     private Boolean isValid;
     private Boolean showErrorLabel = false;
+
     protected override async Task OnInitializedAsync()
     {
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
@@ -115,43 +97,26 @@
                 NavigationManager.NavigateTo($"/Error/{e.Message}");
             }
         }
-
     }
 
-    public void wantToDelete()
-    {
-        ShowPopup = true;
-    }
-    public void deleteprofile()
-    {
-        Network.deleteProfile(ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username);
-    }
-    
-    
 
-    public void Cancel()
-    {
-        ShowPopup = false;
-    }
-    
     public string fixWhiteSpace(string hej)
     {
         string stringToBeFixed = "\"" + hej + "\"";
         return stringToBeFixed;
-
     }
 
     public void ConfirmData()
     {
         if (ProfileData.self.hobbies != null)
         {
-            
         }
 
         isValid = editContext.Validate();
         if (isValid)
         {
-            ProfileData.username = ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;;
+            ProfileData.username = ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
+            ;
             ProfileData.firstName = fixWhiteSpace(ProfileData.firstName);
             ProfileData.lastName = fixWhiteSpace(ProfileData.lastName);
             ProfileData.education = fixWhiteSpace(ProfileData.education);
@@ -167,18 +132,21 @@
         }
         else
         {
-           editContext.GetValidationMessages();
+            editContext.GetValidationMessages();
         }
-        
     }
 
     public void cleanup()
     {
         ProfileData.self.hobbies = new String(ProfileData.self.hobbies.Where(c => c != '-' && (c < '0' || c > '9')).ToArray());
         ProfileData.self.hobbies = Regex.Replace((string) ProfileData.self.hobbies, @", ,", ",");
-       
+    }
+
+
+    private void Refresh()
+    {
+        NavigationManager.NavigateTo("/Settings");
         
     }
- 
 
 }

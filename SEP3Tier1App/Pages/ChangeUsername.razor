@@ -35,7 +35,6 @@
                 Request response = await NetworkComp.ChangeUsername(user, ProfileData.username);
                 if (response.requestOperation == RequestOperationEnum.SUCCESS)
                 {
-                    Console.WriteLine(response.o.ToString());
                     Update = response.o.ToString();
                     StateHasChanged();
                 }

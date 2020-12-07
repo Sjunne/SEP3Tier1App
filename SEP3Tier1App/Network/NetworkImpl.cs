@@ -56,7 +56,6 @@ namespace WebApplication.Network
         {
             profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
             string message = JsonSerializer.Serialize(profileData);
-            Console.WriteLine(message);
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreateProfile", content);
         }
@@ -65,7 +64,6 @@ namespace WebApplication.Network
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
             string message = JsonSerializer.Serialize(profileData);
-            Console.WriteLine(message);
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/CreatePreference", content);
         }
@@ -111,7 +109,6 @@ namespace WebApplication.Network
             if (httpResponseMessage.StatusCode == HttpStatusCode.ServiceUnavailable)
             {
                 string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
-                Console.WriteLine(httpResponseMessage.RequestMessage.ToString());
                 throw new ErrorException(httpResponseMessage.StatusCode + " " + readAsStringAsync);
             }
             
@@ -142,7 +139,6 @@ namespace WebApplication.Network
             Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + response.o.ToString());
             }
 
@@ -201,7 +197,6 @@ namespace WebApplication.Network
                 Encoding.UTF8,
                 "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match/Accept", content);
-            Console.WriteLine(info.StatusCode);
             
         }
 
@@ -226,7 +221,6 @@ namespace WebApplication.Network
         {
             profileData.jsonSelf = JsonSerializer.Serialize(profileData.self);
             string message = JsonSerializer.Serialize(profileData);
-            Console.WriteLine(message);
             HttpContent content = new StringContent(message, Encoding.UTF8, "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Profile/bigEditProfile", content);
         }
@@ -241,7 +235,6 @@ namespace WebApplication.Network
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException("Database connection lost");
             }
 
@@ -261,7 +254,6 @@ namespace WebApplication.Network
 
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode + "");
             }
             return await httpResponseMessage.Content.ReadAsStringAsync();
@@ -272,7 +264,6 @@ namespace WebApplication.Network
             HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Image/All?username={username}");
             if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
             {
-                Console.WriteLine(httpResponseMessage);
                 throw new ErrorException(httpResponseMessage.StatusCode+ "");
             }
 

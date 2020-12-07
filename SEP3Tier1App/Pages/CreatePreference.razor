@@ -12,138 +12,137 @@
 <h1>Create preferences.</h1>
 <link rel="stylesheet" href="prefstyle.css">
 <EditForm EditContext=@editContext OnValidSubmit="ConfirmData">
-<DataAnnotationsValidator />
-<ValidationSummary />
-@if (showEducationErrorLabel)
-{
-    <label id="education" class="errormessagelabel">Education: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showCityErrorLabel)
-{
-    <label id="city" class="errormessagelabel">City: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showHobbiesErrorLabel)
-{
-    <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
-    <br/>
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    @if (showEducationErrorLabel)
+    {
+        <label id="education" class="errormessagelabel">Education: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showCityErrorLabel)
+    {
+        <label id="city" class="errormessagelabel">City: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showHobbiesErrorLabel)
+    {
+        <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showHairColorErrorLabel)
+    {
+        <label id="haircolor" class="errormessagelabel">Hair Color: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showEyeColorErrorLabel)
+    {
+        <label id="eyecolor" class="errormessagelabel">Eye Color: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showSkinColorErrorLabel)
+    {
+        <label id="skincolor" class="errormessagelabel">Skin Color: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showNationalityErrorLabel)
+    {
+        <label id="nationality" class="errormessagelabel">Nationality: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showBodyshapeErrorLabel)
+    {
+        <label id="bodyshape" class="errormessagelabel">Bodyshape: Cannot be over 300 Characters</label>
+        <br/>
+    }
+    @if (showJobErrorLabel)
+    {
+        <label id="Job" class="errormessagelabel">Job: Cannot be over 300 Characters</label>
+        <br/>
+    }
 
-}
-@if (showHairColorErrorLabel)
-{
-    <label id="haircolor" class="errormessagelabel">Hair Color: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showEyeColorErrorLabel)
-{
-    <label id="eyecolor" class="errormessagelabel">Eye Color: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showSkinColorErrorLabel)
-{
-    <label id="skincolor" class="errormessagelabel">Skin Color: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showNationalityErrorLabel)
-{
-    <label id="nationality" class="errormessagelabel">Nationality: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showBodyshapeErrorLabel)
-{
-    <label id="bodyshape" class="errormessagelabel">Bodyshape: Cannot be over 300 Characters</label>
-    <br/>
-}
-@if (showJobErrorLabel)
-{
-    <label id="Job" class="errormessagelabel">Job: Cannot be over 300 Characters</label>
-    <br/>
-}
+    <div class="row">
+        <div class="col-md-6 ">
+            <label>Maximum Age</label>
+            <InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
+            <label>Minimum Age</label>
+            <InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
+            <div>
+                <label>Education</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.preferences.education"/>
 
+            </div>
+            <div>
+                <label>City</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.preferences.city"/>
 
-<label>Maximum Age</label>
-<InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
-<label>Minimum Age</label>
-<InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
-<div>
-    <label>Education</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.preferences.education"/>
+            </div>
+            <div>
+                <label>Hobbies</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.preferences.hobbies"/>
 
-</div>
-<div>
-    <label>City</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.preferences.city"/>
+            </div>
+            <div>
+                <label>Hair Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.preferences.hairColor"/>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <label>Eye Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.preferences.eyeColor"/>
 
-</div>
-<div>
-    <label>Hobbies</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.preferences.hobbies"/>
+            </div>
+            <div>
+                <label>Skin Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.preferences.skinColor"/>
 
-</div>
-<div>
-    <label>Hair Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.preferences.hairColor"/>
+            </div>
+            <div>
+                <label>Nationalities</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.preferences.nationality"/>
 
-</div>
-<div>
-    <label>Eye Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.preferences.eyeColor"/>
+            </div>
+            <div>
+                <label>Bodyshape</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.preferences.bodyShape"/>
 
-</div>
-<div>
-    <label>Skin Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.preferences.skinColor"/>
+            </div>
+            <div>
+                <label>Jobs</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.preferences.job"/>
 
-</div>
-<div>
-    <label>Nationalities</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.preferences.nationality"/>
+            </div>
+            <div>
+                <label>Genders</label>
+                <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.preferences.gender"/>
+            </div>
 
-</div>
-<div>
-    <label>Bodyshape</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.preferences.bodyShape"/>
+            <div>
+                <label>Do you want them to have kids?</label>
+                <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
+            </div>
+            <div>
+                <label>Seeks Relationship</label>
+                <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
+            </div>
+        </div>
 
-</div>
-<div>
-    <label>Jobs</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.preferences.job"/>
-
-</div>
-<div>
-    <label>Genders</label>
-    <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.preferences.gender"/>
-</div>
-
-<div>
-    <label>Do you want them to have kids?</label>
-    <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
-</div>
-<div>
-    <label>Seeks Relationship</label>
-    <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
-</div>
-
-
-<button type="submit">
-    <i class="oi oi-submit" style="color:red"/>
-    Submit</button>
+        <button type="submit">
+            <i class="oi oi-submit" style="color:red"/>
+            Submit
+        </button>
+    </div>
 </EditForm>
 
-<button style="background-color: green" class="btn btn-primary"
-                        @onclick="FinishAndGoToProfile">
-                    Finish!
-                </button>
 
 @code {
     private EditContext editContext;
@@ -170,12 +169,6 @@
         }
     }
     
-    public string fixWhiteSpace(string hej)
-    {
-        string stringToBeFixed = "\"" + hej + "\"";
-        return stringToBeFixed;
-
-    }
 
     public void ConfirmData()
     {
@@ -183,24 +176,11 @@
 
         if (isValid)
         {
-            ProfileData.intro = fixWhiteSpace(ProfileData.intro);
-            ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
-            ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
-            ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
-            ProfileData.interests = fixWhiteSpace(ProfileData.interests);
             ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             NetWork.CreatePreference(ProfileData);
-            NavigationManager.NavigateTo("/Profile");
-
+            NavigationManager.NavigateTo("/");
         }
-       
     }
 
-
-    private void FinishAndGoToProfile()
-    {
-        NavigationManager.NavigateTo("/Profile");
-
-    }
 
 }

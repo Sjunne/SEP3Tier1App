@@ -30,7 +30,6 @@ namespace SEP3Tier1App.Network
 
         public void SendUsername()
         {
-            Console.WriteLine(Username);
             var bytes = Encoding.ASCII.GetBytes(Username);
             _networkStream.Write(bytes, 0, bytes.Length);
         }
@@ -49,7 +48,6 @@ namespace SEP3Tier1App.Network
         
         public void closeConnection()
         {
-            Console.WriteLine("VI LUKKER STREAM");
             _networkStream.Close();
         }
 
@@ -69,8 +67,6 @@ namespace SEP3Tier1App.Network
                     {
                         case RequestOperationEnum.GETCONNECTIONS:
                         {
-                            Console.WriteLine("vi er i switch på tier1");
-                            Console.WriteLine(request.o);
                             _delegating.GetConnectionsFromNetwork?.Invoke(request);
                             IList<string> Images = new Collection<string>();
                             int numberOfImages = JsonSerializer.Deserialize<IList<Connections>>(request.o.ToString())
@@ -89,7 +85,6 @@ namespace SEP3Tier1App.Network
                         }
                         case RequestOperationEnum.NOTIFYABOUTMESSAGES:
                         {
-                            Console.WriteLine("jeg sender en notify");
                             _delegating.NotfifyAboutNewMessage?.Invoke();
                             break;
                         }
@@ -102,7 +97,6 @@ namespace SEP3Tier1App.Network
                 }
             }
 
-            Console.WriteLine("Vi er lige her før close");
             _networkStream.Close();
         }
 

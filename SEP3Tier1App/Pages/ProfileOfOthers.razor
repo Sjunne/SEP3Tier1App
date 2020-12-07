@@ -151,12 +151,10 @@
     protected override async Task OnInitializedAsync()
     {
         var test = username;
-        Console.WriteLine(test);
         Reviews.Add(new Review());
         ProfileData.username = username;
         
         ProfileData.isEditingAbout = false;
-        Console.WriteLine(username);
 
     //henter data fra databasen til at fylde profilen ud,
     //kunne optimeres

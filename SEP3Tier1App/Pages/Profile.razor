@@ -57,8 +57,11 @@
                                 <p class="Georgia">Age: @ProfileData.age</p>
                                 <p class="Georgia">Interests: @ProfileData.interests</p>
                                 <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
-                                <p class="Georgia">Instagram: @ProfileData.instagram</p>
-                                <p class="Georgia">Spotify: @ProfileData.spotify</p>
+                                <a href="@ProfileData.spotify"><p class="Georgia">Spotify: @ProfileData.spotify</p></a>
+                                <a href="https://www.instagram.com/@ProfileData.instagram/"><p class="Georgia">Instagram: @ProfileData.instagram</p></a>
+
+                                
+                                
                             </div>
                         }
                         else
@@ -68,8 +71,8 @@
                             <input type="number" class="form-control" placeholder="Age" @bind="@ProfileData.age"/>
                             <input type="text" class="form-control" placeholder="Interests" @bind="@ProfileData.interests"/>
                             <input type="text" class="form-control" placeholder="Ideal Date" @bind="@ProfileData.idealdate"/>
-                            <a href="@ProfileData.spotify"><input type="text" class="form-control" placeholder="Spotify" @bind="@spotify"/></a>
-                            <a href="https://www.instagram.com/@ProfileData.instagram/"><input type="text" class="form-control" placeholder="Instagram" @bind="@ProfileData.instagram"/></a>
+                            <input type="text" class="form-control" placeholder="Spotify" @bind="@spotify"/>
+                            <input type="text" class="form-control" placeholder="Instagram" @bind="@ProfileData.instagram"/>
                         }
 
 
@@ -273,7 +276,6 @@
 
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
             int length = Encoding.ASCII.GetBytes(dataUri).Length;
-            Console.WriteLine(file.Type + " here");
             
             if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")) && 55000 < length)
             {

@@ -51,7 +51,7 @@ else
 }
 </body>
 @code {
-  private IList<String> Usernames;
+  private List<String> Usernames;
   ProfileOfOthers ProfileOfOthers;
   private IList<string> ProfilePictures;
   private string username;
@@ -69,7 +69,7 @@ else
     {
       username = ((CustomAuthenticationStateProvider) Authentication).getCachedUser().username;
       _match = new Match();
-      Usernames = await Network.GetMatches(username);
+      Usernames = (List<string>)await Network.GetMatches(username);
       ProfilePictures = await getProfilePictures(Usernames);
     }
 
@@ -87,7 +87,9 @@ else
   {
    _match.MakeMatch(username,username2);
     await Network.AcceptMatch(_match);
-    Usernames.Remove(username2);
+    int index = Usernames.FindIndex(username => username.Contains(username2));
+    ProfilePictures.RemoveAt(index);
+    Usernames.RemoveAt(index);
     _match.usernames.Clear();
     StateHasChanged();
   }
@@ -96,7 +98,9 @@ else
   {
     _match.MakeMatch(username,username2);
     await Network.DeclineMatch(_match);
-    Usernames.Remove(username2);
+    int index = Usernames.FindIndex(username => username.Contains(username2));
+    ProfilePictures.RemoveAt(index);
+    Usernames.RemoveAt(index);
     _match.usernames.Clear();
     StateHasChanged();
   }

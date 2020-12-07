@@ -19,55 +19,56 @@
 <EditForm Model="ProfileData" OnValidSubmit="@ConfirmData">
     <ObjectGraphDataAnnotationsValidator />
     <ValidationSummary />
-    <label>First Name</label>
-    <InputText class="form-control" placeholder="FirstName" @bind-Value="@ProfileData.firstName"/>
-    <label>Last Name</label>
-    <InputText class="form-control" placeholder="LastName" @bind-Value="@ProfileData.lastName"/>
+    <div class="row">
+        <div class="col-md-6 ">
+            <label>First Name</label>
+            <InputText class="form-control" placeholder="FirstName" @bind-Value="@ProfileData.firstName"/>
+            <label>Last Name</label>
+            <InputText class="form-control" placeholder="LastName" @bind-Value="@ProfileData.lastName"/>
 
-    <label>Age</label>
-    <InputNumber class="form-control" placeholder="Age" @bind-Value="@ProfileData.age"/>
-    <label>Education</label>
-    <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
-    <label>City</label>
-    <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
-    <div>
-        <label>Hobbies</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-        <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.self.hobbies"/>
+            <label>Age</label>
+            <InputNumber class="form-control" placeholder="Age" @bind-Value="@ProfileData.age"/>
+            <label>Education</label>
+            <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.education"/>
+            <label>City</label>
+            <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.city"/>
+            <div>
+                <label>Hobbies</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.self.hobbies"/>
+            </div>
+            <label>Hair Color</label>
+            <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
+        </div>
+        <div class="col-md-6">
+            <label>Eye Color</label>
+            <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.self.eyeColor"/>
+            <label>Skin Color</label>
+            <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.self.skinColor"/>
+            <label>Nationality</label>
+            <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.self.nationality"/>
+            <label>Body Shape</label>
+            <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.self.bodyShape"/>
+            <label>Job</label>
+            <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.self.job"/>
+            <label>Gender</label>
+            <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.self.gender"/>
+            <div>
+                <label>Do you have kids?</label>
+                <input type="checkbox" @bind="@ProfileData.self.kids"/>
+            </div>
+            <div>
+                <label>Seeks Relationship</label>
+                <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
+            </div>
+        </div>
+        <button>
+            <i class="oi oi-submit" style="color:red"/>
+            Submit</button>
     </div>
-    <label>Hair Color</label>
-    <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.self.hairColor"/>
-    <label>Eye Color</label>
-    <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.self.eyeColor"/>
-    <label>Skin Color</label>
-    <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.self.skinColor"/>
-    <label>Nationality</label>
-    <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.self.nationality"/>
-    <label>Body Shape</label>
-    <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.self.bodyShape"/>
-    <label>Job</label>
-    <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.self.job"/>
-    <label>Gender</label>
-    <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.self.gender"/>
-    <div>
-        <label>Do you have kids?</label>
-        <input type="checkbox" @bind="@ProfileData.self.kids"/>
-    </div>
-    <div>
-        <label>Seeks Relationship</label>
-        <input type="checkbox" @bind="@ProfileData.self.lookingFor"/>
-    </div>
-
-    <button>
-        <i class="oi oi-submit" style="color:red"/>
-        Submit</button>
-
 </EditForm>
 
-<button style="background-color: green" class="btn btn-primary"
-                        @onclick="NextCreatePreference">
-                    Set up Your Preferences!
-                </button>
+
 
 
 @code {
@@ -82,6 +83,7 @@
         }
         else
         {
+            
             ProfileData.self.maximumAge = 18;
             ProfileData.self.minimumAge = 18;
             ProfileData.self.education = " ";
@@ -94,7 +96,6 @@
     {
         string stringToBeFixed = "\"" + hej + "\"";
         return stringToBeFixed;
-
     }
     
     public void ConfirmData()
@@ -119,6 +120,7 @@
             ProfileData.idealdate = fixWhiteSpace(ProfileData.idealdate);
             ProfileData.interests = fixWhiteSpace(ProfileData.interests);
 
+
             if (ProfileData.self.hobbies.Equals(""))
             {
                 ProfileData.self.hobbies = "nothing";
@@ -134,24 +136,11 @@
         
     }
 
-    /*public void cleanup()
-    {
-        ProfileData.self.hobbies = new String(ProfileData.self.hobbies.Where(c => c != '-' && (c < '0' || c > '9')).ToArray());
-        ProfileData.self.hobbies = Regex.Replace((string) ProfileData.self.hobbies, @", ,", ",");
-        Console.WriteLine( ProfileData.self.hobbies.ToString());
-       Console.WriteLine(editContext.Validate());
-       Console.WriteLine(isValid);
-        
-    }*/
-
     public void ShowErrorLabel()
     {
         showErrorLabel = true;
     }
-
-    private void NextCreatePreference()
-    {
-        NavigationManager.NavigateTo("/Createpreference");
-    }
+    
+    
 
 }

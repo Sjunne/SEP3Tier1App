@@ -25,7 +25,6 @@
 {
     <label id="hobbies" class="errormessagelabel">Hobbies: Cannot be over 300 Characters</label>
     <br/>
-
 }
 @if (showHairColorErrorLabel)
 {
@@ -60,79 +59,86 @@
 
 
 <EditForm Model="ProfileData.preferences" OnValidSubmit="@ConfirmData">
-<DataAnnotationsValidator />
-<ValidationSummary />
-<label>Maximum Age</label>
-<InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
-<label>Minimum Age</label>
-<InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
-<div>
-    <label>Education</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.preferences.education"/>
-</div>
-<div>
-    <label>City</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.preferences.city"/>
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="row">
+        <div class="col-md-6 ">
+            <label>Maximum Age</label>
+            <InputNumber class="form-control" placeholder="MaxAge" @bind-Value="@ProfileData.preferences.maximumAge"/>
+            <label>Minimum Age</label>
+            <InputNumber class="form-control" placeholder="MinAge" @bind-Value="@ProfileData.preferences.minimumAge"/>
+            <div>
+                <label>Education</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Education" @bind-Value="@ProfileData.preferences.education"/>
+            </div>
+            <div>
+                <label>City</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="City" @bind-Value="@ProfileData.preferences.city"/>
 
-</div>
-<div>
-    <label>Hobbies</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.preferences.hobbies"/>
-  
-</div>
-<div>
-    <label>Hair Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.preferences.hairColor"/>
-   
-</div>
-<div>
-    <label>Eye Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.preferences.eyeColor"/>
+            </div>
+            <div>
+                <label>Hobbies</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Hobbies" @bind-Value="@ProfileData.preferences.hobbies"/>
 
-</div>
-<div>
-    <label>Skin Colors</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.preferences.skinColor"/>
-</div>
-<div>
-    <label>Nationalities</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.preferences.nationality"/>
-</div>
-<div>
-    <label>Bodyshape</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.preferences.bodyShape"/>
-</div>
-<div>
-    <label>Jobs</label><br>
-    <label style="font-size: xx-small">Please separate each item with a comma</label>
-    <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.preferences.job"/>
-</div>
-<div>
-    <label>Genders</label>
-    <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.preferences.gender"/>
-</div>
+            </div>
+            <div>
+                <label>Hair Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="HairColor" @bind-Value="@ProfileData.preferences.hairColor"/>
 
-<div>
-    <label>Do you want them to have kids?</label>
-    <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
-</div>
-<div>
-    <label>Seeks Relationship</label>
-    <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
-</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
 
+                <label>Eye Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="EyeColor" @bind-Value="@ProfileData.preferences.eyeColor"/>
 
-<button>
-    <i class="oi oi-submit" style="color:red"/>
-    Submit</button>
+            </div>
+            <div>
+                <label>Skin Colors</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="SkinColor" @bind-Value="@ProfileData.preferences.skinColor"/>
+            </div>
+            <div>
+                <label>Nationalities</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Nationality" @bind-Value="@ProfileData.preferences.nationality"/>
+            </div>
+            <div>
+                <label>Bodyshape</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="BodyShape" @bind-Value="@ProfileData.preferences.bodyShape"/>
+            </div>
+            <div>
+                <label>Jobs</label><br>
+                <label style="font-size: xx-small">Please separate each item with a comma</label>
+                <InputText class="form-control" placeholder="Job" @bind-Value="@ProfileData.preferences.job"/>
+            </div>
+            <div>
+                <label>Genders</label>
+                <InputText class="form-control" placeholder="Gender" @bind-Value="@ProfileData.preferences.gender"/>
+            </div>
+
+            <div>
+                <label>Do you want them to have kids?</label>
+                <input type="checkbox" @bind="@ProfileData.preferences.kids"/>
+            </div>
+            <div>
+                <label>Seeks Relationship</label>
+                <input type="checkbox" @bind="@ProfileData.preferences.lookingFor"/>
+            </div>
+
+        </div>
+        <button @onclick="NavigateTo" class="btn btn-primary Georgia">
+            <i class="oi oi-submit" style="color:red"/>
+            Submit
+        </button>
+    </div>
 </EditForm>
 
 @code {
@@ -161,35 +167,33 @@
                 ProfileData = await Network.GetPreference(ProfileData.username);
                 ProfileData.preferences = JsonSerializer.Deserialize<Details>(ProfileData.jsonPref);
                 editContext = new EditContext(ProfileData.preferences);
-                Console.WriteLine(ProfileData.username);
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 NavigationManager.NavigateTo($"/Error/{e.Message}");
             }
         }
-        
-
     }
 
     public string fixWhiteSpace(string hej)
     {
         string stringToBeFixed = "\"" + hej + "\"";
         return stringToBeFixed;
-
     }
-    
+
     public void ConfirmData()
     {
         Boolean isValid = editContext.Validate();
         if (ProfileData.preferences.maximumAge < ProfileData.preferences.minimumAge)
         {
             int maxAgeTemp = ProfileData.preferences.maximumAge;
-            ProfileData.preferences.maximumAge=ProfileData.preferences.minimumAge;
+            ProfileData.preferences.maximumAge = ProfileData.preferences.minimumAge;
             ProfileData.preferences.minimumAge = maxAgeTemp;
         }
 
         if (isValid)
-        {
+        {   
+            
             ProfileData.intro = fixWhiteSpace(ProfileData.intro);
             ProfileData.instagram = fixWhiteSpace(ProfileData.instagram);
             ProfileData.spotify = fixWhiteSpace(ProfileData.spotify);
@@ -198,7 +202,11 @@
             ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             Network.EditPreference(ProfileData);
         }
-       
     }
-    
+
+    private void NavigateTo()
+    {
+        NavigationManager.NavigateTo("/Settings");
+    }
+
 }

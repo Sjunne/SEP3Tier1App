@@ -78,10 +78,9 @@
 
     }
 
-    private async void ReactToNetwork(Request obj)
+    private  void ReactToNetwork(Request obj)
     {
         allConnections = JsonSerializer.Deserialize<IList<Connections>>(obj.o.ToString());
-        Console.WriteLine(allConnections.Count);
     }
 
     private async void setDelegates()

@@ -14,9 +14,9 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <body>
 
-@if (Usernames == null)
+@if (Usernames == null || Usernames.Count == 0)
 {
-  <p><em>No matches found</em></p>
+  <p><em>You do not have any matches yet - but only wait!</em></p>
 }
 else
 {
@@ -52,11 +52,10 @@ else
 </body>
 @code {
   private IList<String> Usernames;
-  private IList<int> matchesId;
   ProfileOfOthers ProfileOfOthers;
   private IList<string> ProfilePictures;
   private string username;
-  Match _match;
+  private Match _match;
 
 
 
@@ -78,31 +77,31 @@ else
 
   private void ButtonClicked(string item)
   {
-    Console.WriteLine(item + "here");
-      if (item != null)
+    if (item != null)
       {
         NavigationManager.NavigateTo($"/ProfileOfOthers/{item}");
       }
   }
 
-  private async void Accept(string username2)
+  private async Task Accept(string username2)
   {
    _match.MakeMatch(username,username2);
-    Network.AcceptMatch(_match);
-    Usernames = await Network.GetMatches(username);
+    await Network.AcceptMatch(_match);
+    Usernames.Remove(username2);
     _match.usernames.Clear();
     StateHasChanged();
   }
 
-  private async void Decline(string username2)
+  private async Task Decline(string username2)
   {
     _match.MakeMatch(username,username2);
-    Network.DeclineMatch(_match);
-    Usernames = await Network.GetMatches(username);
+    await Network.DeclineMatch(_match);
+    Usernames.Remove(username2);
     _match.usernames.Clear();
     StateHasChanged();
   }
 
+  //pak det her væk udenfor controllers - for meget logik, burde være et enkelt metodekald
   private async Task<IList<string>> getProfilePictures(IList<string> username)
   {
     IList<string> pictures = new List<string>();

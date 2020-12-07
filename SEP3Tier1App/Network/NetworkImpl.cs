@@ -201,6 +201,7 @@ namespace WebApplication.Network
                 Encoding.UTF8,
                 "application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Match/Accept", content);
+            Console.WriteLine(info.StatusCode);
             
         }
 

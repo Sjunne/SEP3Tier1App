@@ -51,7 +51,10 @@
                 Update = "You must be above 18 years old. \n";
             }
         }
-        
+        else if (IncludesSpaces(username))
+        {
+            Update = "Please do not include spaces in the username.";
+        }
         else
         {
             User user = new User()
@@ -81,6 +84,11 @@
 
             
         }
+    }
+
+    private bool IncludesSpaces(string s)
+    {
+        return s.Contains(" ");
     }
 
     private bool checkNull()

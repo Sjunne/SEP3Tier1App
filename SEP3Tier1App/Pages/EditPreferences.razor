@@ -134,7 +134,7 @@
             </div>
 
         </div>
-        <button @onclick="NavigateTo" class="btn btn-primary Georgia">
+        <button>
             <i class="oi oi-submit" style="color:red"/>
             Submit
         </button>
@@ -201,12 +201,9 @@
             ProfileData.interests = fixWhiteSpace(ProfileData.interests);
             ProfileData.username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
             Network.EditPreference(ProfileData);
+            NavigationManager.NavigateTo("/Settings");
+
         }
     }
-
-    private void NavigateTo()
-    {
-        NavigationManager.NavigateTo("/Settings");
-    }
-
+    
 }

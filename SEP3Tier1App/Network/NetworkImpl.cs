@@ -226,6 +226,7 @@ namespace WebApplication.Network
             HttpResponseMessage httpResponseMessage = await client.
                 PostAsync("https://localhost:5003/Match/NewReview", content);
             string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            Console.WriteLine(readAsStringAsync);
             Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
             if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
             {

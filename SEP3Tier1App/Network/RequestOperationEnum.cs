@@ -31,6 +31,7 @@ namespace WebApplication.Network
         CHANGEPASSWORD,
         CHANGEUSERNAME,
         SENDMESSAGE,
-        NOTIFYABOUTMESSAGES
+        NOTIFYABOUTMESSAGES,
+        SETUSERNAME
     }
 }

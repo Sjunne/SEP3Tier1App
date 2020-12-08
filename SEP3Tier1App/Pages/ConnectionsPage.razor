@@ -26,7 +26,7 @@
                 int holder = i;
                 <div class="col-sm-12">
                     <div class="col-sm-2" style="float: left">
-                        <img src="@Images[holder]" class="img-circle" width="60px">
+                        <a href=""><img src="@Images[holder]" class="img-circle" width="60px"></a>
                     </div>
                     <div class="col-sm-8" style="float: left">
                         <h4>
@@ -62,7 +62,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() );
+        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() + " connection init");
 
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {

@@ -30,7 +30,13 @@ namespace SEP3Tier1App.Network
 
         public void SendUsername()
         {
-            var bytes = Encoding.ASCII.GetBytes(Username);
+            Request request = new Request()
+            {
+                Username = Username,
+                requestOperation = RequestOperationEnum.SETUSERNAME
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            var bytes = Encoding.ASCII.GetBytes(serialize);
             _networkStream.Write(bytes, 0, bytes.Length);
         }
 
@@ -45,7 +51,7 @@ namespace SEP3Tier1App.Network
             var bytes = Encoding.ASCII.GetBytes(serialize);
             _networkStream.Write(bytes);
         }
-        
+
         public void closeConnection()
         {
             _networkStream.Close();

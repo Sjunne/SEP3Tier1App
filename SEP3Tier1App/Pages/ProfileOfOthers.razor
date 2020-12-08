@@ -103,27 +103,31 @@
 
             </RadzenTabsItem>
             <RadzenTabsItem Text="Reviews">
+
                 <div style="height: 300px; overflow: scroll;">
-                    <div style="height: 100px; border-width: 1px; margin-left: 10px; margin-right: 30px;" class="container">
-                        <div class="row" style="height: 100%">
-                            <div style="height: 100%" class="col-md-2">
+                    @if (isConnected)
+                    {
+                        <div style="height: 100px; border-width: 1px; margin-left: 10px; margin-right: 30px;" class="container">
+                            <div class="row" style="height: 100%">
+                                <div style="height: 100%" class="col-md-2">
 
+                                </div>
+
+
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" placeholder="Review" @bind="@newReview"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button style="background-color: green" class="btn btn-primary"
+                                            @onclick="AddReview">
+                                        Add Review
+                                    </button>
+                                </div>
                             </div>
 
-
-                            <div class="col-md-8">
-                                <input style="height: 50px;" type="text" class="form-control" placeholder="Review" @bind="@newReview"/>
-                            </div>
-
-                            <div class="col-md-2">
-                                <button style="background-color: green" class="btn btn-primary"
-                                        @onclick="AddReview">
-                                    Add Review
-                                </button>
-                            </div>
                         </div>
-
-                    </div>
+                    }
 
 
                     @foreach (Review review in Reviews)
@@ -160,6 +164,7 @@
     private string dataUri, Error, ErrorIntro;
     private IList<string> Images = new List<string>();
     private IList<Review> Reviews = new List<Review>();
+    private string url = "https://localhost:5001/ProfileOfOthers/{username}/true";
 
 
     [Parameter]

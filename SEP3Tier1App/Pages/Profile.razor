@@ -171,8 +171,6 @@
                  bottom: 0;
                  right: 0; color: white; width: 100px; height:75px; background-color: #721c24; border-radius: 10%; visibility: @VisibilityString">New Message</div>
 @code {
-
-
     private string placeholder, VisibilityString="hidden";
     private string CoverPicture;
     private string ProfilePicture;
@@ -186,6 +184,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() );
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");

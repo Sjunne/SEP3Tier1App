@@ -77,9 +77,10 @@ else
 
   private void ButtonClicked(string item)
   {
+    bool isConnected = false;
     if (item != null)
       {
-        NavigationManager.NavigateTo($"/ProfileOfOthers/{item}");
+        NavigationManager.NavigateTo($"/ProfileOfOthers/{item}/{isConnected}");
       }
   }
 

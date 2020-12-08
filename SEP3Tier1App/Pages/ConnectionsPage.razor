@@ -62,7 +62,8 @@
 
     protected override Task OnInitializedAsync()
     {
-        
+        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() );
+
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             Manager.NavigateTo("/");

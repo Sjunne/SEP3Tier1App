@@ -6,7 +6,6 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).Logout();
         StateHasChanged();
     }
 }

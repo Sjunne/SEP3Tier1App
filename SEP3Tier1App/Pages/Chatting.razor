@@ -45,41 +45,39 @@
 
     <div class="position-relative">
         <div class="chat-messages p-4">
-           @if (messages.Count > 0)
-           {
-               @for (int j = messages.Count-1; j >= 0; j--)
-               {
-                   int holder = j;
-                   if (messages[holder].usernameFrom.Equals(friendUsername))
-                   {
-                       <div class="chat-message-left pb-4">
-                           <div>
-                               <img src="@friendProfilePic" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
-                               <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
-                           </div>
-                           <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
-                               <div class="font-weight-bold mb-1">@friendUsername</div>
-                               <p> @messages[holder].text</p>
-                           </div>
-                       </div>
-                   }
-                   else
-                   {
-                       <div class="chat-message-right pb-4">
-                           <div>
-                               <img src="@yourProfilePic" class="rounded-circle mr-1" alt="@yourUsername" width="40" height="40">
-                               <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
-                           </div>
-                           <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                               <div class="font-weight-bold mb-1">You</div>
-                               @messages[holder].text
-                           </div>
-                       </div>
-                   }
-               }
-           }
-                
-
+            
+            @for (int i = 0; i < messages.Count; i++)
+            {
+                int holder = i;
+                if (messages[holder].usernameFrom.Equals(friendUsername))
+                {
+                    <div class="chat-message-left pb-4">
+                        <div>
+                            <img src="@friendProfilePic" class="rounded-circle mr-1" alt="@friendUsername" width="40" height="40">
+                            <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
+                        </div>
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 ml-3">
+                            <div class="font-weight-bold mb-1">@friendUsername</div>
+                            <p> @messages[holder].text</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="chat-message-right pb-4">
+                        <div>
+                            <img src="@yourProfilePic" class="rounded-circle mr-1" alt="@yourUsername" width="40" height="40">
+                            <div class="text-muted small text-nowrap mt-2">@messages[holder].timeSend</div>
+                        </div>
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                            <div class="font-weight-bold mb-1">You</div>
+                            @messages[holder].text
+                        </div>
+                    </div>
+                }
+            }
+           
+           
         </div>
     </div>
 
@@ -99,12 +97,7 @@
                       }
                   </div>
               </div>
-
     </div>
-    
-  
-     
-
 </div>
 
 @code {
@@ -125,6 +118,7 @@
 
     protected override Task OnInitializedAsync()
     {
+        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser());
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");

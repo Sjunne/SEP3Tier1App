@@ -207,7 +207,34 @@ namespace WebApplication.Network
             var privateMessages = JsonSerializer.Deserialize<IList<PrivateMessage>>(s);
             return privateMessages;
         }
- 
+
+        public async Task<Request> AddNewReview(string myUsername, string username, string newReview)
+        {
+            Review review = new Review()
+            {
+                reviewed = username,
+                username = myUsername,
+                review = newReview
+            };
+            
+
+            HttpContent content = new StringContent(
+                JsonSerializer.Serialize(review),
+                Encoding.UTF8,
+                "application/json");
+            
+            HttpResponseMessage httpResponseMessage = await client.
+                PostAsync("https://localhost:5003/Match/NewReview", content);
+            string readAsStringAsync = await httpResponseMessage.Content.ReadAsStringAsync();
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            if (httpResponseMessage.StatusCode != HttpStatusCode.Created)
+            {
+                throw new ErrorException(httpResponseMessage.StatusCode + response.o.ToString());
+            }
+
+            return response;
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);
@@ -336,6 +363,7 @@ namespace WebApplication.Network
 
         public async Task<ProfileData> GetProfile(int userId)
         {
+            //TODO: skal den slettes?
             string message = await client.GetStringAsync($"https://localhost:5003/Profile?userid={userId}");
             ProfileData profileData = JsonSerializer.Deserialize<ProfileData>(message);
             return profileData;
@@ -401,6 +429,7 @@ namespace WebApplication.Network
 
         public bool ByteArrayToFile(string fileName, byte[] byteArray)
         {
+            //TODO: skal den slettes?
             try
             {
                 using (var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write))

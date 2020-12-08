@@ -6,5 +6,8 @@
         public string review { get; set; }
         public string username { get; set; }
         public string timestamp { get; set; }
+        
+        public string reviewed { get; set; }
+        
     }
 }

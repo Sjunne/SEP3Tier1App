@@ -146,6 +146,7 @@
 
                                 <div class="col-md-2">
                                     <p style="float: right;">@review.timestamp</p>
+
                                 </div>
                             </div>
 
@@ -164,7 +165,7 @@
     private string dataUri, Error, ErrorIntro;
     private IList<string> Images = new List<string>();
     private IList<Review> Reviews = new List<Review>();
-    private string url = "https://localhost:5001/ProfileOfOthers/{username}/true";
+    private string otherusername = "";
 
 
     [Parameter]
@@ -208,5 +209,5 @@
         await Network.AddNewReview(myUsername, username, newReview);
         Reviews = await Network.GetReviews(username);
     }
-
+    
 }

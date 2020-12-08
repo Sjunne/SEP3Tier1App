@@ -9,6 +9,7 @@
 @inject NavigationManager Manager;
 @inject AuthenticationStateProvider CustomAuthenticationStateProvider
 @inject ProfileData ProfileData
+@inject NavigationManager NavigationManager
 
 
 <h3>Connections</h3>
@@ -26,7 +27,9 @@
                 int holder = i;
                 <div class="col-sm-12">
                     <div class="col-sm-2" style="float: left">
-                        <a href=""><img src="@Images[holder]" class="img-circle" width="60px"></a>
+                        <a @onclick="@(() => ButtonClicked(allConnections[holder].Username))">
+                            <img src="@Images[holder]" class="img-circle" width="60px">
+                        </a>
                     </div>
                     <div class="col-sm-8" style="float: left">
                         <h4>
@@ -103,6 +106,15 @@
     private void OpenChatting(string username)
     {
         Manager.NavigateTo($"/Chatting/{username}");
+    }
+
+    private void ButtonClicked(string item)
+    {
+        bool isConnected = true;
+        if (item != null)
+        {
+            NavigationManager.NavigateTo($"/ProfileOfOthers/{item}/{isConnected}");
+        }
     }
 
 }

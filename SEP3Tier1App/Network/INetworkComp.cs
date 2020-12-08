@@ -43,5 +43,6 @@ namespace WebApplication.Network
         Task<Request> ChangeUsername(User user, string profileDataUsername);
         Task<IList<PrivateMessage>> getAllPrivateMessages(string yourUsername, string friendUsername);
         Task<Request> AddNewReview(string myUsername, string username, string newReview);
+        Task<Request> ReportReview(string username, Review review);
     }
 }

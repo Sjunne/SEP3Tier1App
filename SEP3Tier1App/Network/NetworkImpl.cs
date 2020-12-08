@@ -236,6 +236,34 @@ namespace WebApplication.Network
             return response;
         }
 
+        public async Task<Request> ReportReview(string username, Review review)
+        {
+            Request request = new Request()
+            {
+                o = JsonSerializer.Serialize(new Review()
+                {
+                    username = review.username,
+                    review = review.review,
+                    reviewed = review.reviewed
+                }),
+                Username = username,
+                requestOperation = RequestOperationEnum.REPORTREVIEW
+            };
+            string serialize = JsonSerializer.Serialize(request);
+            
+            HttpContent content = new StringContent(serialize, Encoding.UTF8, "application/json");
+            HttpResponseMessage info = await client.PatchAsync("https://localhost:5003/Match/Report", content);
+            string readAsStringAsync = await info.Content.ReadAsStringAsync();
+            if (info.StatusCode == HttpStatusCode.ServiceUnavailable)
+            {
+                throw new ErrorException(info.StatusCode + " " + readAsStringAsync);
+            }
+
+            Console.WriteLine(readAsStringAsync);
+            Request response = JsonSerializer.Deserialize<Request>(readAsStringAsync);
+            return response;
+        }
+
         public async Task EditPreference(ProfileData profileData)
         {
             profileData.jsonPref = JsonSerializer.Serialize(profileData.preferences);

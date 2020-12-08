@@ -57,11 +57,14 @@
                                 <p class="Georgia">Age: @ProfileData.age</p>
                                 <p class="Georgia">Interests: @ProfileData.interests</p>
                                 <p class="Georgia">Ideal date: @ProfileData.idealdate</p>
-                                <a href="@ProfileData.spotify"><p class="Georgia">Spotify: @ProfileData.spotify</p></a>
-                                <a href="https://www.instagram.com/@ProfileData.instagram/"><p class="Georgia">Instagram: @ProfileData.instagram</p></a>
+                                <a href="@ProfileData.spotify">
+                                    <p class="Georgia">Spotify: @ProfileData.spotify</p>
+                                </a>
+                                <a href="https://www.instagram.com/@ProfileData.instagram/">
+                                    <p class="Georgia">Instagram: @ProfileData.instagram</p>
+                                </a>
 
-                                
-                                
+
                             </div>
                         }
                         else
@@ -101,7 +104,7 @@
 
                             </EditForm>
                         }
-                       
+
 
                     </div>
                     <p>@ErrorIntro</p>
@@ -121,7 +124,7 @@
                             <p>Upload Pictures to your Profile </p>
                         }
                         <div class="gallery" style="overflow: hidden;">
-                            <a target="_blank" href="@Images[holder]" >
+                            <a target="_blank" href="@Images[holder]">
                                 <img src="@Images[i]" alt="@holder" width="600px" height="400px"/>
                             </a>
                             <div>
@@ -150,17 +153,27 @@
                                 </div>
 
 
-                                <div class="col-md-8">
+                                <div class="col-md-7">
                                     <p>@review.review</p>
+                                    
                                 </div>
 
                                 <div class="col-md-2">
                                     <p style="float: right;">@review.timestamp</p>
+                                    
+                                </div>
+                                <div class="col-md-1">
+                                    <a @onclick="@(() => ButtonClicked(review))">
+                                        <img src="images/report-flag.png" style="width: 25px;height: 25px;" alt="report-flag"/>
+                                    </a>
                                 </div>
                             </div>
 
                         </div>
+                        
                     }
+                    
+                    <p>@Reported</p>
                 </div>
             </RadzenTabsItem>
         </Tabs>
@@ -170,8 +183,9 @@
 <div class="center" style=" position: fixed;
                  bottom: 0;
                  right: 0; color: white; width: 100px; height:75px; background-color: #721c24; border-radius: 10%; visibility: @VisibilityString">New Message</div>
+
 @code {
-    private string placeholder, VisibilityString="hidden";
+    private string placeholder, VisibilityString = "hidden";
     private string CoverPicture;
     private string ProfilePicture;
     private string dataUri, Error, ErrorIntro;
@@ -179,25 +193,26 @@
     private IList<Review> Reviews = new List<Review>();
     private string spotify = "Favourite Spotify PlayListe";
     private Delegating _delegate;
+    private string Reported;
 
     private string username;
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() );
+        Console.WriteLine(((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser());
         if (((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser() == null || ProfileData.username == null)
         {
             NavigationManager.NavigateTo("/");
         }
         else
         {
-            //Reviews.Add(new Review());
+    //Reviews.Add(new Review());
             ProfileData.isEditingAbout = false;
-        
-        username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
 
-        //henter data fra databasen til at fylde profilen ud,
-        //kunne optimeres
+            username = ((CustomAuthenticationStateProvider) CustomAuthenticationStateProvider).getCachedUser().username;
+
+    //henter data fra databasen til at fylde profilen ud,
+    //kunne optimeres
 
             try
             {
@@ -206,7 +221,7 @@
                 Images = await Network.GetPictures(username);
                 ProfilePicture = await Network.GetProfilePicture(username);
                 Reviews = await Network.GetReviews(username);
-            
+
                 ProfileData = await profile;
                 _delegate = NetworkSocket.getDelegating();
                 _delegate.NotfifyAboutNewMessage = NotifyAboutNewMessages;
@@ -215,7 +230,7 @@
             {
                 Console.WriteLine(e.Message);
                 NavigationManager.NavigateTo($"/Error/{e.Message}");
-            }    
+            }
         }
     }
 
@@ -232,7 +247,7 @@
     {
         ProfileData.isEditingIntro = !ProfileData.isEditingIntro;
     }
-    
+
     private void NotifyAboutNewMessages()
     {
         new Thread(() =>
@@ -243,14 +258,11 @@
             Thread.Sleep(10000);
             VisibilityString = "hidden";
             InvokeAsync(StateHasChanged);
-
         }).Start();
-        
     }
 
     public async Task EditIntroduction()
     {
-        
         EditIntro();
         ProfileData.intro = ProfileData.intro.Trim();
         if (ProfileData.intro.Length > 300)
@@ -275,7 +287,7 @@
 
             dataUri = $"data:{file.Type};base64,{Convert.ToBase64String(ms.ToArray())}";
             int length = Encoding.ASCII.GetBytes(dataUri).Length;
-            
+
             if (!(file.Type.Equals("image/jpeg") || file.Type.Equals("image/jpg")) && 55000 < length)
             {
                 Error = "Only JPG is supported for now. \n Choose a smaller picture.";
@@ -294,7 +306,7 @@
             else
             {
                 Error = "";
-                
+
                 try
                 {
                     await Network.UploadPicture(username, dataUri);
@@ -306,7 +318,6 @@
                     NavigationManager.NavigateTo($"/Error/{e.Message}");
                 }
             }
-            
         }
     }
 
@@ -319,7 +330,7 @@
 
         try
         {
-            if(ProfileData.age < 18 || ProfileData.age>120)
+            if (ProfileData.age < 18 || ProfileData.age > 120)
                 ErrorIntro = "Changes has not been stored! Please select a valid age. (18 - 120) ";
             else
             {
@@ -331,7 +342,7 @@
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
     }
-    
+
     private async void ChooseCover(int i)
     {
         try
@@ -339,7 +350,6 @@
             await Network.ChangeCoverPicture(username + (i + 1));
             CoverPicture = Images[i];
             StateHasChanged();
-
         }
         catch (Exception e)
         {
@@ -354,13 +364,11 @@
             await Network.ChangeProfilePic(username + (i + 1));
             ProfilePicture = Images[i];
             StateHasChanged();
-
         }
         catch (Exception e)
         {
             NavigationManager.NavigateTo($"/Error/{e.Message}");
         }
-       
     }
 
     private async void DeletePhoto(int holder)
@@ -369,4 +377,18 @@
         Images = await Network.GetPictures(username);
         StateHasChanged();
     }
+
+    private async Task ButtonClicked(Review review)
+    {
+        Request request = await Network.ReportReview(username, review);
+        if (request.requestOperation == RequestOperationEnum.SUCCESS)
+        {
+            Reported = "You reported a review.";
+        }
+        else
+        {
+            Reported = "The review was not reported.";
+        }
+    }
+
 }

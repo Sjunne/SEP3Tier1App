@@ -189,6 +189,31 @@ namespace WebApplication.Network
             return response;
         }
 
+        public async Task<Warning> getWarning(String username)
+        {
+            HttpResponseMessage httpResponseMessage = await client.GetAsync($"https://localhost:5003/Profile/Warning?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException("Database connection lost");
+            }
+
+            string message = await httpResponseMessage.Content.ReadAsStringAsync();
+            Warning warning1 = JsonSerializer.Deserialize<Warning>(message);
+            
+            return warning1;
+            
+        }
+
+        public async Task removeWarning(string username)
+        {
+            HttpResponseMessage httpResponseMessage = await client.DeleteAsync($"https://localhost:5003/Profile/RemoveWarning?username={username}");
+            if (httpResponseMessage.StatusCode != HttpStatusCode.OK)
+            {
+                throw new ErrorException("Database connection lost");
+            }
+            Console.Write(username);
+        }
+
         public async Task AcceptMatch(Match match)
         {
             string message = JsonSerializer.Serialize(match);

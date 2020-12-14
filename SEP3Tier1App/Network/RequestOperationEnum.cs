@@ -33,6 +33,8 @@ namespace WebApplication.Network
         SENDMESSAGE,
         NOTIFYABOUTMESSAGES,
         SETUSERNAME,
-        REPORTREVIEW
+        REPORTREVIEW,
+        WARNUSER,
+        REMOVEWARNING,
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Radzen;
 using SEP3Tier1App.Authentication;
 using SEP3Tier1App.Network;
 //using SEP3Tier1App.Network;
@@ -44,7 +45,7 @@ namespace SEP3Tier1App
             services.AddScoped<Details>();
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             services.AddScoped<INetworkSocket, NetworkSocketImpl>();
-            
+
             //Network
             //Singleton
             services.AddScoped<INetworkComp, NetworkImpl>();

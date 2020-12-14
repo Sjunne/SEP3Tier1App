@@ -33,6 +33,9 @@ namespace WebApplication.Network
 
 
         Delegating getDelegating();
+
+        Task<Warning> getWarning(string username);
+        Task removeWarning(string username);
         
 
         Task AcceptMatch(Match match);

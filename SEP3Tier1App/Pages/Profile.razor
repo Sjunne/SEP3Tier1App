@@ -45,6 +45,10 @@
     <RadzenTabs>
         <Tabs>
             <RadzenTabsItem Text="About">
+                @if(@WarningMessage.warningMessage != null)
+                    {
+                        <p>Warning:@WarningMessage.warningMessage</p>
+                    }
                 <div style="height: 300px">
                     <div style="float:left; width: 40%; height: 250px; border-style: solid; margin-left: 7%; overflow: scroll;">
 
@@ -194,6 +198,7 @@
     private string spotify = "Favourite Spotify PlayListe";
     private Delegating _delegate;
     private string Reported;
+    private Warning WarningMessage;
 
     private string username;
 
@@ -216,12 +221,15 @@
 
             try
             {
+                WarningMessage = new Warning();
                 Task<ProfileData> profile = Network.GetProfile(username);
                 CoverPicture = await Network.GetCoverPicture(username);
                 Images = await Network.GetPictures(username);
                 ProfilePicture = await Network.GetProfilePicture(username);
                 Reviews = await Network.GetReviews(username);
-
+                WarningMessage = await Network.getWarning(username);
+                 await Network.removeWarning(username);
+            
                 ProfileData = await profile;
                 _delegate = NetworkSocket.getDelegating();
                 _delegate.NotfifyAboutNewMessage = NotifyAboutNewMessages;

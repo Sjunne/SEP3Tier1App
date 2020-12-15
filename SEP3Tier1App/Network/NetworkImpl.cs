@@ -424,9 +424,15 @@ namespace WebApplication.Network
         }
 
         
-        public async Task ChangeCoverPicture(string pictureName)
+        public async Task ChangeCoverPicture(string pictureName, string username)
         {
-            string message = JsonSerializer.Serialize(pictureName);
+            Request r = new Request()
+            {
+                requestOperation = RequestOperationEnum.UPDATEPROFILEPIC,
+                o= pictureName,
+                Username = username
+            };
+            string message = JsonSerializer.Serialize(r);
 
             HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
             HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateCover", content);
@@ -453,10 +459,15 @@ namespace WebApplication.Network
             return readAsStringAsync;
         }
 
-        public async Task ChangeProfilePic(string picturename)
+        public async Task ChangeProfilePic(string picturename, string username)
         {
-            
-                string message = JsonSerializer.Serialize(picturename);
+            Request r = new Request()
+            {
+                requestOperation = RequestOperationEnum.UPDATEPROFILEPIC,
+                o= picturename,
+                Username = username
+            };
+            string message = JsonSerializer.Serialize(r);
 
                 HttpContent content = new StringContent(message,Encoding.UTF8,"application/json");
                 HttpResponseMessage info = await client.PostAsync("https://localhost:5003/Image/UpdateProfilePic", content);

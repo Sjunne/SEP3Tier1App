@@ -355,7 +355,7 @@
     {
         try
         {
-            await Network.ChangeCoverPicture(username + (i + 1));
+            await Network.ChangeCoverPicture(username + (i + 1),username);
             CoverPicture = Images[i];
             StateHasChanged();
         }
@@ -369,7 +369,7 @@
     {
         try
         {
-            await Network.ChangeProfilePic(username + (i + 1));
+            await Network.ChangeProfilePic(username + (i + 1),username);
             ProfilePicture = Images[i];
             StateHasChanged();
         }

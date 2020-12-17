@@ -428,7 +428,7 @@ namespace WebApplication.Network
         {
             Request r = new Request()
             {
-                requestOperation = RequestOperationEnum.UPDATEPROFILEPIC,
+                requestOperation = RequestOperationEnum.UPDATECOVER,
                 o= pictureName,
                 Username = username
             };
